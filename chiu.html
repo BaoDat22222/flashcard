@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<!-- saved from url=(0050)file:///C:/Users/Administrator/Downloads/chiu.html -->
-<html lang="en" style="--card-front: #8b2f7c; --card-front2: #c44569; --card-back: #4c1d95; --card-back2: #7c3aed; --face-emoji: &quot;🌙&quot;"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<html lang="en" style="--card-front: #8b2f7c; --card-front2: #c44569; --card-back: #4c1d95; --card-back2: #7c3aed; --face-emoji: &quot;🌙&quot;">
+<head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Flashcard Premium 🪞 · Tự luyện tập</title>
     <link rel="preconnect" href="https://fonts.googleapis.com/">
     <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="">
-    <link href="./chiu_files/css2" rel="stylesheet">
+    <link href="./Flashcard Premium 🪞 · Flashcards &amp; Study Timer_files/css2" rel="stylesheet">
     <style>
         /* ============================================================
            GƯƠNG MIỆNG · FLASHCARD PREMIUM
@@ -3669,7 +3669,7 @@
         }
     </style>
 </head>
-<body class="theme-forest" style="overflow: hidden;">
+<body class="dark theme-forest" style="">
 
     <!-- ===== SETTINGS FAB ===== -->
     <button class="settings-fab" id="settingsBtn" title="Settings" aria-label="Settings">⚙️</button>
@@ -3678,7 +3678,7 @@
     <div class="timer-island" id="timerIsland">
         <button class="island-pill" id="islandPill" type="button" title="Open quick hub" aria-label="Open quick hub">
             <span class="island-pill-icon" id="islandPillIcon">🕐</span>
-            <span class="island-pill-clock" id="islandPillClock">01:02</span>
+            <span class="island-pill-clock" id="islandPillClock">13:59</span>
             <span class="island-pill-time" id="islandPillTime">00:00</span>
         </button>
         <div class="island-panel" id="islandPanel">
@@ -3687,13 +3687,13 @@
 
                 <div class="island-header">
                     <div class="island-header-title">🪞 Quick Hub</div>
-                    <div class="island-header-clock" id="islandHeaderClock">Sat · 01:02:38</div>
+                    <div class="island-header-clock" id="islandHeaderClock">Wed · 13:59:37</div>
                 </div>
 
                 <div class="island-tabs">
-                    <button class="island-tab active" data-tab="timer" type="button" onclick="setIslandTab(&#39;timer&#39;)">⏱️ Timer</button>
-                    <button class="island-tab" data-tab="stats" type="button" onclick="setIslandTab(&#39;stats&#39;)">🔥 Stats</button>
-                    <button class="island-tab" data-tab="quick" type="button" onclick="setIslandTab(&#39;quick&#39;)">⚡ Quick</button>
+                    <button class="island-tab active" data-tab="timer" type="button" onclick="setIslandTab('timer')">⏱️ Timer</button>
+                    <button class="island-tab" data-tab="stats" type="button" onclick="setIslandTab('stats')">🔥 Stats</button>
+                    <button class="island-tab" data-tab="quick" type="button" onclick="setIslandTab('quick')">⚡ Quick</button>
                 </div>
 
                 <!-- ===== TAB: TIMER ===== -->
@@ -3720,9 +3720,9 @@
                     <div class="timer-status" id="timerStatus" style="color: var(--card-front);">⏱️ Stopwatch ready</div>
 
                     <div class="timer-modes">
-                        <button class="mode-btn active" data-mode="stopwatch" onclick="setTimerMode(&#39;stopwatch&#39;)">⏱️ Stopwatch</button>
-                        <button class="mode-btn" data-mode="countdown" onclick="setTimerMode(&#39;countdown&#39;)">⏳ Countdown</button>
-                        <button class="mode-btn" data-mode="pomodoro" onclick="setTimerMode(&#39;pomodoro&#39;)">🍅 Pomodoro</button>
+                        <button class="mode-btn active" data-mode="stopwatch" onclick="setTimerMode('stopwatch')">⏱️ Stopwatch</button>
+                        <button class="mode-btn" data-mode="countdown" onclick="setTimerMode('countdown')">⏳ Countdown</button>
+                        <button class="mode-btn" data-mode="pomodoro" onclick="setTimerMode('pomodoro')">🍅 Pomodoro</button>
                     </div>
 
                     <!-- Custom countdown input -->
@@ -3757,8 +3757,8 @@
                 <div class="island-tab-panel" id="islandTabQuick" style="display:none;">
                     <div class="timer-sub" style="margin-bottom:18px;">Handy shortcuts</div>
                     <div class="island-quick-grid">
-                        <button class="island-quick-btn" id="islandDarkBtn" type="button" onclick="islandToggleDark()">
-                            <span class="iq-icon" id="islandDarkIcon">🌙</span>
+                        <button class="island-quick-btn on" id="islandDarkBtn" type="button" onclick="islandToggleDark()">
+                            <span class="iq-icon" id="islandDarkIcon">☀️</span>
                             <span>Dark mode</span>
                         </button>
                         <button class="island-quick-btn" type="button" onclick="islandShuffleTheme()">
@@ -3814,7 +3814,7 @@
 
             <div class="settings-section">
                 <div class="settings-label">🔊 Pronunciation voice</div>
-                <select id="voiceSelect" class="settings-select"><option value="__auto__">Auto (best match)</option><option value="Microsoft David - English (United States)">Microsoft David - English (United States) — en-US (default)</option><option value="Microsoft Mark - English (United States)">Microsoft Mark - English (United States) — en-US</option><option value="Microsoft Zira - English (United States)">Microsoft Zira - English (United States) — en-US</option><option value="Microsoft William Multilingual Online (Natural) - English (Australia)">Microsoft William Multilingual Online (Natural) - English (Australia) — en-AU</option><option value="Microsoft Natasha Online (Natural) - English (Australia)">Microsoft Natasha Online (Natural) - English (Australia) — en-AU</option><option value="Microsoft Clara Online (Natural) - English (Canada)">Microsoft Clara Online (Natural) - English (Canada) — en-CA</option><option value="Microsoft Liam Online (Natural) - English (Canada)">Microsoft Liam Online (Natural) - English (Canada) — en-CA</option><option value="Microsoft Sonia Online (Natural) - English (United Kingdom)">Microsoft Sonia Online (Natural) - English (United Kingdom) — en-GB</option><option value="Microsoft Ryan Online (Natural) - English (United Kingdom)">Microsoft Ryan Online (Natural) - English (United Kingdom) — en-GB</option><option value="Microsoft Libby Online (Natural) - English (United Kingdom)">Microsoft Libby Online (Natural) - English (United Kingdom) — en-GB</option><option value="Microsoft Maisie Online (Natural) - English (United Kingdom)">Microsoft Maisie Online (Natural) - English (United Kingdom) — en-GB</option><option value="Microsoft Thomas Online (Natural) - English (United Kingdom)">Microsoft Thomas Online (Natural) - English (United Kingdom) — en-GB</option><option value="Microsoft Yan Online (Natural) - English (Hong Kong SAR)">Microsoft Yan Online (Natural) - English (Hong Kong SAR) — en-HK</option><option value="Microsoft Sam Online (Natural) - English (Hong Kong SAR)">Microsoft Sam Online (Natural) - English (Hong Kong SAR) — en-HK</option><option value="Microsoft Emily Online (Natural) - English (Ireland)">Microsoft Emily Online (Natural) - English (Ireland) — en-IE</option><option value="Microsoft Connor Online (Natural) - English (Ireland)">Microsoft Connor Online (Natural) - English (Ireland) — en-IE</option><option value="Microsoft Neerja Online (Natural) - English (India)">Microsoft Neerja Online (Natural) - English (India) — en-IN</option><option value="Microsoft Prabhat Online (Natural) - English (India)">Microsoft Prabhat Online (Natural) - English (India) — en-IN</option><option value="Microsoft Asilia Online (Natural) - English (Kenya)">Microsoft Asilia Online (Natural) - English (Kenya) — en-KE</option><option value="Microsoft Chilemba Online (Natural) - English (Kenya)">Microsoft Chilemba Online (Natural) - English (Kenya) — en-KE</option><option value="Microsoft Ezinne Online (Natural) - English (Nigeria)">Microsoft Ezinne Online (Natural) - English (Nigeria) — en-NG</option><option value="Microsoft Abeo Online (Natural) - English (Nigeria)">Microsoft Abeo Online (Natural) - English (Nigeria) — en-NG</option><option value="Microsoft Molly Online (Natural) - English (New Zealand)">Microsoft Molly Online (Natural) - English (New Zealand) — en-NZ</option><option value="Microsoft Mitchell Online (Natural) - English (New Zealand)">Microsoft Mitchell Online (Natural) - English (New Zealand) — en-NZ</option><option value="Microsoft Rosa Online (Natural) - English (Philippines)">Microsoft Rosa Online (Natural) - English (Philippines) — en-PH</option><option value="Microsoft James Online (Natural) - English (Philippines)">Microsoft James Online (Natural) - English (Philippines) — en-PH</option><option value="Microsoft Luna Online (Natural) - English (Singapore)">Microsoft Luna Online (Natural) - English (Singapore) — en-SG</option><option value="Microsoft Wayne Online (Natural) - English (Singapore)">Microsoft Wayne Online (Natural) - English (Singapore) — en-SG</option><option value="Microsoft Imani Online (Natural) - English (Tanzania)">Microsoft Imani Online (Natural) - English (Tanzania) — en-TZ</option><option value="Microsoft Elimu Online (Natural) - English (Tanzania)">Microsoft Elimu Online (Natural) - English (Tanzania) — en-TZ</option><option value="Microsoft Ava Multilingual Online (Natural) - English (United States)">Microsoft Ava Multilingual Online (Natural) - English (United States) — en-US</option><option value="Microsoft Andrew Multilingual Online (Natural) - English (United States)">Microsoft Andrew Multilingual Online (Natural) - English (United States) — en-US</option><option value="Microsoft Emma Multilingual Online (Natural) - English (United States)">Microsoft Emma Multilingual Online (Natural) - English (United States) — en-US</option><option value="Microsoft Brian Multilingual Online (Natural) - English (United States)">Microsoft Brian Multilingual Online (Natural) - English (United States) — en-US</option><option value="Microsoft Ava Online (Natural) - English (United States)">Microsoft Ava Online (Natural) - English (United States) — en-US</option><option value="Microsoft Andrew Online (Natural) - English (United States)">Microsoft Andrew Online (Natural) - English (United States) — en-US</option><option value="Microsoft Emma Online (Natural) - English (United States)">Microsoft Emma Online (Natural) - English (United States) — en-US</option><option value="Microsoft Brian Online (Natural) - English (United States)">Microsoft Brian Online (Natural) - English (United States) — en-US</option><option value="Microsoft Jenny Online (Natural) - English (United States)">Microsoft Jenny Online (Natural) - English (United States) — en-US</option><option value="Microsoft Guy Online (Natural) - English (United States)">Microsoft Guy Online (Natural) - English (United States) — en-US</option><option value="Microsoft Aria Online (Natural) - English (United States)">Microsoft Aria Online (Natural) - English (United States) — en-US</option><option value="Microsoft Ana Online (Natural) - English (United States)">Microsoft Ana Online (Natural) - English (United States) — en-US</option><option value="Microsoft Christopher Online (Natural) - English (United States)">Microsoft Christopher Online (Natural) - English (United States) — en-US</option><option value="Microsoft Eric Online (Natural) - English (United States)">Microsoft Eric Online (Natural) - English (United States) — en-US</option><option value="Microsoft Michelle Online (Natural) - English (United States)">Microsoft Michelle Online (Natural) - English (United States) — en-US</option><option value="Microsoft Roger Online (Natural) - English (United States)">Microsoft Roger Online (Natural) - English (United States) — en-US</option><option value="Microsoft Steffan Online (Natural) - English (United States)">Microsoft Steffan Online (Natural) - English (United States) — en-US</option><option value="Microsoft Leah Online (Natural) - English (South Africa)">Microsoft Leah Online (Natural) - English (South Africa) — en-ZA</option><option value="Microsoft Luke Online (Natural) - English (South Africa)">Microsoft Luke Online (Natural) - English (South Africa) — en-ZA</option></select>
+                <select id="voiceSelect" class="settings-select"><option value="__auto__">Auto (best match)</option><option value="Microsoft David - English (United States)">Microsoft David - English (United States) — en-US (default)</option><option value="Microsoft Mark - English (United States)">Microsoft Mark - English (United States) — en-US</option><option value="Microsoft Zira - English (United States)">Microsoft Zira - English (United States) — en-US</option><option value="Google US English">Google US English — en-US</option><option value="Google UK English Female">Google UK English Female — en-GB</option><option value="Google UK English Male">Google UK English Male — en-GB</option></select>
                 <div class="settings-hint">Pick your favourite English voice. "Auto" lets the app choose the best one.</div>
             </div>
 
@@ -3828,8 +3828,8 @@
             <div class="settings-section">
                 <div class="settings-label">🇬🇧 Pronunciation accent</div>
                 <div class="acc-row" id="accRow">
-                    <span class="acc-pill active" data-acc="uk">🇬🇧 British (UK)</span>
-                    <span class="acc-pill" data-acc="us">🇺🇸 American (US)</span>
+                    <span class="acc-pill" data-acc="uk">🇬🇧 British (UK)</span>
+                    <span class="acc-pill active" data-acc="us">🇺🇸 American (US)</span>
                 </div>
                 <div class="settings-hint">Used for the real dictionary audio (Cambridge) &amp; Google audio.</div>
             </div>
@@ -3837,7 +3837,7 @@
             <div class="settings-section">
                 <div class="settings-row">
                     <div class="settings-label">🌙 Dark mode</div>
-                    <button class="switch" id="darkModeToggle" type="button" role="switch" aria-checked="false"><span class="switch-knob"></span></button>
+                    <button class="switch on" id="darkModeToggle" type="button" role="switch" aria-checked="true"><span class="switch-knob"></span></button>
                 </div>
             </div>
         </div>
@@ -3869,7 +3869,7 @@
                     <span class="lp-blob lp-blob-1"></span>
                     <span class="lp-blob lp-blob-2"></span>
                     <span class="lp-blob lp-blob-3"></span>
-                    <canvas id="particleCanvas" width="386" height="781"></canvas>
+                    <canvas id="particleCanvas" width="1173" height="814"></canvas>
                 </div>
                 <div class="lp-board-inner">
                     <span class="lp-eyebrow">✦ flashcard premium — mirror-mouth study</span>
@@ -3888,15 +3888,15 @@
                 </div>
                 <div class="lp-wotd-card">
                     <span class="lp-wotd-label">📌 Word of the day</span>
-                    <div id="lp-wotd-term">Count against</div>
-                    <span id="lp-wotd-ipa">phrasal</span>
+                    <div id="lp-wotd-term">Lay claim to sth</div>
+                    <span id="lp-wotd-ipa">idiom</span>
                     <button class="lp-wotd-speak" id="lp-wotd-speak" type="button" title="Listen">🔊</button>
                     <div class="lp-wotd-reveal" onclick="lpRevealMeaning()">
                         <div id="lp-wotd-tap" style="display: block;">👆 Tap to reveal the meaning</div>
-                        <div id="lp-wotd-meaning" style="display: none;"><p style="margin:0 0 8px;font-size:1rem;font-family:&#39;Inter&#39;,sans-serif;">Gây bất lợi cho, là điểm trừ, chống lại ai/cái gì</p><p style="margin:0;font-size:.8rem;opacity:.9;font-family:ui-monospace,&#39;SFMono-Regular&#39;,Menlo,Consolas,monospace;">"His lack of experience counted against him in the interview."</p></div>
+                        <div id="lp-wotd-meaning" style="display: none;"><p style="margin:0 0 8px;font-size:1rem;font-family:'Inter',sans-serif;">Tuyên bố quyền sở hữu, đánh giấu quyền sở hữu đối với cái gì</p><p style="margin:0;font-size:.8rem;opacity:.9;font-family:ui-monospace,'SFMono-Regular',Menlo,Consolas,monospace;">"My mother laid claim to that building."</p></div>
                     </div>
                     <button class="lp-wotd-next" onclick="lpNextWord()">Another word →</button>
-                    <button class="lp-wotd-speak lp-wotd-dict" type="button" title="Look up in dictionaries" onclick="openDictForWord(document.getElementById(&#39;lp-wotd-term&#39;).textContent)">📖 Look up</button>
+                    <button class="lp-wotd-speak lp-wotd-dict" type="button" title="Look up in dictionaries" onclick="openDictForWord(document.getElementById('lp-wotd-term').textContent)">📖 Look up</button>
                 </div>
             </div>
 
@@ -3996,9 +3996,9 @@
                 <div class="wotd-mini-card" id="wotdMiniCard">
                     <div class="wotd-mini-left">
                         <div class="wotd-mini-label">✨ Word of the day</div>
-                        <div class="wotd-mini-term" id="wotdMiniTerm">Alight</div>
+                        <div class="wotd-mini-term" id="wotdMiniTerm">surpass</div>
                         <div class="wotd-mini-hint" id="wotdMiniHint">👆 Tap to see the meaning</div>
-                        <div class="wotd-mini-vi" id="wotdMiniVi">Xuống (xe buýt, tàu hoả...)</div>
+                        <div class="wotd-mini-vi" id="wotdMiniVi">Vượt qua, vượt trội</div>
                     </div>
                     <button class="wotd-mini-refresh" id="wotdMiniRefresh" type="button" title="Another word">🔀</button>
                 </div>
@@ -4134,7 +4134,7 @@
                     </div>
                 </div>
                 <div style="margin-top:16px;text-align:center;">
-                    <button class="btn btn-primary" id="practiceStartBtn" disabled="" style="min-width:200px;">▶ Start</button>
+                    <button class="btn btn-primary" id="practiceStartBtn" disabled style="min-width:200px;">▶ Start</button>
                 </div>
                 <div class="practice-mode-desc" id="practiceModeDesc" style="text-align:center;margin-top:10px;">Select a mode above to begin.</div>
             </div>
@@ -6930,17 +6930,4 @@
         console.log('✅ Self-Practice (Tự luyện tập) loaded — uses only existing folders/data.');
     </script>
 
-<div id="password-overlay" style="position: fixed; top: 0px; left: 0px; width: 100vw; height: 100vh; background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(8px); z-index: 999999; display: flex; align-items: center; justify-content: center; font-family: system-ui, -apple-system, sans-serif;">
-        <div style="background: white; padding: 40px; border-radius: 16px; text-align: center; max-width: 360px; box-shadow: 0 10px 40px rgba(0,0,0,0.5);">
-            <h2 style="margin: 0 0 10px 0; color: #1a1a1a; font-size: 24px;">Restricted Access</h2>
-            <p style="margin: 0 0 24px 0; color: #666; font-size: 15px;">Please enter the password to unlock your flashcards and quizzes.</p>
-            
-            <input type="password" id="study-password" placeholder="Enter password..." style="width: 100%; box-sizing: border-box; padding: 14px 16px; border-radius: 12px; border: 2px solid #e1e1e1; background: #fafafa; color: #1a1a1a; font-size: 16px; margin-bottom: 12px; outline: none; transition: all 0.2s ease;">
-            
-            <p id="password-error" style="color: #dc3545; display: none; font-size: 13px; margin: 0 0 16px 0; font-weight: 600;">Incorrect password. Try again.</p>
-            
-            <button id="password-submit" style="width: 100%; padding: 14px; border: none; border-radius: 12px; background: #0d6efd; color: white; font-weight: 600; font-size: 16px; cursor: pointer; transition: background 0.2s;">
-                Unlock Study Mode
-            </button>
-        </div>
-    </div></body></html>
+</body></html>
