@@ -4447,7 +4447,7 @@
                                 <div class="ipa" id="frontIpa">/fɜːm ˈhænd.ʃeɪk/</div>
                                 <button class="speak-btn" id="speakFrontBtn" type="button" title="Listen">🔊 Listen</button>
                                 <div class="dict-btn-row">
-                                    <button class="dict-btn" type="button" onclick="openDictForWord()">📖 Look up</button>
+                                    <button class="dict-btn" type="button" onclick="event.stopPropagation();openDictForWord()">📖 Look up</button>
                                 </div>
                                 <div class="hint">👆 Tap to flip the card</div>
                             </div>
@@ -4457,7 +4457,7 @@
                                 <div class="back-term" id="backTerm">firm handshake</div>
                                 <button class="speak-btn speak-btn-back" id="speakBackBtn" type="button" title="Listen">🔊 Listen</button>
                                 <div class="dict-btn-row">
-                                    <button class="dict-btn" type="button" onclick="openDictForWord()">📖 Look up (Cambridge Dictionary)</button>
+                                    <button class="dict-btn" type="button" onclick="event.stopPropagation();openDictForWord()">📖 Look up (Cambridge Dictionary)</button>
                                 </div>
                                 <div class="sec-label">🇬🇧 English meaning</div>
                                 <div class="sec-text" id="backEn">A confident, strong handshake, often seen as a sign of good character.</div>
@@ -5803,7 +5803,13 @@
             const willFlipToBack = !cardEl.classList.contains('flipped');
             cardEl.dataset.flipping = '1';
             cardEl.classList.toggle('flipped');
-            setTimeout(() => { cardEl.dataset.flipping = '0'; }, 640);
+            // Primary unlock: right after the CSS flip transition actually finishes.
+            const clearFlipLock = () => { cardEl.dataset.flipping = '0'; };
+            cardEl.addEventListener('transitionend', clearFlipLock, { once: true });
+            // Fallback unlock in case the transition event never fires (e.g. the tab
+            // was backgrounded — such as when "Look up" opens Cambridge Dictionary in
+            // a new tab — which can throttle or skip transition callbacks).
+            setTimeout(clearFlipLock, 640);
             if (willFlipToBack) {
                 bumpWordCount();
                 const w = ACTIVE[order[idx]];
@@ -5812,6 +5818,13 @@
         }
         cardEl.addEventListener('click', flipCard);
         document.getElementById('flipBtn').addEventListener('click', flipCard);
+
+        // Extra safety net: if the browser throttled our timers while this tab was
+        // in the background (e.g. after opening a Cambridge Dictionary lookup in a
+        // new tab), make sure the flip lock isn't left stuck when we come back.
+        document.addEventListener('visibilitychange', () => {
+            if (!document.hidden) cardEl.dataset.flipping = '0';
+        });
 
         document.getElementById('speakFrontBtn').addEventListener('click', (e) => { e.stopPropagation(); const w = ACTIVE[
                 order[idx]];
