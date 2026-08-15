@@ -1,30 +1,6 @@
 <!DOCTYPE html>
 <!-- saved from url=(0050)file:///C:/Users/Administrator/Downloads/chiu.html -->
-<html lang="en" style="--card-front: #0f172a; --card-front2: #7c3aed; --card-back: #b45309; --card-back2: #dc2626; --face-emoji: &quot;📖&quot;;"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><script id="security-guard">
-        (() => {
-            const PASSWORD = "200110";
-            let input = prompt("Nhập mật khẩu để truy cập trang web:");
-            
-            // Vòng lặp cho phép nhập lại nếu sai
-            while (input !== PASSWORD && input !== null) {
-                input = prompt("❌ Mật khẩu chưa đúng! Vui lòng nhập lại:");
-            }
-            
-            // Nếu bấm Cancel hoặc cố tình bỏ qua
-            if (input !== PASSWORD) {
-                document.documentElement.innerHTML = `
-                    <head><title>Truy cập bị từ chối</title></head>
-                    <body style="background:#0f172a; color:#ef4444; display:flex; justify-content:center; align-items:center; height:100vh; margin:0; font-family:sans-serif;">
-                        <div style="text-align:center;">
-                            <h1 style="font-size:2rem; margin-bottom:10px;">⛔ Quyền truy cập bị từ chối!</h1>
-                            <p style="color:#94a3b8;">Bạn cần nhập đúng mật khẩu để xem nội dung. Vui lòng tải lại trang.</p>
-                        </div>
-                    </body>
-                `;
-                window.stop();
-            }
-        })();
-    </script>
+<html lang="en" style="--card-front: #0f172a; --card-front2: #7c3aed; --card-back: #b45309; --card-back2: #dc2626; --face-emoji: &quot;📖&quot;;"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Flashcard Premium 🪞 · Tự luyện tập</title>
     <link rel="preconnect" href="https://fonts.googleapis.com/">
@@ -3691,15 +3667,286 @@
             color: var(--muted);
             margin-bottom: 12px;
         }
+
+        /* ============================================================
+           SECURITY GATE · animated glass lock screen
+           ============================================================ */
+        html.locked {
+            overflow: hidden;
+        }
+        html.locked body > *:not(#securityGate) {
+            display: none !important;
+        }
+        #securityGate {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            background:
+                radial-gradient(1100px 600px at 85% -10%, rgba(196, 69, 105, .35), transparent 60%),
+                radial-gradient(900px 550px at -10% 110%, rgba(124, 58, 237, .32), transparent 55%),
+                linear-gradient(160deg, #1b1030, #241633 55%, #170d24);
+            overflow: hidden;
+        }
+        #securityGate .sg-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(60px);
+            opacity: .55;
+            animation: sgFloat 9s ease-in-out infinite;
+            pointer-events: none;
+        }
+        #securityGate .sg-orb-1 {
+            width: 320px;
+            height: 320px;
+            top: -80px;
+            left: -60px;
+            background: radial-gradient(circle, #c44569, transparent 70%);
+        }
+        #securityGate .sg-orb-2 {
+            width: 280px;
+            height: 280px;
+            bottom: -70px;
+            right: -50px;
+            background: radial-gradient(circle, #7c3aed, transparent 70%);
+            animation-delay: 1.5s;
+        }
+        #securityGate .sg-orb-3 {
+            width: 220px;
+            height: 220px;
+            bottom: 30%;
+            left: 8%;
+            background: radial-gradient(circle, #f0a864, transparent 70%);
+            animation-delay: 3s;
+        }
+        @keyframes sgFloat {
+            0%, 100% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-22px) scale(1.06); }
+        }
+        #securityGate .sg-card {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            max-width: 380px;
+            padding: 36px 30px 30px;
+            border-radius: 26px;
+            text-align: center;
+            background: rgba(255, 255, 255, .07);
+            border: 1px solid rgba(255, 255, 255, .18);
+            box-shadow: 0 30px 70px -25px rgba(0, 0, 0, .6), inset 0 1px 0 rgba(255, 255, 255, .18);
+            backdrop-filter: blur(22px);
+            -webkit-backdrop-filter: blur(22px);
+            animation: sgCardIn .6s cubic-bezier(.22, 1, .36, 1) both;
+        }
+        @keyframes sgCardIn {
+            from { opacity: 0; transform: translateY(24px) scale(.96); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        #securityGate .sg-card.sg-shake {
+            animation: sgShake .45s;
+        }
+        @keyframes sgShake {
+            10%, 90% { transform: translateX(-2px); }
+            20%, 80% { transform: translateX(4px); }
+            30%, 50%, 70% { transform: translateX(-8px); }
+            40%, 60% { transform: translateX(8px); }
+        }
+        #securityGate .sg-icon {
+            width: 64px;
+            height: 64px;
+            margin: 0 auto 16px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.7rem;
+            background: linear-gradient(135deg, #c44569, #7c3aed);
+            box-shadow: 0 12px 30px -10px rgba(196, 69, 105, .6);
+            animation: sgPulse 2.4s ease-in-out infinite;
+        }
+        @keyframes sgPulse {
+            0%, 100% { box-shadow: 0 12px 30px -10px rgba(196, 69, 105, .6); }
+            50% { box-shadow: 0 12px 42px -6px rgba(124, 58, 237, .75); }
+        }
+        #securityGate h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.4rem;
+            color: #fff;
+            margin-bottom: 6px;
+        }
+        #securityGate p.sg-sub {
+            color: rgba(255, 255, 255, .6);
+            font-size: .85rem;
+            margin-bottom: 22px;
+        }
+        #securityGate .sg-input-wrap {
+            position: relative;
+            margin-bottom: 14px;
+        }
+        #securityGate input#sgPasswordInput {
+            width: 100%;
+            padding: 14px 46px 14px 18px;
+            border-radius: 14px;
+            border: 1px solid rgba(255, 255, 255, .22);
+            background: rgba(255, 255, 255, .08);
+            color: #fff;
+            font-size: 1rem;
+            letter-spacing: .12em;
+            outline: none;
+            transition: border-color .25s, box-shadow .25s, background .25s;
+        }
+        #securityGate input#sgPasswordInput::placeholder {
+            color: rgba(255, 255, 255, .38);
+            letter-spacing: normal;
+        }
+        #securityGate input#sgPasswordInput:focus {
+            border-color: #c44569;
+            background: rgba(255, 255, 255, .12);
+            box-shadow: 0 0 0 4px rgba(196, 69, 105, .22);
+        }
+        #securityGate .sg-toggle-eye {
+            position: absolute;
+            right: 6px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 34px;
+            height: 34px;
+            border: none;
+            background: transparent;
+            color: rgba(255, 255, 255, .6);
+            font-size: 1.05rem;
+            cursor: pointer;
+            border-radius: 50%;
+            transition: color .2s, background .2s;
+        }
+        #securityGate .sg-toggle-eye:hover {
+            color: #fff;
+            background: rgba(255, 255, 255, .1);
+        }
+        #securityGate .sg-submit {
+            width: 100%;
+            padding: 13px;
+            border: none;
+            border-radius: 14px;
+            font-size: .95rem;
+            font-weight: 700;
+            letter-spacing: .01em;
+            color: #fff;
+            background: linear-gradient(120deg, #c44569, #7c3aed);
+            cursor: pointer;
+            box-shadow: 0 14px 30px -14px rgba(124, 58, 237, .7);
+            transition: transform .25s cubic-bezier(.34, 1.56, .64, 1), box-shadow .25s;
+        }
+        #securityGate .sg-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 18px 36px -12px rgba(124, 58, 237, .85);
+        }
+        #securityGate .sg-submit:active {
+            transform: translateY(0) scale(.98);
+        }
+        #securityGate .sg-error {
+            min-height: 20px;
+            margin-top: 12px;
+            font-size: .82rem;
+            color: #ff8fa3;
+            opacity: 0;
+            transform: translateY(-4px);
+            transition: opacity .25s, transform .25s;
+        }
+        #securityGate .sg-error.sg-show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        #securityGate.sg-unlocking .sg-card {
+            animation: sgCardOut .5s cubic-bezier(.55, 0, .55, .2) both;
+        }
+        @keyframes sgCardOut {
+            to { opacity: 0; transform: translateY(-18px) scale(.94); }
+        }
+        #securityGate.sg-unlocking {
+            animation: sgGateOut .55s ease-in .1s both;
+        }
+        @keyframes sgGateOut {
+            to { opacity: 0; visibility: hidden; }
+        }
     </style>
 </head>
 <body class="theme-forest" style="">
+
+    <!-- ===== SECURITY GATE ===== -->
+    <div id="securityGate">
+        <span class="sg-orb sg-orb-1"></span>
+        <span class="sg-orb sg-orb-2"></span>
+        <span class="sg-orb sg-orb-3"></span>
+        <div class="sg-card" id="sgCard">
+            <div class="sg-icon">🔒</div>
+            <h2>Khu vực riêng tư</h2>
+            <p class="sg-sub">Nhập mật khẩu để mở khoá Flashcard Premium</p>
+            <form id="sgForm" autocomplete="off">
+                <div class="sg-input-wrap">
+                    <input type="password" id="sgPasswordInput" placeholder="Nhập mật khẩu…" inputmode="numeric" autocomplete="off">
+                    <button type="button" class="sg-toggle-eye" id="sgToggleEye" title="Hiện/ẩn mật khẩu" aria-label="Hiện/ẩn mật khẩu">👁️</button>
+                </div>
+                <button type="submit" class="sg-submit">Mở khoá →</button>
+                <div class="sg-error" id="sgError">❌ Mật khẩu chưa đúng, thử lại nhé.</div>
+            </form>
+        </div>
+    </div>
+    <script id="security-guard">
+        (() => {
+            const PASSWORD = "200110";
+            document.documentElement.classList.add('locked');
+
+            const gate = document.getElementById('securityGate');
+            const card = document.getElementById('sgCard');
+            const form = document.getElementById('sgForm');
+            const input = document.getElementById('sgPasswordInput');
+            const errorEl = document.getElementById('sgError');
+            const toggleEye = document.getElementById('sgToggleEye');
+
+            toggleEye.addEventListener('click', () => {
+                const isPw = input.type === 'password';
+                input.type = isPw ? 'text' : 'password';
+                toggleEye.textContent = isPw ? '🙈' : '👁️';
+            });
+
+            function showError() {
+                errorEl.classList.add('sg-show');
+                card.classList.remove('sg-shake');
+                // force reflow so the shake animation can retrigger
+                void card.offsetWidth;
+                card.classList.add('sg-shake');
+                input.value = '';
+                input.focus();
+            }
+
+            function unlock() {
+                gate.classList.add('sg-unlocking');
+                document.documentElement.classList.remove('locked');
+                setTimeout(() => { gate.remove(); }, 650);
+            }
+
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+                if (input.value === PASSWORD) {
+                    unlock();
+                } else {
+                    showError();
+                }
+            });
+
+            setTimeout(() => input.focus(), 300);
+        })();
+    </script>
 
     <!-- ===== SETTINGS FAB ===== -->
     <button class="settings-fab" id="settingsBtn" title="Settings" aria-label="Settings" data-original-display="" style="">⚙️</button>
 
     <!-- ===== TIMER ISLAND (Dynamic-Island style hub, top-center) ===== -->
-    <div class="timer-island expanded" id="timerIsland" data-original-display="" style="">
+    <div class="timer-island" id="timerIsland" data-original-display="" style="">
         <button class="island-pill" id="islandPill" type="button" title="Open quick hub" aria-label="Open quick hub">
             <span class="island-pill-icon" id="islandPillIcon">🕐</span>
             <span class="island-pill-clock" id="islandPillClock">10:11</span>
