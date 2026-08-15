@@ -1,0 +1,347 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Flashcard · Advanced Upgrade (update8)</title>
+  <style>
+    :root{--bg:#f6f7fb;--card:#fff;--muted:#666;--accent:#6d5bd0}
+    body{font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial; margin:0; background:var(--bg); color:#111}
+    .app{display:flex;min-height:100vh}
+    .sidebar{width:260px;background:linear-gradient(180deg,#fff,#f3f1ff);border-right:1px solid #e6e6ee;padding:18px}
+    .logo{font-weight:700;color:var(--accent);margin-bottom:12px}
+    .nav{display:flex;flex-direction:column;gap:8px}
+    .nav button{background:transparent;border:none;padding:10px 12px;text-align:left;border-radius:8px;cursor:pointer}
+    .nav button.active{background:rgba(109,91,208,0.12)}
+    .main{flex:1;padding:18px}
+    .topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px}
+    .card{background:var(--card);padding:14px;border-radius:12px;box-shadow:0 6px 20px rgba(25,20,50,0.04);border:1px solid rgba(20,20,40,0.02)}
+    .card h3{margin:0 0 8px 0;font-size:1rem}
+    .big{font-size:1.4rem;font-weight:700}
+    /* flashcard */
+    .fc-stage{display:flex;gap:12px;align-items:flex-start}
+    .fc-card{width:540px;height:320px;background:linear-gradient(180deg,#0f172a,#7c3aed);color:#fff;border-radius:16px;padding:20px;position:relative;display:flex;flex-direction:column;justify-content:center;align-items:center;cursor:pointer;transform-style:preserve-3d;transition:transform .6s}
+    .fc-card.flipped{transform:rotateY(180deg)}
+    .fc-front,.fc-back{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:20px;backface-visibility:hidden}
+    .fc-back{transform:rotateY(180deg);background:linear-gradient(180deg,#f59e0b,#dc2626);color:#fff;border-radius:16px}
+    .rate-row{display:flex;gap:8px;margin-top:14px}
+    .rate-row button{padding:8px 12px;border-radius:8px;border:none;cursor:pointer}
+    .controls{display:flex;flex-direction:column;gap:8px}
+    .lib-list{max-height:600px;overflow:auto}
+    .lib-item{display:flex;justify-content:space-between;padding:8px 10px;border-radius:8px;cursor:pointer}
+    .search{display:flex;gap:8px;margin-bottom:8px}
+    textarea{width:100%;min-height:120px}
+    .muted{color:var(--muted)}
+    .small{font-size:.85rem}
+    .btn{padding:8px 12px;border-radius:8px;border:none;background:var(--accent);color:#fff;cursor:pointer}
+  </style>
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="logo">Flashcard · Upgrade (update8)</div>
+      <div class="muted small">Static upgrade that reads original chiu.html vocab when possible.<br>Branch: update8</div>
+      <nav class="nav" id="nav">
+        <button data-view="dashboard" class="active">Dashboard</button>
+        <button data-view="library">Vocabulary Library</button>
+        <button data-view="training">Training Center</button>
+        <button data-view="mastery">Mastery</button>
+        <button data-view="progress">Progress</button>
+        <hr>
+        <button id="btn-export">Export Progress</button>
+        <button id="btn-import">Import Progress</button>
+        <button id="btn-reset">Reset Progress</button>
+      </nav>
+      <div style="margin-top:14px;font-size:.9rem">
+        <div class="muted">Quick actions</div>
+        <div style="display:flex;gap:8px;margin-top:8px">
+          <button id="btn-load-remote" class="btn" style="background:#444">Load from ../chiu.html</button>
+          <button id="btn-paste" class="btn">Paste vocab</button>
+        </div>
+      </div>
+    </aside>
+    <main class="main">
+      <div class="topbar">
+        <div>
+          <h1 style="margin:0">Advanced Vocabulary Training System</h1>
+          <div class="muted small">Offline-first · localStorage SRS · update8</div>
+        </div>
+        <div class="small muted">Shortcuts: Space=flip · 1/2/3/4 = Again/Hard/Good/Easy · Ctrl/Cmd+K = Search</div>
+      </div>
+      <section id="view-dashboard" class="view">
+        <div class="grid" id="dashboard-grid">
+          <div class="card"><h3>Total vocabulary</h3><div id="stat-total" class="big">—</div></div>
+          <div class="card"><h3>Due today</h3><div id="stat-due" class="big">—</div></div>
+          <div class="card"><h3>Overdue</h3><div id="stat-overdue" class="big">—</div></div>
+          <div class="card"><h3>Weak words</h3><div id="stat-weak" class="big">—</div></div>
+          <div class="card"><h3>Today's reviewed</h3><div id="stat-reviewed" class="big">—</div></div>
+          <div class="card"><h3>Current streak</h3><div id="stat-streak" class="big">—</div></div>
+        </div>
+        <div style="margin-top:12px" class="card">
+          <h3>Today's Mission</h3>
+          <div id="todays-mission" class="muted small">Loading...</div>
+          <div style="margin-top:10px"><button id="start-today" class="btn">Start Today's Session</button></div>
+        </div>
+      </section>
+
+      <section id="view-library" class="view" style="display:none">
+        <div class="search">
+          <input id="lib-search" placeholder="Search words..." style="flex:1;padding:8px;border-radius:8px;border:1px solid #ddd">
+          <select id="lib-filter"><option value="all">All</option><option value="due">Due</option><option value="weak">Weak</option></select>
+        </div>
+        <div class="card lib-list" id="lib-list"></div>
+        <div id="vocab-detail" style="margin-top:12px"></div>
+      </section>
+
+      <section id="view-training" class="view" style="display:none">
+        <div class="fc-stage">
+          <div>
+            <div class="fc-card" id="fc-card">
+              <div class="fc-front"><div id="fc-term" style="font-size:2rem;font-weight:700"></div><div id="fc-ipa" class="muted" style="margin-top:8px"></div></div>
+              <div class="fc-back"><div id="fc-def" style="font-size:1.05rem;text-align:center;max-width:90%"></div></div>
+            </div>
+            <div class="rate-row" style="margin-top:10px">
+              <button id="rate-again" style="background:#f87171;color:#fff" class="rate">Again</button>
+              <button id="rate-hard" style="background:#f59e0b;color:#fff" class="rate">Hard</button>
+              <button id="rate-good" style="background:#10b981;color:#fff" class="rate">Good</button>
+              <button id="rate-easy" style="background:#06b6d4;color:#fff" class="rate">Easy</button>
+            </div>
+          </div>
+          <div class="controls card">
+            <h3>Session</h3>
+            <div class="muted small">Queue</div>
+            <div id="session-queue" style="min-height:120px;max-height:300px;overflow:auto"></div>
+            <div style="margin-top:10px;display:flex;gap:8px">
+              <button id="btn-next" class="btn">Next</button>
+              <button id="btn-shuffle" class="btn">Shuffle</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="view-mastery" class="view" style="display:none">
+        <div class="grid" id="mastery-grid"></div>
+      </section>
+
+      <section id="view-progress" class="view" style="display:none">
+        <div class="card"><h3>Progress & Export</h3>
+          <div style="margin-top:8px"><button id="btn-export2" class="btn">Export JSON</button></div>
+          <div style="margin-top:8px">Import: <input type="file" id="file-import"></div>
+          <div style="margin-top:8px"><button id="btn-reset2" class="btn">Reset progress</button></div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <div id="modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);align-items:center;justify-content:center;padding:20px">
+    <div style="background:#fff;padding:20px;border-radius:12px;max-width:720px;width:100%" id="modal-inner"></div>
+  </div>
+
+<script>
+// ==================== STORAGE & DATA LAYER ====================
+const STORAGE_KEY = 'flash_upgrade_v1';
+function saveState(state){localStorage.setItem(STORAGE_KEY, JSON.stringify(state));}
+function loadState(){try{return JSON.parse(localStorage.getItem(STORAGE_KEY))||{};}catch(e){return {};}}
+
+// initial blank state
+let STORE = loadState();
+if(!STORE.vocab) STORE.vocab = [];
+if(!STORE.srs) STORE.srs = {};
+if(!STORE.stats) STORE.stats = {reviews:[],mistakes:[],days:{}};
+
+// parse remote original chiu.html for vocabulary if exists
+async function tryLoadOriginal(){
+  try{
+    const res = await fetch('../chiu.html');
+    const txt = await res.text();
+    // heuristics: look for large array like 'var data = [ ... ]' or 'VOCAB' or 'wordList'
+    let m = txt.match(/var\s+(?:VOCAB|words|wordList|data)\s*=\s*(\[\s*\{[\s\S]*?\}\s*\])/);
+    if(!m) m = txt.match(/window\.(?:VOCAB|words|wordList)\s*=\s*(\[\s*\{[\s\S]*?\}\s*\])/);
+    if(!m) m = txt.match(/(\[\s*\{\s*\"word\"[\s\S]*?\}\s*\])/);
+    if(m){
+      const jsonText = m[1];
+      const parsed = JSON.parse(jsonText);
+      if(Array.isArray(parsed) && parsed.length>0){
+        ingestVocab(parsed);
+        return true;
+      }
+    }
+  }catch(e){console.warn('remote parse failed',e)}
+  return false;
+}
+
+function ingestVocab(arr){
+  // map entries, keep original data, but ensure SRS fields
+  const now = new Date().toISOString();
+  arr.forEach((item, idx)=>{
+    const id = item.id||item.word||('w'+idx);
+    const exists = STORE.vocab.find(v=>v.id==id||v.word==item.word);
+    if(!exists){
+      const v = Object.assign({},item);
+      v.id = id;
+      v.favorite = v.favorite||false;
+      v.difficult = v.difficult||false;
+      // srs default
+      STORE.srs[id] = STORE.srs[id] || {
+        id, level:'NEW', ease:2.5, interval:0, repetitions:0, correct:0, wrong:0, streak:0, lastReviewed:null, nextReview:null, averageResponseTime:0, masteryScore:0, status:'new'
+      };
+      STORE.vocab.push(v);
+    }
+  });
+  saveState(STORE);
+  renderAll();
+}
+
+// manual paste
+function openPasteModal(){
+  const m = document.getElementById('modal'); const inner = document.getElementById('modal-inner');
+  inner.innerHTML = `<h3>Paste vocabulary JSON</h3><textarea id="paste-area"></textarea><div style="margin-top:8px"><button id="paste-ok" class="btn">Import</button> <button id="paste-cancel">Cancel</button></div>`;
+  m.style.display='flex';
+  document.getElementById('paste-cancel').onclick = ()=>{m.style.display='none'};
+  document.getElementById('paste-ok').onclick = ()=>{
+    try{
+      const data = JSON.parse(document.getElementById('paste-area').value);
+      if(Array.isArray(data)){ingestVocab(data);m.style.display='none';showToast('Imported '+data.length+' words');}
+      else alert('JSON must be array of word objects');
+    }catch(e){alert('invalid JSON: '+e.message)}
+  }
+}
+
+// ==================== SRS ENGINE ====================
+function nowISO(){return new Date().toISOString();}
+function daysToMs(d){return d*24*60*60*1000}
+function scheduleReview(id, response, rt){
+  const s = STORE.srs[id]; if(!s) return;
+  const prevInterval = s.interval||0; // days
+  if(response==='again'){
+    s.repetitions = 0; s.interval = 0.007; s.ease = Math.max(1.3,(s.ease||2.5)-0.15); s.streak = 0; s.wrong=(s.wrong||0)+1; s.lastReviewed=nowISO(); s.nextReview = new Date(Date.now()+Math.round(daysToMs(s.interval))).toISOString();
+  } else if(response==='hard'){
+    s.repetitions = (s.repetitions||0)+1; s.interval = Math.max(0.1, (prevInterval||1) * (s.ease||2.5) * 0.9); s.ease = Math.max(1.3,(s.ease||2.5)-0.05); s.streak=0; s.lastReviewed=nowISO(); s.nextReview = new Date(Date.now()+Math.round(daysToMs(s.interval))).toISOString();
+  } else if(response==='good'){
+    s.repetitions = (s.repetitions||0)+1; s.interval = prevInterval? prevInterval*(s.ease||2.5):1; s.ease = (s.ease||2.5)+0.05; s.correct=(s.correct||0)+1; s.streak=(s.streak||0)+1; s.lastReviewed=nowISO(); s.nextReview = new Date(Date.now()+Math.round(daysToMs(s.interval))).toISOString();
+  } else if(response==='easy'){
+    s.repetitions = (s.repetitions||0)+1; s.interval = prevInterval? prevInterval*(s.ease||2.5)*1.3:2; s.ease = (s.ease||2.5)+0.15; s.correct=(s.correct||0)+1; s.streak=(s.streak||0)+1; s.lastReviewed=nowISO(); s.nextReview = new Date(Date.now()+Math.round(daysToMs(s.interval))).toISOString();
+  }
+  // update masteryScore simple heuristic
+  const total = (s.correct||0)+(s.wrong||0); s.masteryScore = total? Math.round((s.correct||0)/total*100): (s.level==='MASTERED'?100:0);
+  // promote/demote
+  if(s.streak>=6 && s.level!=='MASTERED'){ if(s.level==='NEW') s.level='LEARNING'; else if(s.level==='LEARNING') s.level='FAMILIAR'; else if(s.level==='FAMILIAR') s.level='STRONG'; else s.level='MASTERED'; }
+  if((s.wrong||0)>5) s.level='LEARNING';
+  // record history
+  STORE.stats.reviews.push({id,when:nowISO(),response,rt});
+  saveState(STORE);
+}
+
+// ==================== UI RENDER ====================
+function showToast(msg,ms=2000){const t = document.createElement('div');t.className='card toast';t.textContent=msg;Object.assign(t.style,{position:'fixed',left:'50%',top:'14px',transform:'translateX(-50%)',zIndex:9999});document.body.appendChild(t);setTimeout(()=>t.remove(),ms)}
+
+function renderDashboard(){
+  const total = STORE.vocab.length; document.getElementById('stat-total').textContent=total;
+  // compute due/overdue/weak
+  const today = Date.now(); let due=0,over=0,weak=0,reviewedToday=0,streak=STORE.stats.currentStreak||0;
+  STORE.vocab.forEach(v=>{const s=STORE.srs[v.id]; if(s&&s.nextReview){const nr=new Date(s.nextReview).getTime(); if(nr<=today) {if(nr < today - 24*3600*1000) over++; else due++;}} if(s&&s.masteryScore<50) weak++;});
+  document.getElementById('stat-due').textContent=due; document.getElementById('stat-overdue').textContent=over; document.getElementById('stat-weak').textContent=weak; document.getElementById('stat-reviewed').textContent=STORE.stats.reviews.length||0; document.getElementById('stat-streak').textContent=streak;
+  // today's mission
+  const mission = [`Due reviews: ${due}`, `Weak words: ${weak}`, `Optional new words: 10`, `Context practice: 10`];
+  document.getElementById('todays-mission').innerHTML = mission.map(m=>'<div>'+m+'</div>').join('');
+}
+
+function renderLibrary(filter='',q=''){
+  const list = document.getElementById('lib-list'); list.innerHTML='';
+  const items = STORE.vocab.filter(v=>{ if(q && !(v.word||'').toLowerCase().includes(q.toLowerCase())) return false; if(filter==='due'){ const s=STORE.srs[v.id]; return s && s.nextReview && new Date(s.nextReview).getTime()<=Date.now(); } if(filter==='weak'){ const s=STORE.srs[v.id]; return s && (s.masteryScore||0)<50; } return true; });
+  items.forEach(v=>{
+    const s=STORE.srs[v.id]||{};
+    const el=document.createElement('div');el.className='lib-item card'; el.innerHTML = `<div><strong>${v.word||v.term||''}</strong><div class="muted small">${v.pos||''} · ${v.meaning||v.meaning_en||''}</div></div><div class="muted small">${s.level||'NEW'}</div>`;
+    el.onclick = ()=>{ showVocabDetail(v); }
+    list.appendChild(el);
+  });
+}
+
+function showVocabDetail(v){ const d=document.getElementById('vocab-detail'); const s=STORE.srs[v.id]||{}; d.innerHTML = `<div class="card"><h3>${v.word||''} <span class="muted small">${v.pos||''}</span></h3>
+    <div class="muted small">Pronunciation: ${v.pronunciation||v.ipa||''}</div>
+    <div style="margin-top:8px">EN: ${v.meaning||v.meaning_en||''}</div>
+    <div style="margin-top:8px">VN: ${v.meaning_vn||''}</div>
+    <div style="margin-top:8px">Examples: ${(v.examples||[]).slice(0,3).join(' ; ')}</div>
+    <div style="margin-top:8px">Mastery: ${s.masteryScore||0} · Level: ${s.level||'NEW'} · Next: ${s.nextReview||'—'}</div>
+    <div style="margin-top:8px"><button id="btn-practice-word" class="btn">Practice this word</button></div>
+    </div>`;
+    document.getElementById('btn-practice-word').onclick = ()=>{ startSessionWith([v.id]); activateView('training'); }
+}
+
+// ==================== TRAINING & FLASHCARD ====================
+let SESSION_QUEUE = [];
+let CURRENT_CARD = null; let CARD_FLIPPED=false; let CARD_START_TIME=0;
+function buildTodaySession(){
+  // simple balanced session: due + weak + new
+  const due = STORE.vocab.filter(v=>{const s=STORE.srs[v.id]; return s && s.nextReview && new Date(s.nextReview).getTime()<=Date.now()});
+  const weak = STORE.vocab.filter(v=>{const s=STORE.srs[v.id]; return s && (s.masteryScore||0)<50});
+  const news = STORE.vocab.filter(v=>{const s=STORE.srs[v.id]; return s && s.level==='NEW'}).slice(0,10);
+  const pick = [...due.slice(0,30),...weak.slice(0,20),...news.slice(0,10)];
+  const ids = pick.map(p=>p.id);
+  startSessionWith(ids);
+}
+
+function startSessionWith(ids){ SESSION_QUEUE = ids.slice(); renderQueue(); nextCard(); }
+function renderQueue(){ const q = document.getElementById('session-queue'); q.innerHTML = SESSION_QUEUE.map(id=>{const v=STORE.vocab.find(x=>x.id===id); return `<div>${v?v.word:'?'}</div>`}).join(''); }
+
+function nextCard(){ if(SESSION_QUEUE.length===0){ showToast('Session complete'); CURRENT_CARD=null; document.getElementById('fc-term').textContent=''; document.getElementById('fc-def').textContent=''; return; } const id = SESSION_QUEUE.shift(); renderQueue(); const v = STORE.vocab.find(x=>x.id===id); if(!v) return nextCard(); CURRENT_CARD = v; CARD_FLIPPED=false; updateCardUI(); CARD_START_TIME = Date.now(); }
+
+function updateCardUI(){ if(!CURRENT_CARD) return; document.getElementById('fc-term').textContent = CURRENT_CARD.word||CURRENT_CARD.term||''; document.getElementById('fc-ipa').textContent = CURRENT_CARD.pronunciation||CURRENT_CARD.ipa||''; document.getElementById('fc-def').textContent = CURRENT_CARD.meaning||CURRENT_CARD.meaning_en||CURRENT_CARD.definition||''; const card = document.getElementById('fc-card'); card.classList.remove('flipped'); }
+
+function flipCard(){ const card = document.getElementById('fc-card'); CARD_FLIPPED = !CARD_FLIPPED; if(CARD_FLIPPED) card.classList.add('flipped'); else card.classList.remove('flipped'); }
+
+function rateCurrent(r){ if(!CURRENT_CARD) return; const rt = Date.now()-CARD_START_TIME; scheduleReview(CURRENT_CARD.id, r, rt); // if wrong/again push back
+ if(r==='again'){ // requeue shortly
+   SESSION_QUEUE.splice(2,0,CURRENT_CARD.id);
+ }
+ // record mistake if again/hard
+ if(r==='again' || r==='hard'){ STORE.stats.mistakes.push({id:CURRENT_CARD.id,when:nowISO(),type:r}); saveState(STORE); }
+ nextCard(); renderDashboard(); }
+
+// ==================== EXPORT / IMPORT / RESET ====================
+function exportJSON(){ const data = JSON.stringify(STORE,null,2); const blob = new Blob([data],{type:'application/json'}); const url = URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download='flash_progress.json'; a.click(); URL.revokeObjectURL(url);} 
+function importFile(file){ const reader=new FileReader(); reader.onload=e=>{ try{ const data=JSON.parse(e.target.result); // basic validation
+    if(!data.vocab || !Array.isArray(data.vocab)) return alert('invalid file'); STORE=data; saveState(STORE); renderAll(); showToast('Import complete'); }catch(er){alert('Invalid JSON')} }; reader.readAsText(file);} 
+function resetProgress(){ if(!confirm('Reset all progress?')) return; STORE.srs={}; STORE.stats={reviews:[],mistakes:[],days:{}}; saveState(STORE); renderAll(); }
+
+// ==================== RENDER ALL & NAV ====================
+function renderAll(){ renderDashboard(); renderLibrary(document.getElementById('lib-filter').value, document.getElementById('lib-search').value); renderMastery(); }
+function renderMastery(){ const g=document.getElementById('mastery-grid'); g.innerHTML=''; const groups = {NEW:0,LEARNING:0,FAMILIAR:0,STRONG:0,MASTERED:0}; STORE.vocab.forEach(v=>{ const s=STORE.srs[v.id]||{}; groups[s.level||'NEW'] = (groups[s.level||'NEW']||0)+1; }); for(const k in groups){ const el=document.createElement('div'); el.className='card'; el.innerHTML=`<h3>${k}</h3><div class="big">${groups[k]}</div>`; g.appendChild(el);} }
+
+// navigation
+function activateView(name){ document.querySelectorAll('.view').forEach(v=>v.style.display='none'); document.getElementById('view-'+name).style.display='block'; document.querySelectorAll('#nav button').forEach(b=>b.classList.toggle('active',b.dataset.view===name)); }
+
+// ==================== INIT & BINDINGS ====================
+window.addEventListener('DOMContentLoaded',()=>{
+  document.querySelectorAll('#nav button').forEach(b=>{ b.addEventListener('click',()=>{ if(b.dataset.view){ activateView(b.dataset.view);} }); });
+  document.getElementById('btn-load-remote').onclick = async ()=>{ const ok = await tryLoadOriginal(); if(ok) showToast('Loaded vocab from ../chiu.html'); else alert('Could not auto-detect vocab in ../chiu.html. You can paste JSON.'); };
+  document.getElementById('btn-paste').onclick = openPasteModal;
+  document.getElementById('lib-search').addEventListener('input',e=>renderLibrary(document.getElementById('lib-filter').value,e.target.value));
+  document.getElementById('lib-filter').addEventListener('change',()=>renderLibrary(document.getElementById('lib-filter').value,document.getElementById('lib-search').value));
+  document.getElementById('start-today').onclick = ()=>{ buildTodaySession(); activateView('training'); };
+  document.getElementById('fc-card').onclick = flipCard;
+  document.getElementById('btn-next').onclick = nextCard;
+  document.getElementById('btn-shuffle').onclick = ()=>{ SESSION_QUEUE = SESSION_QUEUE.sort(()=>Math.random()-0.5); renderQueue(); };
+  document.getElementById('rate-again').onclick = ()=>rateCurrent('again');
+  document.getElementById('rate-hard').onclick = ()=>rateCurrent('hard');
+  document.getElementById('rate-good').onclick = ()=>rateCurrent('good');
+  document.getElementById('rate-easy').onclick = ()=>rateCurrent('easy');
+  document.getElementById('btn-export').onclick = exportJSON; document.getElementById('btn-export2').onclick = exportJSON;
+  document.getElementById('file-import').addEventListener('change',e=>{ if(e.target.files[0]) importFile(e.target.files[0]); });
+  document.getElementById('btn-import').onclick = ()=>{ document.getElementById('file-import').click(); };
+  document.getElementById('btn-reset').onclick = resetProgress; document.getElementById('btn-reset2').onclick = resetProgress;
+
+  // keyboard shortcuts
+  window.addEventListener('keydown',e=>{
+    if(e.code==='Space'){ e.preventDefault(); flipCard(); }
+    if(e.key==='1') rateCurrent('again'); if(e.key==='2') rateCurrent('hard'); if(e.key==='3') rateCurrent('good'); if(e.key==='4') rateCurrent('easy');
+    if((e.ctrlKey||e.metaKey) && e.key.toLowerCase()==='k'){ e.preventDefault(); document.getElementById('lib-search').focus(); }
+  });
+
+  renderAll();
+});
+</script>
+</body>
+</html>
