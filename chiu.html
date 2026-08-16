@@ -1707,6 +1707,167 @@
             box-shadow: 0 14px 30px -12px rgba(120, 50, 110, .6);
         }
 
+        /* ===== dashboard overview: stat cards + streak card ===== */
+        .dash-overview {
+            display: grid;
+            grid-template-columns: 1fr 1.1fr;
+            gap: 12px;
+            margin: 18px 0;
+        }
+        @media (max-width:720px) {
+            .dash-overview {
+                grid-template-columns: 1fr;
+            }
+        }
+        .overview-stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+        .ov-stat {
+            padding: 14px 10px;
+            border-radius: 16px;
+            background: var(--card-bg);
+            border: 1px solid var(--line);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            text-align: center;
+            transition: transform .2s var(--ease-spring);
+        }
+        .ov-stat:hover {
+            transform: translateY(-2px);
+        }
+        .ov-num {
+            font-family: 'Playfair Display', serif;
+            font-weight: 800;
+            font-size: 1.3rem;
+            line-height: 1.1;
+        }
+        .ov-stat:nth-child(1) .ov-num {
+            color: var(--accent3);
+        }
+        .ov-stat:nth-child(2) .ov-num {
+            color: var(--good);
+        }
+        .ov-stat:nth-child(3) .ov-num {
+            color: var(--accent2);
+        }
+        .ov-stat:nth-child(4) .ov-num {
+            color: var(--accent);
+        }
+        .ov-label {
+            font-size: .66rem;
+            color: var(--muted);
+            margin-top: 3px;
+            font-weight: 600;
+        }
+        .streak-card {
+            border-radius: 20px;
+            padding: 16px 18px;
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            color: #fff;
+            box-shadow: 0 14px 30px -14px rgba(196, 69, 105, .55);
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .streak-card-top {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .streak-flame {
+            font-size: 1.8rem;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, .2));
+        }
+        .streak-num {
+            font-family: 'Playfair Display', serif;
+            font-weight: 800;
+            font-size: 1.7rem;
+            line-height: 1;
+        }
+        .streak-sub {
+            font-size: .72rem;
+            opacity: .9;
+            margin-top: 2px;
+        }
+        .streak-days {
+            display: flex;
+            justify-content: space-between;
+            gap: 4px;
+        }
+        .streak-day {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+            flex: 1;
+        }
+        .streak-day-dot {
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, .22);
+            border: 1px solid rgba(255, 255, 255, .35);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: .72rem;
+            font-weight: 700;
+            transition: transform .2s var(--ease-spring);
+        }
+        .streak-day.filled .streak-day-dot {
+            background: #fff;
+            color: var(--accent);
+            border-color: #fff;
+        }
+        .streak-day.today .streak-day-dot {
+            box-shadow: 0 0 0 2px rgba(255, 255, 255, .7);
+        }
+        .streak-day-label {
+            font-size: .6rem;
+            opacity: .85;
+            text-transform: uppercase;
+        }
+
+        /* ===== quick access ===== */
+        .quick-access-block {
+            margin: 18px 0;
+        }
+        .quick-access-title {
+            font-size: .8rem;
+            font-weight: 700;
+            color: var(--muted);
+            margin-bottom: 10px;
+            letter-spacing: .02em;
+        }
+        .quick-access-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+        @media (min-width:640px) {
+            .quick-access-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+        .qa-card {
+            display: flex !important;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            min-width: 0 !important;
+            padding: 16px 8px !important;
+            text-align: center;
+        }
+        .qa-icon {
+            font-size: 1.4rem;
+        }
+        .qa-text {
+            font-size: .78rem;
+        }
+
         /* ===== library dictionary ===== */
         .lib-dict {
             margin: 26px 0;
@@ -2083,6 +2244,72 @@
             border: 1px solid var(--line);
             backdrop-filter: blur(8px);
             -webkit-backdrop-filter: blur(8px);
+        }
+
+        /* ===== KNOWN / UNKNOWN marking ===== */
+        .know-row {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            margin: 4px 0 2px;
+        }
+        .kn-btn {
+            flex: 1;
+            max-width: 220px;
+            padding: 11px 16px;
+            border-radius: 999px;
+            font-weight: 700;
+            font-size: .88rem;
+            cursor: pointer;
+            border: 1.5px solid var(--line);
+            background: var(--card-bg);
+            color: var(--ink);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            transition: transform .2s var(--ease-spring), box-shadow .2s, border-color .2s, background .2s, color .2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+        .kn-btn:hover {
+            transform: translateY(-2px);
+        }
+        .kn-btn-unknown.active {
+            background: linear-gradient(135deg, var(--bad), #ef7c86);
+            border-color: var(--bad);
+            color: #fff;
+            box-shadow: 0 10px 22px -10px rgba(214, 69, 80, .55);
+        }
+        .kn-btn-known.active {
+            background: linear-gradient(135deg, var(--good), #34c9a3);
+            border-color: var(--good);
+            color: #fff;
+            box-shadow: 0 10px 22px -10px rgba(15, 157, 123, .5);
+        }
+        .know-status-chip {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            font-size: .68rem;
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 999px;
+            z-index: 3;
+            display: none;
+            letter-spacing: .02em;
+        }
+        .know-status-chip.show-known {
+            display: inline-block;
+            background: rgba(15, 157, 123, .18);
+            color: var(--good);
+            border: 1px solid rgba(15, 157, 123, .4);
+        }
+        .know-status-chip.show-unknown {
+            display: inline-block;
+            background: rgba(214, 69, 80, .18);
+            color: var(--bad);
+            border: 1px solid rgba(214, 69, 80, .4);
         }
 
         .kbd-hint {
@@ -4282,16 +4509,33 @@
                 </div>
             </div>
 
-            <div class="stats-bar" id="statsBar">
-            <div class="stat-chip"><span class="stat-emoji">🔥</span><div><div class="stat-num">1 days</div><div class="stat-label">Day streak</div></div></div>
-            <div class="stat-chip"><div class="goal-ring-wrap"><svg width="34" height="34" viewBox="0 0 34 34"><circle class="goal-ring-bg" cx="17" cy="17" r="15"></circle><circle class="goal-ring-fg" cx="17" cy="17" r="15" stroke-dasharray="94.24777960769379" stroke-dashoffset="61.261056745000964"></circle></svg></div><div><div class="stat-num">7/20</div><div class="stat-label">Today's goal</div></div></div>
-            <div class="stat-chip"><span class="stat-emoji">🏆</span><div><div class="stat-num">2</div><div class="stat-label">Quizzes taken</div></div></div>
-          </div>
-            <div class="dash-tools">
-                <button class="dash-tool-btn" id="dashRandomBtn" type="button">🎲 Random word</button>
-                <button class="dash-tool-btn" id="dashListenBtn" type="button">🔊 Quick listen (5 words)</button>
-                <button class="dash-tool-btn" id="dashDictBtn" type="button">📖 Cambridge dictionary</button>
-                <button class="dash-tool-btn practice-btn" id="dashPracticeBtn" type="button">🏋️ Tự luyện tập</button>
+            <div class="dash-overview">
+                <div class="overview-stats-grid" id="overviewStatsGrid">
+                    <div class="ov-stat"><div class="ov-num" id="ovTotalWords">0</div><div class="ov-label">Tổng từ</div></div>
+                    <div class="ov-stat"><div class="ov-num" id="ovMastered">0</div><div class="ov-label">Đã thuộc</div></div>
+                    <div class="ov-stat"><div class="ov-num" id="ovProgress">0%</div><div class="ov-label">Tiến độ</div></div>
+                    <div class="ov-stat"><div class="ov-num" id="ovQuizzes">0</div><div class="ov-label">Lượt luyện tập</div></div>
+                </div>
+                <div class="streak-card">
+                    <div class="streak-card-top">
+                        <span class="streak-flame">🔥</span>
+                        <div>
+                            <div class="streak-num" id="streakNum">0</div>
+                            <div class="streak-sub">ngày liên tiếp học</div>
+                        </div>
+                    </div>
+                    <div class="streak-days" id="streakDays"></div>
+                </div>
+            </div>
+
+            <div class="quick-access-block">
+                <div class="quick-access-title">⚡ Truy cập nhanh</div>
+                <div class="quick-access-grid">
+                    <button class="dash-tool-btn qa-card" id="dashRandomBtn" type="button"><span class="qa-icon">🎲</span><span class="qa-text">Từ ngẫu nhiên</span></button>
+                    <button class="dash-tool-btn qa-card practice-btn" id="dashPracticeBtn" type="button"><span class="qa-icon">🏋️</span><span class="qa-text">Luyện tập</span></button>
+                    <button class="dash-tool-btn qa-card" id="dashDictBtn" type="button"><span class="qa-icon">📖</span><span class="qa-text">Từ điển</span></button>
+                    <button class="dash-tool-btn qa-card" id="dashListenBtn" type="button"><span class="qa-icon">🔊</span><span class="qa-text">Nghe nhanh</span></button>
+                </div>
             </div>
             <div class="folder-grid" id="folderGrid"><div class="folder-card"><div class="f-icon">🌌</div><div class="f-name">Advanced Vocab Practice</div><div class="f-count">98 words · 10 sets</div></div><div class="folder-card"><div class="f-icon">🏞️</div><div class="f-name">CPE Use of English</div><div class="f-count">126 words · 10 sets</div></div><div class="folder-card"><div class="f-icon">🎲</div><div class="f-name">Specialized English</div><div class="f-count">431 words · 10 sets</div></div><div class="folder-card"><div class="f-icon">📖</div><div class="f-name">Advanced Vocab In Use</div><div class="f-count">207 words · 10 sets</div></div><div class="folder-card"><div class="f-icon">🎯</div><div class="f-name">SAT Verbal</div><div class="f-count">598 words · 10 sets</div></div><div class="folder-card"><div class="f-icon">🇬🇧</div><div class="f-name">IELTS</div><div class="f-count">48 words · 10 sets</div></div><div class="folder-card"><div class="f-icon">📐</div><div class="f-name">SAT maths</div><div class="f-count">30 words · 10 sets</div></div></div>
 
@@ -4440,7 +4684,8 @@
             <div class="view active" id="view-cards">
                 <div class="progress-bar"><div class="progress-fill" id="progressFill" style="transform: scaleX(0.0181818);"></div></div>
                 <div class="counter" id="cardCounter">1 / 55</div>
-                <div class="card-stage card-pop">
+                <div class="card-stage card-pop" style="position:relative;">
+                    <span class="know-status-chip" id="knowStatusChip" style="pointer-events:none;"></span>
                     <div class="card" id="card" data-flipping="0">
                         <div class="face face-front">
                             <div class="flag-row">
@@ -4493,11 +4738,20 @@
                     <button class="btn btn-primary" id="shuffleBtn">🔀 Shuffle</button>
                     <button class="btn btn-secondary" id="restartCardsBtn">↺ Restart</button>
                 </div>
+                <div class="know-row">
+                    <button class="kn-btn kn-btn-unknown" id="markUnknownBtn" type="button">❌ Chưa thuộc</button>
+                    <button class="kn-btn kn-btn-known" id="markKnownBtn" type="button">✅ Đã thuộc</button>
+                </div>
+                <div class="controls" style="margin-top:2px;">
+                    <button class="btn btn-secondary" id="studyUnknownOnlyBtn" style="font-size:.78rem;padding:8px 16px;">🎯 Chỉ ôn từ chưa thuộc</button>
+                </div>
                 <div class="kbd-hint">
                     <span><kbd>Space</kbd> Flip</span>
                     <span><kbd>←</kbd> <kbd>→</kbd> Navigate</span>
                     <span><kbd>S</kbd> Shuffle</span>
                     <span><kbd>R</kbd> Restart</span>
+                    <span><kbd>K</kbd> Đã thuộc</span>
+                    <span><kbd>U</kbd> Chưa thuộc</span>
                     <span><kbd>Esc</kbd> Go back</span>
                 </div>
             </div>
@@ -4904,10 +5158,13 @@
         function todayStr() { return new Date().toISOString().slice(0, 10); }
 
         function loadStudyStats() {
+            const base = { lastDate: null, streak: 0, todayCount: 0, totalQuizzes: 0, history: [] };
             try {
                 const raw = safeLocalGet('vocab_stats');
-                return raw ? JSON.parse(raw) : { lastDate: null, streak: 0, todayCount: 0, totalQuizzes: 0 };
-            } catch (err) { return { lastDate: null, streak: 0, todayCount: 0, totalQuizzes: 0 }; }
+                const parsed = raw ? JSON.parse(raw) : null;
+                if (!parsed) return base;
+                return Object.assign({}, base, parsed, { history: Array.isArray(parsed.history) ? parsed.history : [] });
+            } catch (err) { return base; }
         }
 
         function saveStudyStats() { safeLocalSet('vocab_stats', JSON.stringify(studyStats)); }
@@ -4922,6 +5179,9 @@
             studyStats.streak = (studyStats.lastDate === yesterday) ? (studyStats.streak + 1) : 1;
             studyStats.lastDate = today;
             studyStats.todayCount = 0;
+            if (!Array.isArray(studyStats.history)) studyStats.history = [];
+            if (!studyStats.history.includes(today)) studyStats.history.push(today);
+            if (studyStats.history.length > 60) studyStats.history = studyStats.history.slice(-60);
             saveStudyStats();
         }
 
@@ -4939,20 +5199,62 @@
             renderStatsBar();
         }
 
+        const VN_DOW = ['CN', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7']; // Date.getDay(): 0=Sun..6=Sat
+
+        function getMasteredWordsCount() {
+            let total = 0;
+            try {
+                const len = localStorage.length;
+                for (let i = 0; i < len; i++) {
+                    const k = localStorage.key(i);
+                    if (k && k.indexOf('practice_progress_') === 0) {
+                        try {
+                            const d = JSON.parse(localStorage.getItem(k));
+                            if (d && Array.isArray(d.known)) total += d.known.length;
+                        } catch (e) { /* ignore malformed entry */ }
+                    }
+                }
+            } catch (e) { /* localStorage unavailable */ }
+            return total;
+        }
+
         function renderStatsBar() {
-            const bar = document.getElementById('statsBar');
-            if (!bar) return;
-            const today = todayStr();
-            const todayCount = (studyStats.lastDate === today) ? (studyStats.todayCount || 0) : 0;
-            const pct = Math.max(0, Math.min(100, Math.round((todayCount / DAILY_GOAL) * 100)));
-            const r = 15,
-                circ = 2 * Math.PI * r;
-            const offset = circ - (pct / 100) * circ;
-            bar.innerHTML = `
-            <div class="stat-chip"><span class="stat-emoji">🔥</span><div><div class="stat-num">${studyStats.streak||0} days</div><div class="stat-label">Day streak</div></div></div>
-            <div class="stat-chip"><div class="goal-ring-wrap"><svg width="34" height="34" viewBox="0 0 34 34"><circle class="goal-ring-bg" cx="17" cy="17" r="${r}"></circle><circle class="goal-ring-fg" cx="17" cy="17" r="${r}" stroke-dasharray="${circ}" stroke-dashoffset="${offset}"></circle></svg></div><div><div class="stat-num">${todayCount}/${DAILY_GOAL}</div><div class="stat-label">Today's goal</div></div></div>
-            <div class="stat-chip"><span class="stat-emoji">🏆</span><div><div class="stat-num">${studyStats.totalQuizzes||0}</div><div class="stat-label">Quizzes taken</div></div></div>
-          `;
+            // ----- overview cards: Tổng từ / Đã thuộc / Tiến độ / Lượt luyện tập -----
+            const totalWords = (typeof VOCAB !== 'undefined') ? VOCAB.length : 0;
+            const mastered = Math.min(getMasteredWordsCount(), totalWords || Infinity);
+            const progressPct = totalWords > 0 ? Math.round((mastered / totalWords) * 100) : 0;
+
+            const ovTW = document.getElementById('ovTotalWords');
+            const ovM = document.getElementById('ovMastered');
+            const ovP = document.getElementById('ovProgress');
+            const ovQ = document.getElementById('ovQuizzes');
+            if (ovTW) ovTW.textContent = totalWords;
+            if (ovM) ovM.textContent = mastered;
+            if (ovP) ovP.textContent = progressPct + '%';
+            if (ovQ) ovQ.textContent = studyStats.totalQuizzes || 0;
+
+            // ----- streak card: number + 7-day dot row -----
+            const streakNumEl = document.getElementById('streakNum');
+            if (streakNumEl) streakNumEl.textContent = studyStats.streak || 0;
+
+            const daysWrap = document.getElementById('streakDays');
+            if (daysWrap) {
+                const hist = new Set(studyStats.history || []);
+                let html = '';
+                for (let i = 6; i >= 0; i--) {
+                    const d = new Date();
+                    d.setDate(d.getDate() - i);
+                    const key = d.toISOString().slice(0, 10);
+                    const filled = hist.has(key);
+                    const isToday = (i === 0);
+                    html += `<div class="streak-day${filled ? ' filled' : ''}${isToday ? ' today' : ''}">
+                        <div class="streak-day-dot">${filled ? '✓' : ''}</div>
+                        <div class="streak-day-label">${VN_DOW[d.getDay()]}</div>
+                    </div>`;
+                }
+                daysWrap.innerHTML = html;
+            }
+
             if (typeof renderIslandStats === 'function') renderIslandStats();
         }
 
@@ -5385,7 +5687,7 @@
             showPage('page-folders'); });
 
         document.getElementById('backToFoldersBtn').addEventListener('click', () => {
-            if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+            stopAllSpeech();
             if (currentParentKey) { buildSubfolderGrid(currentParentKey);
                 showPage('page-subfolders'); } else { buildFolderGrid();
                 showPage('page-folders'); }
@@ -5567,7 +5869,7 @@
 
         document.querySelectorAll('.tab-btn').forEach(btn => {
             btn.addEventListener('click', () => {
-                if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+                stopAllSpeech();
                 document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
                 document.querySelectorAll('#page-study .view').forEach(v => v.classList.remove('active'));
                 btn.classList.add('active');
@@ -5666,6 +5968,7 @@
 
         function speakWithTTS(text, btn) {
             if (!('speechSynthesis' in window)) { alert('Your browser does not support pronunciation. Please try Chrome or Edge.');
+                if (btn) btn.classList.remove('speaking');
                 return; }
             window.speechSynthesis.cancel();
             const utter = new SpeechSynthesisUtterance(text);
@@ -5677,7 +5980,9 @@
             if (btn) { btn.classList.add('speaking');
                 utter.onend = () => btn.classList.remove('speaking');
                 utter.onerror = () => btn.classList.remove('speaking'); }
-            window.speechSynthesis.speak(utter);
+            // Chrome sometimes silently drops speak() calls made right after cancel();
+            // a tiny delay makes playback fire reliably instead of doing nothing.
+            setTimeout(() => window.speechSynthesis.speak(utter), 30);
         }
 
         function cleanForSpeech(term) { return term.replace(/\s*\([^)]*\)\s*/g, ' ').replace(/\/.*$/, '').replace(/\s+/g, ' ')
@@ -5717,32 +6022,68 @@
             const url =
                 `https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&tl=en&q=${encodeURIComponent(word)}`;
             const audio = new Audio(url);
+            currentAudioEl = audio;
             if (btn) btn.classList.add('speaking');
-            audio.onended = () => { if (btn) btn.classList.remove('speaking'); if (onDone) onDone(); };
-            audio.onerror = () => { if (btn) btn.classList.remove('speaking'); if (onDone) onDone(); };
-            audio.play().catch(() => { if (btn) btn.classList.remove('speaking'); if (onDone) onDone(); });
+            audio.onended = () => { if (btn) btn.classList.remove('speaking'); if (currentAudioEl === audio) currentAudioEl = null; if (onDone) onDone(); };
+            audio.onerror = () => { if (btn) btn.classList.remove('speaking'); if (currentAudioEl === audio) currentAudioEl = null; if (onDone) onDone(); };
+            audio.play().catch(() => { if (btn) btn.classList.remove('speaking'); if (currentAudioEl === audio) currentAudioEl = null; if (onDone) onDone(); });
             return audio;
         }
 
-        async function speakText(text, btn) {
+        // Guards against the 2-3s "chờ rồi mới đọc, đọc chồng nhau" issue:
+        // - a monotonically increasing request id so a slow/late fetch from a
+        //   previous click can never start playing over a newer click
+        // - a single currently-playing <audio> element that always gets
+        //   stopped before anything new starts
+        // - a hard timeout on the dictionary-audio fetch so a slow network
+        //   never makes the user wait more than ~1.2s before falling back
+        let ttsRequestId = 0;
+        let currentAudioEl = null;
+
+        function stopAllSpeech() {
             if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+            if (currentAudioEl) {
+                try { currentAudioEl.pause(); currentAudioEl.currentTime = 0; } catch (err) {}
+                currentAudioEl = null;
+            }
+            document.querySelectorAll('.speaking').forEach(el => el.classList.remove('speaking'));
+        }
+
+        function fetchWithTimeout(promise, ms) {
+            return Promise.race([
+                promise,
+                new Promise(resolve => setTimeout(() => resolve(null), ms))
+            ]);
+        }
+
+        async function speakText(text, btn) {
+            // Bump the request id and stop whatever was playing so clicks never pile up.
+            const myId = ++ttsRequestId;
+            stopAllSpeech();
+            if (btn) btn.classList.add('speaking');
             const words = text.trim().split(/\s+/);
             const isSingleWord = words.length === 1 && /^[a-zA-Z'-]+$/.test(words[0]);
             if (isSingleWord) {
-                if (btn) btn.classList.add('speaking');
-                const url = await fetchDictionaryAudio(words[0]);
+                // Cap the dictionary lookup at 1.2s so a slow network can't cause
+                // the long "press-and-wait" delay — fall back to the browser TTS
+                // immediately if it takes longer.
+                const url = await fetchWithTimeout(fetchDictionaryAudio(words[0]), 1200);
+                if (myId !== ttsRequestId) return; // a newer click superseded this one
                 if (url) {
                     try {
                         const audio = new Audio(url);
-                        if (btn) { audio.onended = () => btn.classList.remove('speaking');
-                            audio.onerror = () => { btn.classList.remove('speaking');
-                                speakWithTTS(text, btn); }; }
+                        currentAudioEl = audio;
+                        audio.onended = () => { if (btn) btn.classList.remove('speaking'); if (currentAudioEl === audio) currentAudioEl = null; };
+                        audio.onerror = () => {
+                            if (currentAudioEl === audio) currentAudioEl = null;
+                            if (myId === ttsRequestId) speakWithTTS(text, btn); else if (btn) btn.classList.remove('speaking');
+                        };
                         await audio.play();
                         return;
                     } catch (err) {}
                 }
-                if (btn) btn.classList.remove('speaking');
-                return playGoogleAudio(words[0], btn, () => speakWithTTS(text, btn));
+                if (myId !== ttsRequestId) return;
+                return speakWithTTS(text, btn);
             }
             speakWithTTS(text, btn);
         }
@@ -5817,11 +6158,56 @@
                 srcBlock.style.display = 'none'; }
             document.getElementById('cardCounter').textContent = `${idx+1} / ${order.length}`;
             document.getElementById('progressFill').style.transform = `scaleX(${(idx+1)/order.length})`;
+            renderKnowStatus(w);
         }
+
+        function renderKnowStatus(w) {
+            const status = getWordKnownStatus(w.folder, w.sub || 1, w.term);
+            const chip = document.getElementById('knowStatusChip');
+            const knownBtn = document.getElementById('markKnownBtn');
+            const unknownBtn = document.getElementById('markUnknownBtn');
+            chip.classList.remove('show-known', 'show-unknown');
+            if (status === 'known') { chip.textContent = '✅ Đã thuộc'; chip.classList.add('show-known'); }
+            else if (status === 'unknown') { chip.textContent = '❌ Chưa thuộc'; chip.classList.add('show-unknown'); }
+            else { chip.textContent = ''; }
+            if (knownBtn) knownBtn.classList.toggle('active', status === 'known');
+            if (unknownBtn) unknownBtn.classList.toggle('active', status === 'unknown');
+        }
+
+        function markCurrentCard(status) {
+            if (!ACTIVE.length) return;
+            const w = ACTIVE[order[idx]];
+            const current = getWordKnownStatus(w.folder, w.sub || 1, w.term);
+            // Tapping the same status again un-marks it (toggle).
+            const next = current === status ? null : status;
+            setWordKnownStatus(w.folder, w.sub || 1, w.term, next);
+            renderKnowStatus(w);
+            if (next === 'known') showToast('✅ Đã đánh dấu: Đã thuộc');
+            else if (next === 'unknown') showToast('❌ Đã đánh dấu: Chưa thuộc');
+        }
+
+        document.getElementById('markKnownBtn').addEventListener('click', (e) => { e.stopPropagation(); markCurrentCard('known'); });
+        document.getElementById('markUnknownBtn').addEventListener('click', (e) => { e.stopPropagation(); markCurrentCard('unknown'); });
+
+        document.getElementById('studyUnknownOnlyBtn').addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (!ACTIVE.length) return;
+            const w = ACTIVE[order[idx]];
+            const unknownTerms = getUnknownWords(w.folder, w.sub || 1);
+            if (unknownTerms.length === 0) { showToast('Chưa có từ nào được đánh dấu "Chưa thuộc" 🎉'); return; }
+            const pool = ACTIVE.filter(x => unknownTerms.includes(x.term));
+            if (pool.length === 0) { showToast('Không tìm thấy từ chưa thuộc trong bộ này.'); return; }
+            ACTIVE = pool;
+            order = ACTIVE.map((_, i) => i);
+            idx = 0;
+            stopAllSpeech();
+            renderCard();
+            showToast(`🎯 Đang ôn ${pool.length} từ chưa thuộc`);
+        });
 
         function flipCard() {
             if (cardEl.dataset.flipping === '1') return;
-            if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+            stopAllSpeech();
             const willFlipToBack = !cardEl.classList.contains('flipped');
             cardEl.dataset.flipping = '1';
             cardEl.classList.toggle('flipped');
@@ -5855,22 +6241,18 @@
                 order[idx]];
             speakText(cleanForSpeech(w.term), e.currentTarget); });
 
-        document.getElementById('nextBtn').addEventListener('click', () => { if ('speechSynthesis' in window) window
-                .speechSynthesis.cancel();
+        document.getElementById('nextBtn').addEventListener('click', () => { stopAllSpeech();
             idx = (idx + 1) % order.length;
             renderCard(); });
-        document.getElementById('prevBtn').addEventListener('click', () => { if ('speechSynthesis' in window) window
-                .speechSynthesis.cancel();
+        document.getElementById('prevBtn').addEventListener('click', () => { stopAllSpeech();
             idx = (idx - 1 + order.length) % order.length;
             renderCard(); });
-        document.getElementById('shuffleBtn').addEventListener('click', () => { if ('speechSynthesis' in window) window
-                .speechSynthesis.cancel(); for (let i = order.length - 1; i > 0; i--) { const j = Math.floor(Math
+        document.getElementById('shuffleBtn').addEventListener('click', () => { stopAllSpeech(); for (let i = order.length - 1; i > 0; i--) { const j = Math.floor(Math
                     .random() * (i + 1));
                 [order[i], order[j]] = [order[j], order[i]]; }
             idx = 0;
             renderCard(); });
-        document.getElementById('restartCardsBtn').addEventListener('click', () => { if ('speechSynthesis' in window) window
-                .speechSynthesis.cancel();
+        document.getElementById('restartCardsBtn').addEventListener('click', () => { stopAllSpeech();
             order = ACTIVE.map((_, i) => i);
             idx = 0;
             renderCard(); });
@@ -5902,6 +6284,14 @@
                 case 'r':
                 case 'R':
                     document.getElementById('restartCardsBtn').click();
+                    break;
+                case 'k':
+                case 'K':
+                    markCurrentCard('known');
+                    break;
+                case 'u':
+                case 'U':
+                    markCurrentCard('unknown');
                     break;
                 case 'Escape':
                     document.getElementById('backToFoldersBtn').click();
@@ -6514,9 +6904,14 @@
             const key = getPracticeProgressKey(folder, sub);
             try {
                 const raw = safeLocalGet(key);
-                if (raw) return JSON.parse(raw);
+                if (raw) {
+                    const data = JSON.parse(raw);
+                    if (!data.known) data.known = [];
+                    if (!data.unknown) data.unknown = [];
+                    return data;
+                }
             } catch (e) { /* ignore */ }
-            return { wrongWords: [], favorites: [], wordStats: {} };
+            return { wrongWords: [], favorites: [], wordStats: {}, known: [], unknown: [] };
         }
 
         function savePracticeProgress(folder, sub, data) {
@@ -6561,6 +6956,32 @@
         function getWrongWords(folder, sub) {
             const data = loadPracticeProgress(folder, sub);
             return data.wrongWords || [];
+        }
+
+        // ----- known / unknown marking (like luyentu.com's flashcard mode) -----
+        // Status lives per-word inside the same per-folder+sub progress blob used
+        // by favorites/wrongWords, so it stays in sync across Study and Practice.
+        function setWordKnownStatus(folder, sub, term, status) {
+            // status: 'known' | 'unknown' | null (null clears both)
+            const data = loadPracticeProgress(folder, sub);
+            data.known = (data.known || []).filter(t => t !== term);
+            data.unknown = (data.unknown || []).filter(t => t !== term);
+            if (status === 'known') data.known.push(term);
+            else if (status === 'unknown') data.unknown.push(term);
+            savePracticeProgress(folder, sub, data);
+            return status;
+        }
+
+        function getWordKnownStatus(folder, sub, term) {
+            const data = loadPracticeProgress(folder, sub);
+            if ((data.known || []).includes(term)) return 'known';
+            if ((data.unknown || []).includes(term)) return 'unknown';
+            return null;
+        }
+
+        function getUnknownWords(folder, sub) {
+            const data = loadPracticeProgress(folder, sub);
+            return data.unknown || [];
         }
 
         // ----- build practice word pool -----
