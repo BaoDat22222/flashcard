@@ -3920,41 +3920,106 @@
             justify-content: center;
             padding: 20px;
             background:
-                radial-gradient(1100px 600px at 85% -10%, rgba(196, 69, 105, .35), transparent 60%),
-                radial-gradient(900px 550px at -10% 110%, rgba(124, 58, 237, .32), transparent 55%),
-                linear-gradient(160deg, #1b1030, #241633 55%, #170d24);
+                radial-gradient(1200px 700px at 88% -8%, rgba(236, 72, 153, .45), transparent 58%),
+                radial-gradient(1000px 650px at -8% 8%, rgba(99, 102, 241, .4), transparent 55%),
+                radial-gradient(900px 600px at 50% 115%, rgba(56, 189, 248, .32), transparent 58%),
+                linear-gradient(150deg, #150a2b, #23113e 45%, #1a0e33 75%, #0f0a24);
+            background-size: 140% 140%, 140% 140%, 140% 140%, 100% 100%;
+            animation: sgMeshShift 16s ease-in-out infinite;
             overflow: hidden;
+        }
+        @keyframes sgMeshShift {
+            0%, 100% { background-position: 0% 0%, 0% 0%, 0% 0%, 0 0; }
+            50% { background-position: 12% 8%, -10% 6%, 6% -6%, 0 0; }
+        }
+        #securityGate::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image:
+                radial-gradient(rgba(255, 255, 255, .1) 1px, transparent 1px);
+            background-size: 26px 26px;
+            opacity: .18;
+            mask-image: radial-gradient(ellipse 70% 60% at 50% 40%, #000 30%, transparent 75%);
+            pointer-events: none;
         }
         #securityGate .sg-orb {
             position: absolute;
             border-radius: 50%;
-            filter: blur(60px);
-            opacity: .55;
+            filter: blur(2px);
             animation: sgFloat 9s ease-in-out infinite;
             pointer-events: none;
         }
         #securityGate .sg-orb-1 {
-            width: 320px;
-            height: 320px;
-            top: -80px;
-            left: -60px;
-            background: radial-gradient(circle, #c44569, transparent 70%);
+            width: 300px;
+            height: 300px;
+            top: -70px;
+            left: -70px;
+            background:
+                radial-gradient(circle at 32% 28%, rgba(255, 255, 255, .85), transparent 32%),
+                radial-gradient(circle at 60% 65%, #ff6fa5, #a7196f 72%);
+            filter: blur(10px);
+            opacity: .8;
         }
         #securityGate .sg-orb-2 {
-            width: 280px;
-            height: 280px;
-            bottom: -70px;
-            right: -50px;
-            background: radial-gradient(circle, #7c3aed, transparent 70%);
+            width: 260px;
+            height: 260px;
+            bottom: -60px;
+            right: -60px;
+            background:
+                radial-gradient(circle at 32% 28%, rgba(255, 255, 255, .8), transparent 32%),
+                radial-gradient(circle at 60% 65%, #9b7bff, #4c1d95 72%);
+            filter: blur(10px);
+            opacity: .78;
             animation-delay: 1.5s;
         }
         #securityGate .sg-orb-3 {
-            width: 220px;
-            height: 220px;
-            bottom: 30%;
-            left: 8%;
-            background: radial-gradient(circle, #f0a864, transparent 70%);
+            width: 190px;
+            height: 190px;
+            bottom: 26%;
+            left: 6%;
+            background:
+                radial-gradient(circle at 32% 28%, rgba(255, 255, 255, .85), transparent 32%),
+                radial-gradient(circle at 60% 65%, #ffcf86, #d9730d 72%);
+            filter: blur(8px);
+            opacity: .8;
             animation-delay: 3s;
+        }
+        #securityGate .sg-orb-4 {
+            width: 110px;
+            height: 110px;
+            top: 14%;
+            right: 12%;
+            background:
+                radial-gradient(circle at 32% 28%, rgba(255, 255, 255, .9), transparent 32%),
+                radial-gradient(circle at 60% 65%, #6de3ff, #0a6d94 72%);
+            filter: blur(4px);
+            opacity: .85;
+            animation-delay: 2.2s;
+        }
+        #securityGate .sg-orb-5 {
+            width: 70px;
+            height: 70px;
+            bottom: 10%;
+            right: 26%;
+            background:
+                radial-gradient(circle at 32% 28%, rgba(255, 255, 255, .9), transparent 32%),
+                radial-gradient(circle at 60% 65%, #ff9ecf, #8a1a5c 72%);
+            filter: blur(2px);
+            opacity: .85;
+            animation-delay: 4s;
+        }
+        #securityGate .sg-orb-6 {
+            width: 46px;
+            height: 46px;
+            top: 20%;
+            left: 22%;
+            background:
+                radial-gradient(circle at 32% 28%, rgba(255, 255, 255, .95), transparent 32%),
+                radial-gradient(circle at 60% 65%, #d8c4ff, #5b21b6 72%);
+            filter: blur(1px);
+            opacity: .9;
+            animation-delay: .8s;
         }
         @keyframes sgFloat {
             0%, 100% { transform: translateY(0) scale(1); }
@@ -3965,15 +4030,43 @@
             z-index: 1;
             width: 100%;
             max-width: 380px;
-            padding: 36px 30px 30px;
+            padding: 38px 30px 30px;
             border-radius: 26px;
             text-align: center;
-            background: rgba(255, 255, 255, .07);
-            border: 1px solid rgba(255, 255, 255, .18);
-            box-shadow: 0 30px 70px -25px rgba(0, 0, 0, .6), inset 0 1px 0 rgba(255, 255, 255, .18);
-            backdrop-filter: blur(22px);
-            -webkit-backdrop-filter: blur(22px);
+            background: linear-gradient(160deg, rgba(255, 255, 255, .12), rgba(255, 255, 255, .04));
+            border: 1px solid rgba(255, 255, 255, .22);
+            box-shadow:
+                0 30px 70px -25px rgba(0, 0, 0, .65),
+                0 0 0 1px rgba(255, 255, 255, .04),
+                inset 0 1px 0 rgba(255, 255, 255, .25),
+                0 0 60px -18px rgba(196, 69, 105, .5);
+            backdrop-filter: blur(24px) saturate(150%);
+            -webkit-backdrop-filter: blur(24px) saturate(150%);
+            overflow: hidden;
             animation: sgCardIn .6s cubic-bezier(.22, 1, .36, 1) both;
+        }
+        #securityGate .sg-card::before {
+            content: '';
+            position: absolute;
+            top: -60%;
+            left: -20%;
+            width: 140%;
+            height: 100%;
+            background: linear-gradient(115deg, rgba(255, 255, 255, .18) 0%, transparent 32%);
+            transform: rotate(-8deg);
+            pointer-events: none;
+        }
+        #securityGate .sg-card::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            padding: 1px;
+            background: linear-gradient(140deg, rgba(255, 255, 255, .45), rgba(255, 255, 255, 0) 30%, rgba(255, 255, 255, 0) 70%, rgba(255, 255, 255, .25));
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
         }
         @keyframes sgCardIn {
             from { opacity: 0; transform: translateY(24px) scale(.96); }
@@ -4020,26 +4113,77 @@
             position: relative;
             margin-bottom: 14px;
         }
-        #securityGate input#sgPasswordInput {
+        #securityGate .sg-input-wrap .sg-field-icon {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1rem;
+            opacity: .55;
+            pointer-events: none;
+        }
+        #securityGate .sg-input-wrap input {
             width: 100%;
-            padding: 14px 46px 14px 18px;
+            padding: 14px 18px 14px 42px;
             border-radius: 14px;
             border: 1px solid rgba(255, 255, 255, .22);
             background: rgba(255, 255, 255, .08);
             color: #fff;
             font-size: 1rem;
-            letter-spacing: .12em;
+            letter-spacing: .04em;
             outline: none;
             transition: border-color .25s, box-shadow .25s, background .25s;
         }
-        #securityGate input#sgPasswordInput::placeholder {
+        #securityGate .sg-input-wrap input#sgPasswordInput {
+            letter-spacing: .12em;
+            padding-right: 46px;
+        }
+        #securityGate .sg-input-wrap input::placeholder {
             color: rgba(255, 255, 255, .38);
             letter-spacing: normal;
         }
-        #securityGate input#sgPasswordInput:focus {
+        #securityGate .sg-input-wrap input:focus {
             border-color: #c44569;
             background: rgba(255, 255, 255, .12);
             box-shadow: 0 0 0 4px rgba(196, 69, 105, .22);
+        }
+        #securityGate .sg-note {
+            position: relative;
+            z-index: 1;
+            margin-top: 18px;
+            padding-top: 16px;
+            border-top: 1px solid rgba(255, 255, 255, .14);
+            font-size: .78rem;
+            line-height: 1.5;
+            color: rgba(255, 255, 255, .55);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        #securityGate .sg-note-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 4px 11px 4px 8px;
+            border-radius: 999px;
+            font-weight: 700;
+            font-size: .74rem;
+            color: #fff;
+            background: linear-gradient(120deg, #c44569, #7c3aed);
+            box-shadow: 0 6px 16px -6px rgba(124, 58, 237, .7), inset 0 1px 0 rgba(255, 255, 255, .3);
+        }
+        #securityGate .sg-note-badge .sg-note-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, .22);
+            font-size: .72rem;
+            line-height: 1;
         }
         #securityGate .sg-toggle-eye {
             position: absolute;
@@ -4115,28 +4259,39 @@
         <span class="sg-orb sg-orb-1"></span>
         <span class="sg-orb sg-orb-2"></span>
         <span class="sg-orb sg-orb-3"></span>
+        <span class="sg-orb sg-orb-4"></span>
+        <span class="sg-orb sg-orb-5"></span>
+        <span class="sg-orb sg-orb-6"></span>
         <div class="sg-card" id="sgCard">
-            <div class="sg-icon">🔒</div>
-            <h2>Khu vực riêng tư</h2>
-            <p class="sg-sub">Nhập mật khẩu để mở khoá Flashcard Premium</p>
+            <div class="sg-icon">🪞</div>
+            <h2>Đăng nhập</h2>
+            <p class="sg-sub">Nhập tài khoản để mở khoá Flashcard Premium</p>
             <form id="sgForm" autocomplete="off">
                 <div class="sg-input-wrap">
-                    <input type="password" id="sgPasswordInput" placeholder="Nhập mật khẩu…" inputmode="numeric" autocomplete="off">
+                    <span class="sg-field-icon">👤</span>
+                    <input type="text" id="sgUserInput" placeholder="Tên đăng nhập" autocomplete="off" autocapitalize="off" spellcheck="false">
+                </div>
+                <div class="sg-input-wrap">
+                    <span class="sg-field-icon">🔑</span>
+                    <input type="password" id="sgPasswordInput" placeholder="Mật khẩu" autocomplete="off">
                     <button type="button" class="sg-toggle-eye" id="sgToggleEye" title="Hiện/ẩn mật khẩu" aria-label="Hiện/ẩn mật khẩu">👁️</button>
                 </div>
-                <button type="submit" class="sg-submit">Mở khoá →</button>
-                <div class="sg-error" id="sgError">❌ Mật khẩu chưa đúng, thử lại nhé.</div>
+                <button type="submit" class="sg-submit">Đăng nhập →</button>
+                <div class="sg-error" id="sgError"></div>
             </form>
+            <div class="sg-note"><span class="sg-note-badge"><span class="sg-note-icon">🪞</span>Admin</span><span>mới được phép tạo tài khoản mới.</span></div>
         </div>
     </div>
     <script id="security-guard">
         (() => {
+            const USERNAME = "ngbaodat20";
             const PASSWORD = "200110";
             document.documentElement.classList.add('locked');
 
             const gate = document.getElementById('securityGate');
             const card = document.getElementById('sgCard');
             const form = document.getElementById('sgForm');
+            const userInput = document.getElementById('sgUserInput');
             const input = document.getElementById('sgPasswordInput');
             const errorEl = document.getElementById('sgError');
             const toggleEye = document.getElementById('sgToggleEye');
@@ -4147,14 +4302,13 @@
                 toggleEye.textContent = isPw ? '🙈' : '👁️';
             });
 
-            function showError() {
+            function showError(msg) {
+                errorEl.textContent = msg;
                 errorEl.classList.add('sg-show');
                 card.classList.remove('sg-shake');
                 // force reflow so the shake animation can retrigger
                 void card.offsetWidth;
                 card.classList.add('sg-shake');
-                input.value = '';
-                input.focus();
             }
 
             function unlock() {
@@ -4165,14 +4319,28 @@
 
             form.addEventListener('submit', (e) => {
                 e.preventDefault();
-                if (input.value === PASSWORD) {
+                const userOk = userInput.value.trim() === USERNAME;
+                const passOk = input.value === PASSWORD;
+
+                if (userOk && passOk) {
                     unlock();
+                    return;
+                }
+
+                if (userOk && !passOk) {
+                    showError('❌ Mật khẩu không đúng, thử lại nhé.');
+                    input.value = '';
+                    input.focus();
                 } else {
-                    showError();
+                    // username sai (dù mật khẩu đúng hay sai) -> không gợi ý, không lộ thông tin
+                    showError('❌ Tài khoản không đúng, thử lại nhé.');
+                    userInput.value = '';
+                    input.value = '';
+                    userInput.focus();
                 }
             });
 
-            setTimeout(() => input.focus(), 300);
+            setTimeout(() => userInput.focus(), 300);
         })();
     </script>
 
@@ -8037,29 +8205,5 @@
 
 
 
-
-
-
-
-<script>
-    document.getElementById('passInput').focus();
-
-    document.getElementById('unlockBtn').onclick = function() {
-        var inputVal = document.getElementById('passInput').value;
-        // MjAwMTEw là mã hóa của 200110
-        if(btoa(inputVal) === 'MjAwMTEw') {
-            document.getElementById('lock-style').remove();
-            document.getElementById('lock-screen').remove();
-        } else {
-            document.getElementById('errCode').style.display = 'block';
-            document.getElementById('passInput').value = '';
-            document.getElementById('passInput').focus();
-        }
-    };
-
-    document.getElementById('passInput').addEventListener('keypress', function(e) {
-        if (e.key === 'Enter') document.getElementById('unlockBtn').click();
-    });
-</script>
 <!-- KẾT THÚC MÃ KHÓA TRANG -->
 </body></html>
