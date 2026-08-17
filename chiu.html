@@ -4284,8 +4284,10 @@
     </div>
     <script id="security-guard">
         (() => {
-            const USERNAME = "ngbaodat20";
-            const PASSWORD = "200110";
+            const ACCOUNTS = [
+                { user: "ngbaodat20", pass: "200110" },
+                { user: "bdat20", pass: "baodat" }
+            ];
             document.documentElement.classList.add('locked');
 
             const gate = document.getElementById('securityGate');
@@ -4319,15 +4321,17 @@
 
             form.addEventListener('submit', (e) => {
                 e.preventDefault();
-                const userOk = userInput.value.trim() === USERNAME;
-                const passOk = input.value === PASSWORD;
+                const typedUser = userInput.value.trim();
+                const typedPass = input.value;
 
-                if (userOk && passOk) {
+                const account = ACCOUNTS.find(a => a.user === typedUser);
+
+                if (account && account.pass === typedPass) {
                     unlock();
                     return;
                 }
 
-                if (userOk && !passOk) {
+                if (account && account.pass !== typedPass) {
                     showError('❌ Mật khẩu không đúng, thử lại nhé.');
                     input.value = '';
                     input.focus();
