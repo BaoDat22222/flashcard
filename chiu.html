@@ -4535,6 +4535,7 @@
                     <button class="dash-tool-btn qa-card practice-btn" id="dashPracticeBtn" type="button"><span class="qa-icon">🏋️</span><span class="qa-text">Luyện tập</span></button>
                     <button class="dash-tool-btn qa-card" id="dashDictBtn" type="button"><span class="qa-icon">📖</span><span class="qa-text">Từ điển</span></button>
                     <button class="dash-tool-btn qa-card" id="dashListenBtn" type="button"><span class="qa-icon">🔊</span><span class="qa-text">Nghe nhanh</span></button>
+                    <button class="dash-tool-btn qa-card" id="dashFavBtn" type="button"><span class="qa-icon">⭐</span><span class="qa-text">Yêu thích</span></button>
                 </div>
             </div>
             <div class="folder-grid" id="folderGrid"><div class="folder-card"><div class="f-icon">🌌</div><div class="f-name">Advanced Vocab Practice</div><div class="f-count">98 words · 10 sets</div></div><div class="folder-card"><div class="f-icon">🏞️</div><div class="f-name">CPE Use of English</div><div class="f-count">126 words · 10 sets</div></div><div class="folder-card"><div class="f-icon">🎲</div><div class="f-name">Specialized English</div><div class="f-count">431 words · 10 sets</div></div><div class="folder-card"><div class="f-icon">📖</div><div class="f-name">Advanced Vocab In Use</div><div class="f-count">207 words · 10 sets</div></div><div class="folder-card"><div class="f-icon">🎯</div><div class="f-name">SAT Verbal</div><div class="f-count">598 words · 10 sets</div></div><div class="folder-card"><div class="f-icon">🇬🇧</div><div class="f-name">IELTS</div><div class="f-count">48 words · 10 sets</div></div><div class="folder-card"><div class="f-icon">📐</div><div class="f-name">SAT maths</div><div class="f-count">30 words · 10 sets</div></div></div>
@@ -4552,6 +4553,29 @@
             </div>
 
             <div class="logout-row"><button class="logout-btn" id="logoutBtn">Log out</button></div>
+        </div>
+
+        <!-- ==========================================================
+        PAGE: FAVORITES
+        ========================================================== -->
+        <div class="page" id="page-favorites">
+            <div class="study-topbar">
+                <button class="back-btn" id="backFromFavBtn">⬅ Back to library</button>
+                <span>⭐ Từ yêu thích</span>
+            </div>
+            <div style="padding:0 18px;">
+                <p style="color:var(--muted,#8a8a9a);font-size:.9rem;margin:6px 0 14px;">Danh sách các từ bạn đã đánh dấu yêu thích trong lúc học flashcard. Nhấn vào một từ để mở flashcard của từ đó.</p>
+                <div class="search-box" id="favSearchBox" style="margin-bottom:14px;">
+                    <span class="search-icon">🔍</span>
+                    <input type="text" id="favSearchInput" placeholder="Tìm trong danh sách yêu thích..." autocomplete="off" aria-label="Search favorites">
+                </div>
+                <div id="favEmptyState" style="display:none;text-align:center;padding:40px 10px;color:var(--muted,#8a8a9a);">
+                    <div style="font-size:2.2rem;margin-bottom:8px;">☆</div>
+                    <div>Bạn chưa có từ yêu thích nào.</div>
+                    <div style="font-size:.85rem;margin-top:4px;">Nhấn vào biểu tượng ☆ trên flashcard để thêm từ vào đây.</div>
+                </div>
+                <div id="favListWrap" class="search-suggest show" style="position:static;max-height:none;box-shadow:none;"></div>
+            </div>
         </div>
 
         <!-- ==========================================================
@@ -4654,6 +4678,16 @@
                         <div class="gm-name">Definition Practice</div>
                         <div class="gm-desc">See the definition, type the word</div>
                     </div>
+                    <div class="game-mode-card" data-mode="listening">
+                        <span class="gm-icon">🎧</span>
+                        <div class="gm-name">Listening Quiz</div>
+                        <div class="gm-desc">Hear the word, pick the right meaning</div>
+                    </div>
+                    <div class="game-mode-card" data-mode="scramble">
+                        <span class="gm-icon">🧩</span>
+                        <div class="gm-name">Word Scramble</div>
+                        <div class="gm-desc">Unscramble the letters from the meaning</div>
+                    </div>
                 </div>
                 <div style="margin-top:16px;text-align:center;">
                     <button class="btn btn-primary" id="practiceStartBtn" disabled="" style="min-width:200px;">▶ Start</button>
@@ -4686,6 +4720,7 @@
                 <div class="counter" id="cardCounter">1 / 55</div>
                 <div class="card-stage card-pop" style="position:relative;">
                     <span class="know-status-chip" id="knowStatusChip" style="pointer-events:none;"></span>
+                    <button class="fav-star-btn" id="favStarBtn" type="button" title="Đánh dấu yêu thích" style="position:absolute;top:8px;left:8px;z-index:5;background:rgba(0,0,0,.25);border:none;border-radius:50%;width:36px;height:36px;font-size:1.1rem;cursor:pointer;line-height:1;">☆</button>
                     <div class="card" id="card" data-flipping="0">
                         <div class="face face-front">
                             <div class="flag-row">
@@ -4752,6 +4787,7 @@
                     <span><kbd>R</kbd> Restart</span>
                     <span><kbd>K</kbd> Đã thuộc</span>
                     <span><kbd>U</kbd> Chưa thuộc</span>
+                    <span><kbd>F</kbd> Yêu thích</span>
                     <span><kbd>Esc</kbd> Go back</span>
                 </div>
             </div>
@@ -5155,7 +5191,18 @@
         // ===== STUDY STATS =====
         const DAILY_GOAL = 20;
 
-        function todayStr() { return new Date().toISOString().slice(0, 10); }
+        // Local calendar date (NOT UTC) — using toISOString() here caused the
+        // streak to break/reset around midnight for users in timezones ahead of
+        // UTC (e.g. Vietnam, UTC+7), because the UTC date can differ from the
+        // local date the user actually experiences.
+        function localDateStr(d) {
+            d = d || new Date();
+            const y = d.getFullYear();
+            const m = String(d.getMonth() + 1).padStart(2, '0');
+            const day = String(d.getDate()).padStart(2, '0');
+            return `${y}-${m}-${day}`;
+        }
+        function todayStr() { return localDateStr(new Date()); }
 
         function loadStudyStats() {
             const base = { lastDate: null, streak: 0, todayCount: 0, totalQuizzes: 0, history: [] };
@@ -5175,7 +5222,7 @@
             if (studyStats.lastDate === today) return;
             const y = new Date();
             y.setDate(y.getDate() - 1);
-            const yesterday = y.toISOString().slice(0, 10);
+            const yesterday = localDateStr(y);
             studyStats.streak = (studyStats.lastDate === yesterday) ? (studyStats.streak + 1) : 1;
             studyStats.lastDate = today;
             studyStats.todayCount = 0;
@@ -5244,7 +5291,7 @@
                 for (let i = 6; i >= 0; i--) {
                     const d = new Date();
                     d.setDate(d.getDate() - i);
-                    const key = d.toISOString().slice(0, 10);
+                    const key = localDateStr(d);
                     const filled = hist.has(key);
                     const isToday = (i === 0);
                     html += `<div class="streak-day${filled ? ' filled' : ''}${isToday ? ' today' : ''}">
@@ -5526,6 +5573,56 @@
             });
         })();
 
+        // ===== BACK-BUTTON NAVIGATION (hardware/browser back goes one step at a time) =====
+        // Every time the user drills into a deeper screen we push a history entry.
+        // Physical/browser back then fires 'popstate', which we catch and use to run
+        // the exact same one-level-up logic as the in-app "back" buttons — so the
+        // hardware back button follows the same folders → sets 1-10 → collection
+        // sequence instead of exiting the whole app in one press.
+        function navPush() { try { history.pushState({ navDepth: (history.state && history.state.navDepth || 0) + 1 }, ''); } catch (e) { /* ignore */ } }
+
+        function performBack() {
+            const activeEl = document.querySelector('.page.active');
+            const pid = activeEl ? activeEl.id : '';
+            if (pid === 'page-study') {
+                stopAllSpeech();
+                if (currentParentKey) { buildSubfolderGrid(currentParentKey);
+                    showPage('page-subfolders'); } else { buildFolderGrid();
+                    showPage('page-folders'); }
+            } else if (pid === 'page-subfolders') {
+                buildFolderGrid();
+                showPage('page-folders');
+            } else if (pid === 'page-favorites') {
+                buildFolderGrid();
+                showPage('page-folders');
+            } else if (pid === 'page-practice') {
+                if (practiceState.isComplete || practiceState.step === 1) {
+                    enterLibrary();
+                } else if (practiceState.step === 4) {
+                    practiceState.step = 3;
+                    renderPracticeStep3();
+                    updateStepIndicators(3);
+                    document.getElementById('practiceHeroTitle').textContent = '🎮 Choose your game';
+                    document.getElementById('practiceHeroDesc').textContent = 'Select a mode above to begin.';
+                } else if (practiceState.step === 3) {
+                    practiceState.step = 2;
+                    renderPracticeStep2();
+                    updateStepIndicators(2);
+                } else if (practiceState.step === 2) {
+                    practiceState.step = 1;
+                    renderPracticeStep1();
+                    updateStepIndicators(1);
+                } else {
+                    enterLibrary();
+                }
+            } else {
+                buildFolderGrid();
+                showPage('page-folders');
+            }
+        }
+
+        window.addEventListener('popstate', () => { performBack(); });
+
         // ===== ENTER LIBRARY (no password / no countdown — straight in) =====
         function enterLibrary() {
             safeSessionSet('vocab_authed', '1');
@@ -5622,6 +5719,7 @@
             currentParentKey = key;
             buildSubfolderGrid(key);
             showPage('page-subfolders');
+            navPush();
         }
 
         function buildSubfolderGrid(key) {
@@ -5681,17 +5779,10 @@
             speakNext();
         });
 
-        document.getElementById('backToParentsBtn').addEventListener('click', () => { buildFolderGrid();
-            showPage('page-folders'); });
-        document.getElementById('backToParentsBtn2').addEventListener('click', () => { buildFolderGrid();
-            showPage('page-folders'); });
+        document.getElementById('backToParentsBtn').addEventListener('click', () => { history.back(); });
+        document.getElementById('backToParentsBtn2').addEventListener('click', () => { history.back(); });
 
-        document.getElementById('backToFoldersBtn').addEventListener('click', () => {
-            stopAllSpeech();
-            if (currentParentKey) { buildSubfolderGrid(currentParentKey);
-                showPage('page-subfolders'); } else { buildFolderGrid();
-                showPage('page-folders'); }
-        });
+        document.getElementById('backToFoldersBtn').addEventListener('click', () => { history.back(); });
 
         // ===== SEARCH =====
         (function initSearch() {
@@ -5865,6 +5956,7 @@
             renderCard();
             buildQuiz();
             showPage('page-study');
+            navPush();
         }
 
         document.querySelectorAll('.tab-btn').forEach(btn => {
@@ -6159,6 +6251,16 @@
             document.getElementById('cardCounter').textContent = `${idx+1} / ${order.length}`;
             document.getElementById('progressFill').style.transform = `scaleX(${(idx+1)/order.length})`;
             renderKnowStatus(w);
+            renderFavStatus(w);
+        }
+
+        function renderFavStatus(w) {
+            const btn = document.getElementById('favStarBtn');
+            if (!btn || !w) return;
+            const fav = isFavorite(w.folder, w.sub || 1, w.term);
+            btn.textContent = fav ? '★' : '☆';
+            btn.classList.toggle('is-fav', fav);
+            btn.style.color = fav ? '#ffd54a' : '#fff';
         }
 
         function renderKnowStatus(w) {
@@ -6188,6 +6290,15 @@
 
         document.getElementById('markKnownBtn').addEventListener('click', (e) => { e.stopPropagation(); markCurrentCard('known'); });
         document.getElementById('markUnknownBtn').addEventListener('click', (e) => { e.stopPropagation(); markCurrentCard('unknown'); });
+
+        document.getElementById('favStarBtn').addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (!ACTIVE.length) return;
+            const w = ACTIVE[order[idx]];
+            const favs = toggleFavorite(w.folder, w.sub || 1, w.term);
+            renderFavStatus(w);
+            showToast(favs.includes(w.term) ? '⭐ Đã thêm vào Yêu thích' : '☆ Đã bỏ khỏi Yêu thích');
+        });
 
         document.getElementById('studyUnknownOnlyBtn').addEventListener('click', (e) => {
             e.stopPropagation();
@@ -6292,6 +6403,10 @@
                 case 'u':
                 case 'U':
                     markCurrentCard('unknown');
+                    break;
+                case 'f':
+                case 'F':
+                    document.getElementById('favStarBtn').click();
                     break;
                 case 'Escape':
                     document.getElementById('backToFoldersBtn').click();
@@ -6953,6 +7068,79 @@
             return data.favorites.includes(term);
         }
 
+        // ===== FAVORITES PAGE (list of all favorited words across every set) =====
+        function favEscapeHTML(s) {
+            return String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+        }
+
+        function getAllFavoriteWords() {
+            const out = [];
+            try {
+                const len = localStorage.length;
+                for (let i = 0; i < len; i++) {
+                    const k = localStorage.key(i);
+                    if (!k || k.indexOf('practice_progress_') !== 0) continue;
+                    const rest = k.slice('practice_progress_'.length);
+                    const m = rest.match(/^(.*)_(sub-(\d+)|all)$/);
+                    if (!m) continue;
+                    const folder = m[1];
+                    const sub = m[3] ? parseInt(m[3], 10) : null;
+                    let data;
+                    try { data = JSON.parse(localStorage.getItem(k)); } catch (e) { continue; }
+                    if (!data || !Array.isArray(data.favorites) || data.favorites.length === 0) continue;
+                    data.favorites.forEach(term => {
+                        const w = VOCAB.find(x => x.folder === folder && (sub === null || (x.sub || 1) === sub) && x.term === term);
+                        if (w && !out.includes(w)) out.push(w);
+                    });
+                }
+            } catch (e) { /* localStorage unavailable */ }
+            return out;
+        }
+
+        function renderFavoritesPage(filterQuery) {
+            const wrap = document.getElementById('favListWrap');
+            const emptyState = document.getElementById('favEmptyState');
+            if (!wrap) return;
+            let words = getAllFavoriteWords();
+            const total = words.length;
+            if (filterQuery && filterQuery.trim()) {
+                const q = filterQuery.trim().toLowerCase();
+                words = words.filter(w => cleanTermLabel(w.term).toLowerCase().includes(q) || (w.vi || '').toLowerCase().includes(q));
+            }
+            if (total === 0) {
+                wrap.innerHTML = '';
+                emptyState.style.display = 'block';
+                document.getElementById('favSearchBox').style.display = 'none';
+                return;
+            }
+            emptyState.style.display = 'none';
+            document.getElementById('favSearchBox').style.display = 'flex';
+            if (words.length === 0) {
+                wrap.innerHTML = `<div class="search-empty">Không tìm thấy từ nào khớp.</div>`;
+                return;
+            }
+            wrap.innerHTML = '';
+            words.forEach(w => {
+                const item = document.createElement('div');
+                item.className = 'search-item';
+                item.innerHTML = `<div class="si-term">⭐ ${favEscapeHTML(cleanTermLabel(w.term))}</div><div class="si-meta">${favEscapeHTML(w.vi || '')}</div>`;
+                item.addEventListener('click', () => { openWordFromSearch(w); });
+                wrap.appendChild(item);
+            });
+        }
+
+        document.getElementById('dashFavBtn')?.addEventListener('click', () => {
+            renderFavoritesPage('');
+            const input = document.getElementById('favSearchInput');
+            if (input) input.value = '';
+            showPage('page-favorites');
+            navPush();
+        });
+        document.getElementById('backFromFavBtn')?.addEventListener('click', () => { history.back(); });
+        document.getElementById('favSearchInput')?.addEventListener('input', (e) => {
+            renderFavoritesPage(e.target.value);
+        });
+
         function getWrongWords(folder, sub) {
             const data = loadPracticeProgress(folder, sub);
             return data.wrongWords || [];
@@ -7040,6 +7228,7 @@
             updateStepIndicators(1);
             document.getElementById('practiceHeroTitle').textContent = '🏋️ Tự luyện tập';
             document.getElementById('practiceHeroDesc').textContent = 'Chọn một bộ flashcard và chế độ luyện tập để bắt đầu.';
+            navPush();
         }
 
         // ----- step indicators -----
@@ -7077,6 +7266,7 @@
                     practiceState.selectedSub = null;
                     renderPracticeStep2();
                     updateStepIndicators(2);
+                    navPush();
                 });
                 grid.appendChild(card);
             });
@@ -7111,6 +7301,7 @@
                         practiceState.selectedSub = i;
                         renderPracticeStep3();
                         updateStepIndicators(3);
+                        navPush();
                     });
                 }
                 grid.appendChild(card);
@@ -7121,6 +7312,7 @@
                 practiceState.selectedSub = null;
                 renderPracticeStep3();
                 updateStepIndicators(3);
+                navPush();
             };
         }
 
@@ -7154,7 +7346,9 @@
                         matching: '🔗 Match words with their English definitions.',
                         mistakes: '❌ Only words you\'ve answered incorrectly.',
                         favorites: '⭐ Only words you\'ve marked as favorites.',
-                        definition: '📝 See the definition, type the word.'
+                        definition: '📝 See the definition, type the word.',
+                        listening: '🎧 Listen to the pronunciation and pick the correct meaning.',
+                        scramble: '🧩 See the meaning, unscramble the letters to spell the word.'
                     };
                     document.getElementById('practiceModeDesc').textContent = descs[card.dataset.mode] || '';
                 };
@@ -7164,6 +7358,7 @@
             document.getElementById('practiceStartBtn').onclick = () => {
                 if (!practiceState.selectedMode) return;
                 startPracticeGame();
+                navPush();
             };
         }
 
@@ -7829,31 +8024,7 @@
         };
 
         // ----- Practice "Back" button -----
-        document.getElementById('practiceBackBtn').addEventListener('click', () => {
-            if (practiceState.isComplete || practiceState.step === 1) {
-                enterLibrary();
-            } else {
-                // Go back one step
-                if (practiceState.step === 4) {
-                    practiceState.step = 3;
-                    renderPracticeStep3();
-                    updateStepIndicators(3);
-                    document.getElementById('practiceHeroTitle').textContent = '🎮 Choose your game';
-                    document.getElementById('practiceHeroDesc').textContent =
-                        'Select a mode above to begin.';
-                } else if (practiceState.step === 3) {
-                    practiceState.step = 2;
-                    renderPracticeStep2();
-                    updateStepIndicators(2);
-                } else if (practiceState.step === 2) {
-                    practiceState.step = 1;
-                    renderPracticeStep1();
-                    updateStepIndicators(1);
-                } else {
-                    enterLibrary();
-                }
-            }
-        });
+        document.getElementById('practiceBackBtn').addEventListener('click', () => { history.back(); });
 
         // Wire up the "Self-Practice" button in dashboard
         document.getElementById('dashPracticeBtn').addEventListener('click', showPractice);
