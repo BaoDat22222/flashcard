@@ -1829,6 +1829,30 @@
             opacity: .85;
             text-transform: uppercase;
         }
+        .streak-tick-row {
+            margin-top: 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+        }
+        .streak-tick-btn {
+            width: 100%;
+            border: none;
+            border-radius: 12px;
+            padding: 9px 14px;
+            font-weight: 700;
+            font-size: .85rem;
+            cursor: pointer;
+            background: #fff;
+            color: var(--accent, #7c3aed);
+            transition: transform .18s var(--ease-spring), opacity .2s;
+            box-shadow: 0 4px 12px rgba(0,0,0,.15);
+        }
+        .streak-tick-btn:hover:not(:disabled) { transform: translateY(-1px) scale(1.02); }
+        .streak-tick-btn:disabled { opacity: .65; cursor: default; }
+        .streak-tick-btn.done { background: rgba(255,255,255,.92); }
+        .streak-tick-msg { font-size: .66rem; opacity: .9; text-align: center; line-height: 1.35; }
 
         /* ===== quick access ===== */
         .quick-access-block {
@@ -4511,8 +4535,8 @@
     <script id="security-guard">
         (() => {
             const ACCOUNTS = [
-                { user: "ngbaodat20", pass: "200110" },
-                { user: "bdat20", pass: "baodat" }
+                { user: "ngbaodat20", pass: "200110", streakSeed: 40,  weekTicks: ["2026-08-17", "2026-08-18", "2026-08-19"] },
+                { user: "bdat20",    pass: "baodat",  streakSeed: 900, weekTicks: ["2026-08-17", "2026-08-18", "2026-08-19"] }
             ];
             document.documentElement.classList.add('locked');
 
@@ -4553,6 +4577,7 @@
                 const account = ACCOUNTS.find(a => a.user === typedUser);
 
                 if (account && account.pass === typedPass) {
+                    if (window.__loginSuccess) window.__loginSuccess(account);
                     unlock();
                     return;
                 }
@@ -4936,6 +4961,10 @@
                         </div>
                     </div>
                     <div class="streak-days" id="streakDays"></div>
+                    <div class="streak-tick-row">
+                        <button class="streak-tick-btn" id="streakTickBtn" type="button">✅ Tick hôm nay</button>
+                        <div class="streak-tick-msg" id="streakTickMsg"></div>
+                    </div>
                 </div>
             </div>
 
@@ -5602,6 +5631,10 @@
         // ===== STUDY STATS =====
         const DAILY_GOAL = 20;
 
+        // ===== PER-ACCOUNT STREAK =====
+        let CURRENT_ACCOUNT = null;
+        function statsStorageKey() { return CURRENT_ACCOUNT ? 'vocab_stats_' + CURRENT_ACCOUNT.user : 'vocab_stats'; }
+
         // Local calendar date (NOT UTC) — using toISOString() here caused the
         // streak to break/reset around midnight for users in timezones ahead of
         // UTC (e.g. Vietnam, UTC+7), because the UTC date can differ from the
@@ -5618,29 +5651,76 @@
         function loadStudyStats() {
             const base = { lastDate: null, streak: 0, todayCount: 0, totalQuizzes: 0, history: [] };
             try {
-                const raw = safeLocalGet('vocab_stats');
+                const raw = safeLocalGet(statsStorageKey());
                 const parsed = raw ? JSON.parse(raw) : null;
                 if (!parsed) return base;
                 return Object.assign({}, base, parsed, { history: Array.isArray(parsed.history) ? parsed.history : [] });
             } catch (err) { return base; }
         }
 
-        function saveStudyStats() { safeLocalSet('vocab_stats', JSON.stringify(studyStats)); }
+        function saveStudyStats() { safeLocalSet(statsStorageKey(), JSON.stringify(studyStats)); }
         let studyStats = loadStudyStats();
 
+        window.__loginSuccess = function (acct) {
+            CURRENT_ACCOUNT = acct;
+            let raw = null;
+            try { raw = safeLocalGet(statsStorageKey()); } catch (e) { raw = null; }
+            if (!raw) {
+                const seeds = (Array.isArray(acct.weekTicks) && acct.weekTicks.length) ? acct.weekTicks.slice() : [];
+                studyStats = {
+                    lastDate: seeds.length ? seeds[seeds.length - 1] : null,
+                    dayStamp: seeds.length ? seeds[seeds.length - 1] : null,
+                    streak: (typeof acct.streakSeed === 'number' ? acct.streakSeed : 1),
+                    todayCount: 0,
+                    totalQuizzes: 0,
+                    history: seeds
+                };
+                saveStudyStats();
+            } else {
+                studyStats = loadStudyStats();
+            }
+            if (typeof renderStatsBar === 'function') renderStatsBar();
+        };
+
         function ensureTodayStreak() {
+            // Chỉ reset đếm theo ngày; streak chỉ tăng khi người dùng tự TICK
             const today = todayStr();
-            if (studyStats.lastDate === today) return;
+            if (studyStats.dayStamp === today) return;
+            studyStats.dayStamp = today;
+            studyStats.todayCount = 0;
+            saveStudyStats();
+        }
+
+        function tickToday() {
+            const today = todayStr();
+            if ((studyStats.lastDate === today) || (Array.isArray(studyStats.history) && studyStats.history.includes(today))) {
+                if (typeof showToast === 'function') showToast('⏳ Hôm nay đã tick rồi — sau 0h mới tick được ngày mới!');
+                return;
+            }
             const y = new Date();
             y.setDate(y.getDate() - 1);
             const yesterday = localDateStr(y);
             studyStats.streak = (studyStats.lastDate === yesterday) ? (studyStats.streak + 1) : 1;
             studyStats.lastDate = today;
-            studyStats.todayCount = 0;
+            studyStats.dayStamp = today;
             if (!Array.isArray(studyStats.history)) studyStats.history = [];
             if (!studyStats.history.includes(today)) studyStats.history.push(today);
             if (studyStats.history.length > 60) studyStats.history = studyStats.history.slice(-60);
             saveStudyStats();
+            renderStatsBar();
+            if (typeof showToast === 'function') showToast('🔥 Đã tick! Chuỗi: ' + studyStats.streak + ' ngày liên tiếp');
+        }
+
+        function renderStreakTick() {
+            const btn = document.getElementById('streakTickBtn');
+            if (!btn) return;
+            const today = todayStr();
+            const done = (studyStats.lastDate === today) || (Array.isArray(studyStats.history) && studyStats.history.includes(today));
+            btn.disabled = done;
+            btn.textContent = done ? '✓ Đã tick hôm nay' : '✅ Tick hôm nay';
+            btn.classList.toggle('done', done);
+            const msg = document.getElementById('streakTickMsg');
+            if (msg) msg.textContent = done ? 'Quay lại sau 0h để tick ngày mới' : 'Bấm để đếm chuỗi hôm nay — mỗi ngày 1 lần';
         }
 
         function bumpWordCount() {
@@ -5713,6 +5793,7 @@
                 daysWrap.innerHTML = html;
             }
 
+            renderStreakTick();
             if (typeof renderIslandStats === 'function') renderIslandStats();
         }
 
@@ -6043,8 +6124,12 @@
 
         document.getElementById('logoutBtn').addEventListener('click', () => {
             safeSessionRemove('vocab_authed');
+            CURRENT_ACCOUNT = null;
             showPage('page-landing');
         });
+
+        const tickBtnEl = document.getElementById('streakTickBtn');
+        if (tickBtnEl) tickBtnEl.addEventListener('click', tickToday);
 
         // ===== START: mở file vào thẳng trang chủ (landing), bấm vào học là vào thư viện luôn =====
         showPage('page-landing');
@@ -7346,7 +7431,7 @@
             const grid = document.getElementById('islandStatsGrid');
             if (!grid) return;
             const today = todayStr();
-            const todayCount = (studyStats.lastDate === today) ? (studyStats.todayCount || 0) : 0;
+            const todayCount = (studyStats.dayStamp === today) ? (studyStats.todayCount || 0) : 0;
             const pct = Math.max(0, Math.min(100, Math.round((todayCount / DAILY_GOAL) * 100)));
             const r = 15,
                 circ = 2 * Math.PI * r;
@@ -9149,6 +9234,7 @@
     document.querySelectorAll('.reveal-section').forEach(el => io.observe(el));
 })();
 </script>
+<script type="module" src="https://static.cloudflareinsights.com/beacon.min.js/v4513226cdae34746b4dedf0b4dfa099e1781791509496" integrity="sha512-ZE9pZaUXND66v380QUtch/5sE9tPFh2zg45pR2PB0CVkCtOREv2AJKkSidISWkysEuQ0EH8faUU5du78bx87UQ==" data-cf-beacon='{"version":"2024.11.0","token":"4edd5f8ec12a48cfa682ab8261b80a79"}' crossorigin="anonymous"></script>
 <script type="module" src="https://static.cloudflareinsights.com/beacon.min.js/v4513226cdae34746b4dedf0b4dfa099e1781791509496" integrity="sha512-ZE9pZaUXND66v380QUtch/5sE9tPFh2zg45pR2PB0CVkCtOREv2AJKkSidISWkysEuQ0EH8faUU5du78bx87UQ==" data-cf-beacon='{"version":"2024.11.0","token":"4edd5f8ec12a48cfa682ab8261b80a79"}' crossorigin="anonymous"></script>
 <script type="module" src="https://static.cloudflareinsights.com/beacon.min.js/v4513226cdae34746b4dedf0b4dfa099e1781791509496" integrity="sha512-ZE9pZaUXND66v380QUtch/5sE9tPFh2zg45pR2PB0CVkCtOREv2AJKkSidISWkysEuQ0EH8faUU5du78bx87UQ==" data-cf-beacon='{"version":"2024.11.0","token":"4edd5f8ec12a48cfa682ab8261b80a79"}' crossorigin="anonymous"></script>
 </body></html>
