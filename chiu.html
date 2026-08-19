@@ -6275,8 +6275,8 @@
             speakNext();
         });
 
-        document.getElementById('backToParentsBtn').addEventListener('click', () => { history.back(); });
-        document.getElementById('backToParentsBtn2').addEventListener('click', () => { history.back(); });
+        document.getElementById('backToParentsBtn').addEventListener('click', () => { buildFolderGrid(); showPage('page-folders'); });
+        document.getElementById('backToParentsBtn2').addEventListener('click', () => { buildFolderGrid(); showPage('page-folders'); });
 
         document.getElementById('backToFoldersBtn').addEventListener('click', () => { history.back(); });
 
