@@ -4552,9 +4552,44 @@
 }
 #page-folders .lib-side .quick-access-grid { grid-template-columns: repeat(2, 1fr); }
 
+
+        /* ===== WebThreads background ===== */
+        #webthreads-host{position:fixed;inset:0;width:100vw;height:100vh;z-index:0;overflow:hidden;}
+        #webthreads-host canvas{display:block;width:100%;height:100%;}
+        body{position:relative;z-index:1;background:transparent;}
+        html,body{background:transparent !important;}
     </style>
 </head>
 <body class="theme-forest" style="">
+<!-- ===== WebThreads background (vanilla WebGL) ===== -->
+<div id="webthreads-host"></div>
+<script>
+(() => {
+  const P={color1:[0x52/255,0x27/255,0xFF/255],color2:[0x04/255,0x03/255,0x04/255],color3:[1,1,1],speed:0.2,threadCount:6,frequency:5,spread:0.18,taper:1.0,position:0.5,fanMode:'center',glow:0.02,falloff:0.6,thickness:1.1,brightness:0.6,opacity:1,mirror:true,shimmer:false,grain:true,grainIntensity:0.05,mouseInteraction:true,mouseStrength:0.3};
+  const host=document.getElementById('webthreads-host');
+  const canvas=document.createElement('canvas');
+  host.appendChild(canvas);
+  const gl=canvas.getContext('webgl',{antialias:true,alpha:true});
+  if(!gl){return;}
+  function compile(t,s){const sh=gl.createShader(t);gl.shaderSource(sh,s);gl.compileShader(sh);return sh;}
+  const prog=gl.createProgram();
+  gl.attachShader(prog,compile(gl.VERTEX_SHADER,'attribute vec2 a;varying vec2 v;void main(){v=a*0.5+0.5;gl_Position=vec4(a,0.,1.);}'));
+  gl.attachShader(prog,compile(gl.FRAGMENT_SHADER,'precision highp float;varying vec2 v;uniform vec2 uRes;uniform float uT;uniform vec3 uC1,uC2,uC3;uniform float uSpread,uTaper,uFreq,uGlow,uFalloff,uThick,uBright,uOpacity,uPos;uniform int uMirror,uShimmer,uGrain;uniform float uGrainAmt;uniform vec2 uMouse;uniform float uMouseStr;uniform int uN;float hash(vec2 p){p=fract(p*vec2(123.34,456.21));p+=dot(p,p+45.32);return fract(p.x*p.y);}float threadX(int idx,float t,float seed){float i=float(idx);float n=float(uN);float a=(i-(n-1.)*.5)*uSpread*4.;float fall=pow(sin(t*3.14159265),uFalloff*2.5+.001);float wiggle=sin(t*uFreq+i*1.7+seed)*uSpread*.35+sin(t*uFreq*1.7+i*2.3+seed*1.3)*uSpread*.18;float taper=mix(.55,1.,pow(t,uTaper*.5+.5));return uPos+a*t*taper+wiggle*fall;}float threadC(vec2 uv,int idx,float seed,vec2 m){float t=uv.y;float fanT=smoothstep(0.,1.,max(t,1.-t));float x=threadX(idx,t,seed);float d=abs(uv.x-x);if(uMouseStr>.001){float md=distance(uv,m);float push=exp(-md*md*6.)*uMouseStr;d/=(1.+push*1.2);}float core=exp(-d*d/(uThick*uThick*.0009));float halo=exp(-d*d/(uThick*uThick*.012));float c=(core+halo*uGlow*10.);float edge=pow(sin(uv.y*3.14159265*.5+.6),.7);c*=edge;return c;}void main(){vec2 uv=v;vec2 m=uMouse/uRes;vec3 col=uC2*.6;float energy=0.;float hi=0.;for(int i=0;i<12;i++){if(i>=uN)break;float c=threadC(uv,i,float(i)*.71+.37,m);energy+=c;hi+=pow(c,7.);}if(uMirror==1){vec2 uvM=vec2(2.*uPos-uv.x,uv.y);vec2 mM=vec2(2.*uPos-m.x,m.y);for(int i=0;i<12;i++){if(i>=uN)break;float c=threadC(uvM,i,float(i)*.71+2.07,mM);energy+=c;hi+=pow(c,7.);}}vec3 tCol=uC1*energy*uBright*6.;vec3 hCol=uC3*hi*uBright*1.4;col=col+tCol+hCol;if(uGrain==1){float g=(hash(gl_FragCoord.xy+uT*60.)-.5)*uGrainAmt;col+=g;}float vig=smoothstep(1.4,.35,length(uv-.5));col*=mix(.5,1.,vig);col*=uOpacity;gl_FragColor=vec4(col,1.);}'));
+  gl.linkProgram(prog);gl.useProgram(prog);
+  const buf=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,buf);gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,1,-1,-1,1,1,1]),gl.STATIC_DRAW);
+  const a=gl.getAttribLocation(prog,'a');gl.enableVertexAttribArray(a);gl.vertexAttribPointer(a,2,gl.FLOAT,false,0,0);
+  const U={};['uRes','uT','uC1','uC2','uC3','uSpread','uTaper','uFreq','uGlow','uFalloff','uThick','uBright','uOpacity','uPos','uMirror','uShimmer','uGrain','uGrainAmt','uMouse','uMouseStr','uN'].forEach(n=>U[n]=gl.getUniformLocation(prog,n));
+  let mx=0,my=0;
+  window.addEventListener('mousemove',e=>{const r=canvas.getBoundingClientRect();mx=(e.clientX-r.left)/(r.width||1)*canvas.width;my=(r.height-(e.clientY-r.top))/(r.height||1)*canvas.height;});
+  function resize(){const dpr=Math.min(window.devicePixelRatio||1,2);const w=host.clientWidth;const h=host.clientHeight;canvas.width=Math.max(1,Math.floor(w*dpr));canvas.height=Math.max(1,Math.floor(h*dpr));gl.viewport(0,0,canvas.width,canvas.height);}
+  window.addEventListener('resize',resize);resize();
+  const t0=performance.now();
+  function setU(){gl.uniform2f(U.uRes,canvas.width,canvas.height);gl.uniform3fv(U.uC1,P.color1);gl.uniform3fv(U.uC2,P.color2);gl.uniform3fv(U.uC3,P.color3);gl.uniform1f(U.uSpread,P.spread);gl.uniform1f(U.uTaper,P.taper);gl.uniform1f(U.uFreq,P.frequency);gl.uniform1f(U.uGlow,P.glow);gl.uniform1f(U.uFalloff,P.falloff);gl.uniform1f(U.uThick,P.thickness);gl.uniform1f(U.uBright,P.brightness);gl.uniform1f(U.uOpacity,P.opacity);gl.uniform1f(U.uPos,P.position);gl.uniform1i(U.uMirror,P.mirror?1:0);gl.uniform1i(U.uShimmer,P.shimmer?1:0);gl.uniform1i(U.uGrain,P.grain?1:0);gl.uniform1f(U.uGrainAmt,P.grainIntensity);gl.uniform2f(U.uMouse,mx,my);gl.uniform1f(U.uMouseStr,P.mouseInteraction?P.mouseStrength:0);gl.uniform1i(U.uN,P.threadCount);}
+  function frame(){const t=(performance.now()-t0)/1000;gl.uniform1f(U.uT,t*P.speed*4.);setU();gl.drawArrays(gl.TRIANGLE_STRIP,0,4);requestAnimationFrame(frame);}
+  requestAnimationFrame(frame);
+})();
+</script>
+
 
     <!-- ===== SECURITY GATE ===== -->
     <div id="securityGate">
