@@ -6241,6 +6241,10 @@
         // Folders that open straight into flashcards (no subfolder picker)
         const NO_SUB_FOLDERS = ['CAT1'];
 
+        // Per-folder override for number of sub-sets (default 10)
+        const SUB_COUNT_OVERRIDES = { 'Chuyên 1': 20 };
+        function maxSubFor(key) { return SUB_COUNT_OVERRIDES[key] || 10; }
+
         function getParentList() {
             return FOLDER_LIST;
         }
@@ -6262,7 +6266,7 @@
                 const count = (FOLDER_WORDS.get(key) || []).length;
                 const card = document.createElement('div');
                 card.className = 'folder-card';
-                const countLabel = NO_SUB_FOLDERS.includes(key) ? `${count} words` : `${count} words · 10 sets`;
+                const countLabel = NO_SUB_FOLDERS.includes(key) ? `${count} words` : `${count} words · ${maxSubFor(key)} sets`;
                 card.innerHTML =
                     `<div class="f-icon">${meta.icon}</div><div class="f-name">${meta.label}</div><div class="f-count">${countLabel}</div>`;
                 card.addEventListener('click', () => { openParent(key); });
@@ -6295,18 +6299,19 @@
 
         function buildSubfolderGrid(key) {
             const meta = metaFor(key);
+            const maxSub = maxSubFor(key);
             document.getElementById('subHeroTitle').textContent = `${meta.icon} ${meta.label}`;
             document.getElementById('subHeroDesc').textContent =
-                `"${meta.theme}" theme — pick a small set (1–10) to start learning.`;
+                `"${meta.theme}" theme — pick a small set (1–${maxSub}) to start learning.`;
             const grid = document.getElementById('subfolderGrid');
             grid.innerHTML = '';
             const wordsInFolder = FOLDER_WORDS.get(key) || [];
-            const subCounts = new Array(11).fill(0);
+            const subCounts = new Array(maxSub + 1).fill(0);
             for (let _si = 0; _si < wordsInFolder.length; _si++) {
                 const _s = wordsInFolder[_si].sub || 1;
-                if (_s >= 1 && _s <= 10) subCounts[_s]++;
+                if (_s >= 1 && _s <= maxSub) subCounts[_s]++;
             }
-            for (let i = 1; i <= 10; i++) {
+            for (let i = 1; i <= maxSub; i++) {
                 const count = subCounts[i];
                 const card = document.createElement('div');
                 card.className = 'folder-card' + (count === 0 ? ' locked' : '');
@@ -7831,7 +7836,7 @@
                 const card = document.createElement('div');
                 card.className = 'folder-card';
                 card.innerHTML =
-                    `<div class="f-icon">${meta.icon}</div><div class="f-name">${meta.label}</div><div class="f-count">${count} words · 10 sets</div>`;
+                    `<div class="f-icon">${meta.icon}</div><div class="f-name">${meta.label}</div><div class="f-count">${count} words · ${maxSubFor(key)} sets</div>`;
                 card.addEventListener('click', () => {
                     practiceState.selectedFolder = key;
                     practiceState.selectedSub = null;
@@ -7855,13 +7860,14 @@
             const grid = document.getElementById('practiceSubfolderGrid');
             grid.innerHTML = '';
             const wordsInFolder = FOLDER_WORDS.get(folder) || [];
-            const subCounts = new Array(11).fill(0);
+            const maxSub = maxSubFor(folder);
+            const subCounts = new Array(maxSub + 1).fill(0);
             for (let i = 0; i < wordsInFolder.length; i++) {
                 const s = wordsInFolder[i].sub || 1;
-                if (s >= 1 && s <= 10) subCounts[s]++;
+                if (s >= 1 && s <= maxSub) subCounts[s]++;
             }
 
-            for (let i = 1; i <= 10; i++) {
+            for (let i = 1; i <= maxSub; i++) {
                 const count = subCounts[i];
                 const card = document.createElement('div');
                 card.className = 'folder-card' + (count === 0 ? ' locked' : '');
