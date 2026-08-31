@@ -23,12 +23,25 @@
 html {
     scroll-behavior: smooth;
     -webkit-text-size-adjust: 100%;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+}
+
+button, a, input, select, textarea, .btn, .card, .folder-card, .opt, .tab-btn, .dash-tool-btn, .mode-btn, .island-pill, .theme-opt {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+}
+
+button:active, .btn:active, .folder-card:active, .opt:active, .tab-btn:active, .dash-tool-btn:active, .mode-btn:active, .island-pill:active {
+    transform: scale(0.96) !important;
+    transition: transform 0.05s ease !important;
 }
 
 :root {
     --ease-spring: cubic-bezier(.34, 1.56, .64, 1);
     --ease-smooth: cubic-bezier(.22, 1, .36, 1);
     --ease-out: cubic-bezier(.16, 1, .3, 1);
+    --ease-fast: cubic-bezier(.2, .9, .3, 1);
 
     --bg1: #0e111a;
     --bg2: #141824;
@@ -59,6 +72,7 @@ body {
     color: var(--ink);
     line-height: 1.5;
     overflow-x: hidden;
+    touch-action: manipulation;
 }
 
 /* Neutralize body pseudo elements */
@@ -101,13 +115,13 @@ body::before, body::after {
 
 .page.active {
     display: block;
-    animation: pageIn 0.32s var(--ease-smooth) both;
+    animation: pageIn 0.15s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
 @keyframes pageIn {
     from {
         opacity: 0;
-        transform: translateY(12px);
+        transform: translateY(8px);
     }
     to {
         opacity: 1;
@@ -397,7 +411,7 @@ header p {
     border-color: var(--accent);
 }
 
-/* ===== 7. TIMER ISLAND (DYNAMIC ISLAND) ===== */
+/* ===== 7. TIMER ISLAND (APPLE FLUID SPRING DYNAMIC ISLAND) ===== */
 .timer-island {
     position: fixed;
     top: 14px;
@@ -415,22 +429,32 @@ header p {
     gap: 12px;
     margin: 0 auto;
     width: fit-content;
-    padding: 7px 20px;
+    padding: 7px 22px;
     border-radius: 999px;
-    background: #141926;
+    background: #121724;
     border: 1px solid rgba(255, 255, 255, 0.16);
     color: var(--ink);
     font-size: 0.88rem;
     cursor: pointer;
-    box-shadow: 0 10px 25px -8px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 8px 24px -6px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.1);
     pointer-events: auto;
-    transition: transform 0.2s var(--ease-spring), border-color 0.2s, background 0.2s;
+    transition: transform 0.3s cubic-bezier(0.34, 1.4, 0.64, 1),
+                border-color 0.25s ease,
+                background 0.25s ease,
+                box-shadow 0.3s ease;
+    will-change: transform;
 }
 
 .island-pill:hover {
-    transform: translateY(2px);
+    transform: translateY(2px) scale(1.02);
     border-color: var(--accent);
-    background: #1c2234;
+    background: #182030;
+    box-shadow: 0 12px 28px -4px rgba(211, 163, 90, 0.25);
+}
+
+.island-pill:active {
+    transform: scale(0.92) translateY(3px) !important;
+    transition: transform 0.08s ease !important;
 }
 
 .island-pill-icon {
@@ -461,17 +485,33 @@ header p {
 .island-panel {
     display: none;
     margin-top: 12px;
-    border-radius: 24px;
-    background: #141926;
+    border-radius: 26px;
+    background: #121724;
     border: 1px solid rgba(255, 255, 255, 0.14);
-    box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.8);
+    box-shadow: 0 30px 70px -15px rgba(0, 0, 0, 0.85), inset 0 1px 0 rgba(255, 255, 255, 0.12);
     overflow: hidden;
     pointer-events: auto;
+    transform-origin: top center;
 }
 
 .timer-island.expanded .island-panel {
     display: block;
-    animation: islandIn 0.25s var(--ease-smooth) both;
+    animation: appleFluidSpring 0.42s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes appleFluidSpring {
+    0% {
+        opacity: 0;
+        transform: scale(0.82) translateY(-18px);
+    }
+    60% {
+        opacity: 1;
+        transform: scale(1.015) translateY(1px);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
 }
 
 .timer-container {
@@ -2073,7 +2113,7 @@ header p {
     width: 100%;
     min-height: 400px;
     transform-style: preserve-3d;
-    transition: transform 0.55s var(--ease-spring);
+    transition: transform .6s var(--ease-spring);
     cursor: pointer;
 }
 
@@ -3361,7 +3401,8 @@ body:not(.dark):not(.theme-rustic):not(.theme-modern):not(.theme-ocean):not(.the
 ::-webkit-scrollbar-thumb:hover {
     background: var(--accent);
 }
-    </style>
+
+</style>
 </head>
 <body class="theme-forest" style="">
 
@@ -5382,24 +5423,67 @@ body:not(.dark):not(.theme-rustic):not(.theme-modern):not(.theme-ocean):not(.the
             });
         });
 
-        // ===== TTS =====
+        // ===== CAMBRIDGE AUDIO ENGINE (ULTRA-FAST & 100% ACCURATE UK/US) =====
         let voices = [];
+        let ttsRequestId = 0;
+        let currentAudioEl = null;
+        window._currentUtter = null;
+
+        const audioBufferCache = new Map();
 
         function loadVoices() {
-            voices = window.speechSynthesis ? window.speechSynthesis.getVoices() : [];
-            populateVoiceSelect();
+            if ('speechSynthesis' in window) {
+                voices = window.speechSynthesis.getVoices() || [];
+                populateVoiceSelect();
+            }
         }
-        if ('speechSynthesis' in window) { loadVoices();
-            window.speechSynthesis.onvoiceschanged = loadVoices; }
+        if ('speechSynthesis' in window) {
+            loadVoices();
+            window.speechSynthesis.onvoiceschanged = loadVoices;
+        }
+
+        function getAccent() {
+            return safeLocalGet('vocab_acc') === 'us' ? 'us' : 'uk';
+        }
+
+        function cleanForSpeech(term) {
+            if (!term) return '';
+            return String(term)
+                .replace(/\s*\([^)]*\)\s*/g, ' ')
+                .replace(/\/.*$/, '')
+                .replace(/["'“”]/g, '')
+                .replace(/\s+/g, ' ')
+                .trim();
+        }
 
         function pickEnglishVoice() {
-            const byNamePriority = [/Google UK English Female/i, /Google UK English Male/i, /Microsoft Libby/i,
-                /Microsoft Sonia/i, /Microsoft Ryan/i, /Daniel/i, /Kate/i, /Serena/i, /Arthur/i
-            ];
-            for (const re of byNamePriority) { const v = voices.find(v => re.test(v.name) && /en-GB|en_GB/i.test(v
-                    .lang)); if (v) return v; }
-            const anyGB = voices.find(v => /en-GB|en_GB/i.test(v.lang));
-            if (anyGB) return anyGB;
+            const acc = getAccent();
+            if (acc === 'us') {
+                const usPriority = [
+                    /Google US English/i,
+                    /Microsoft (David|Zira|Mark|Aria|Guy|Jenny)/i,
+                    /Samantha|Alex|Victoria|Allison|Ava/i,
+                    /en-US|en_US/i
+                ];
+                for (const re of usPriority) {
+                    const v = voices.find(v => re.test(v.name) || (re.test(v.lang) && /en-US|en_US/i.test(v.lang)));
+                    if (v) return v;
+                }
+            } else {
+                const ukPriority = [
+                    /Google UK English Female/i,
+                    /Google UK English Male/i,
+                    /Microsoft (Libby|Sonia|Ryan|George|Susan|Hazel)/i,
+                    /Daniel|Kate|Serena|Arthur|Oliver/i,
+                    /en-GB|en_GB/i
+                ];
+                for (const re of ukPriority) {
+                    const v = voices.find(v => re.test(v.name) || (re.test(v.lang) && /en-GB|en_GB/i.test(v.lang)));
+                    if (v) return v;
+                }
+            }
+            const anyAcc = voices.find(v => acc === 'us' ? /en-US|en_US/i.test(v.lang) : /en-GB|en_GB/i.test(v.lang));
+            if (anyAcc) return anyAcc;
             const anyEn = voices.find(v => /^en/i.test(v.lang));
             return anyEn || null;
         }
@@ -5448,7 +5532,15 @@ body:not(.dark):not(.theme-rustic):not(.theme-modern):not(.theme-ocean):not(.the
                     safeLocalSet('vocab_voice', val);
                     if ('speechSynthesis' in window) {
                         window.speechSynthesis.cancel();
-                        if (val) { const v = voices.find(v => v.name === val); if (v && v.lang) { const u = new SpeechSynthesisUtterance(' '); u.voice = v; u.lang = v.lang; window.speechSynthesis.speak(u); } }
+                        if (val) {
+                            const v = voices.find(v => v.name === val);
+                            if (v && v.lang) {
+                                const u = new SpeechSynthesisUtterance(' ');
+                                u.voice = v;
+                                u.lang = v.lang;
+                                window.speechSynthesis.speak(u);
+                            }
+                        }
                     }
                 });
             }
@@ -5463,7 +5555,7 @@ body:not(.dark):not(.theme-rustic):not(.theme-modern):not(.theme-ocean):not(.the
                     as.setAttribute('aria-checked', nv ? 'true' : 'false');
                     safeLocalSet('vocab_auto_speak', nv ? '1' : '0');
                     if (nv && document.getElementById('page-study').classList.contains('active') && ACTIVE.length) {
-                        speakText(cleanForSpeech(ACTIVE[idx].term));
+                        speakText(cleanForSpeech(ACTIVE[order[idx]].term));
                     }
                 });
             }
@@ -5471,128 +5563,222 @@ body:not(.dark):not(.theme-rustic):not(.theme-modern):not(.theme-ocean):not(.the
 
         function isAutoSpeakOn() { return safeLocalGet('vocab_auto_speak') === '1'; }
 
-        function speakWithTTS(text, btn) {
-            if (!('speechSynthesis' in window)) { alert('Your browser does not support pronunciation. Please try Chrome or Edge.');
-                if (btn) btn.classList.remove('speaking');
-                return; }
-            window.speechSynthesis.cancel();
-            const utter = new SpeechSynthesisUtterance(text);
-            const v = getSelectedVoice();
-            if (v) utter.voice = v;
-            utter.lang = (v && v.lang) || 'en-GB';
-            utter.rate = 0.72;
-            utter.pitch = 1;
-            if (btn) { btn.classList.add('speaking');
-                utter.onend = () => btn.classList.remove('speaking');
-                utter.onerror = () => btn.classList.remove('speaking'); }
-            // Chrome sometimes silently drops speak() calls made right after cancel();
-            // a tiny delay makes playback fire reliably instead of doing nothing.
-            setTimeout(() => window.speechSynthesis.speak(utter), 30);
-        }
-
-        function cleanForSpeech(term) { return term.replace(/\s*\([^)]*\)\s*/g, ' ').replace(/\/.*$/, '').replace(/\s+/g, ' ')
-                .trim(); }
-
-        const dictAudioCache = {};
-
-        function getAccent() { return safeLocalGet('vocab_acc') === 'us' ? 'us' : 'uk'; }
-
-        async function fetchDictionaryAudio(word) {
-            const key = word.toLowerCase();
-            const accent = getAccent();
-            const cacheKey = `${accent}:${key}`;
-            if (cacheKey in dictAudioCache) return dictAudioCache[cacheKey];
-            try {
-                const res = await fetch(
-                    `https://api.dictionaryapi.dev/api/v2/entries/en/${encodeURIComponent(key)}`);
-                if (!res.ok) { dictAudioCache[cacheKey] = null; return null; }
-                const data = await res.json();
-                const accentRe = accent === 'us' ? /-us\.|en-us|american/i : /-uk\.|en-gb|british/i;
-                let url = null;
-                for (const entry of data) {
-                    const phonetics = entry.phonetics || [];
-                    const match = phonetics.find(p => p.audio && accentRe.test(p.audio));
-                    if (match) { url = match.audio; break; }
-                }
-                if (!url) {
-                    for (const entry of data) { const withAudio = (entry.phonetics || []).find(p => p.audio); if (
-                            withAudio) { url = withAudio.audio; break; } }
-                }
-                dictAudioCache[cacheKey] = url || null;
-                return dictAudioCache[cacheKey];
-            } catch (err) { dictAudioCache[cacheKey] = null; return null; }
-        }
-
-        function playGoogleAudio(word, btn, onDone) {
-            const url =
-                `https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&tl=en&q=${encodeURIComponent(word)}`;
-            const audio = new Audio(url);
-            currentAudioEl = audio;
-            if (btn) btn.classList.add('speaking');
-            audio.onended = () => { if (btn) btn.classList.remove('speaking'); if (currentAudioEl === audio) currentAudioEl = null; if (onDone) onDone(); };
-            audio.onerror = () => { if (btn) btn.classList.remove('speaking'); if (currentAudioEl === audio) currentAudioEl = null; if (onDone) onDone(); };
-            audio.play().catch(() => { if (btn) btn.classList.remove('speaking'); if (currentAudioEl === audio) currentAudioEl = null; if (onDone) onDone(); });
-            return audio;
-        }
-
-        // Guards against the 2-3s "chờ rồi mới đọc, đọc chồng nhau" issue:
-        // - a monotonically increasing request id so a slow/late fetch from a
-        //   previous click can never start playing over a newer click
-        // - a single currently-playing <audio> element that always gets
-        //   stopped before anything new starts
-        // - a hard timeout on the dictionary-audio fetch so a slow network
-        //   never makes the user wait more than ~1.2s before falling back
-        let ttsRequestId = 0;
-        let currentAudioEl = null;
-
         function stopAllSpeech() {
-            if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+            if ('speechSynthesis' in window) {
+                try {
+                    window.speechSynthesis.cancel();
+                    if (window.speechSynthesis.paused) {
+                        window.speechSynthesis.resume();
+                    }
+                } catch (e) {}
+            }
             if (currentAudioEl) {
-                try { currentAudioEl.pause(); currentAudioEl.currentTime = 0; } catch (err) {}
+                try {
+                    currentAudioEl.pause();
+                    currentAudioEl.currentTime = 0;
+                } catch (e) {}
                 currentAudioEl = null;
             }
             document.querySelectorAll('.speaking').forEach(el => el.classList.remove('speaking'));
         }
 
-        function fetchWithTimeout(promise, ms) {
-            return Promise.race([
-                promise,
-                new Promise(resolve => setTimeout(() => resolve(null), ms))
-            ]);
+        function getAudioStreamUrl(text) {
+            const clean = cleanForSpeech(text);
+            if (!clean) return '';
+            const acc = getAccent();
+            const langCode = acc === 'us' ? 'en-US' : 'en-GB';
+            return `https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&tl=${langCode}&q=${encodeURIComponent(clean)}`;
+        }
+
+        function preloadAudio(text) {
+            const clean = cleanForSpeech(text);
+            if (!clean) return;
+            const key = `${getAccent()}:${clean.toLowerCase()}`;
+            if (audioBufferCache.has(key)) return;
+            const url = getAudioStreamUrl(clean);
+            try {
+                const a = new Audio();
+                a.preload = 'auto';
+                a.src = url;
+                audioBufferCache.set(key, a);
+            } catch (e) {}
+        }
+
+        function speakWithTTS(text, btn) {
+            if (!('speechSynthesis' in window)) {
+                if (btn) btn.classList.remove('speaking');
+                return;
+            }
+            const clean = cleanForSpeech(text);
+            if (!clean) {
+                if (btn) btn.classList.remove('speaking');
+                return;
+            }
+
+            try {
+                window.speechSynthesis.cancel();
+                if (window.speechSynthesis.paused) {
+                    window.speechSynthesis.resume();
+                }
+            } catch (e) {}
+
+            const utter = new SpeechSynthesisUtterance(clean);
+            const v = getSelectedVoice();
+            const acc = getAccent();
+            if (v) utter.voice = v;
+            utter.lang = (v && v.lang) || (acc === 'us' ? 'en-US' : 'en-GB');
+            utter.rate = 0.88;
+            utter.pitch = 1.0;
+
+            window._currentUtter = utter;
+
+            if (btn) {
+                btn.classList.add('speaking');
+                utter.onend = () => {
+                    btn.classList.remove('speaking');
+                    window._currentUtter = null;
+                };
+                utter.onerror = () => {
+                    btn.classList.remove('speaking');
+                    window._currentUtter = null;
+                };
+            }
+
+            setTimeout(() => {
+                try {
+                    window.speechSynthesis.speak(utter);
+                } catch (e) {
+                    if (btn) btn.classList.remove('speaking');
+                }
+            }, 15);
+        }
+
+        async function fetchDictionaryAudioUrl(word) {
+            const clean = cleanForSpeech(word);
+            if (!clean || clean.includes(' ')) return null;
+            const acc = getAccent();
+            const cacheKey = `dict:${acc}:${clean.toLowerCase()}`;
+            if (audioBufferCache.has(cacheKey)) return audioBufferCache.get(cacheKey);
+
+            try {
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 350);
+                const res = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${encodeURIComponent(clean.toLowerCase())}`, {
+                    signal: controller.signal
+                });
+                clearTimeout(timeoutId);
+                if (!res.ok) {
+                    audioBufferCache.set(cacheKey, null);
+                    return null;
+                }
+                const data = await res.json();
+                const accentRe = acc === 'us' ? /-us\.|en-us|american/i : /-uk\.|en-gb|british/i;
+                let audioUrl = null;
+
+                for (const entry of data) {
+                    const phonetics = entry.phonetics || [];
+                    const match = phonetics.find(p => p.audio && accentRe.test(p.audio));
+                    if (match && match.audio) { audioUrl = match.audio; break; }
+                }
+                if (!audioUrl) {
+                    for (const entry of data) {
+                        const withAudio = (entry.phonetics || []).find(p => p.audio);
+                        if (withAudio && withAudio.audio) { audioUrl = withAudio.audio; break; }
+                    }
+                }
+                audioBufferCache.set(cacheKey, audioUrl || null);
+                return audioUrl;
+            } catch (e) {
+                audioBufferCache.set(cacheKey, null);
+                return null;
+            }
         }
 
         async function speakText(text, btn) {
-            // Bump the request id and stop whatever was playing so clicks never pile up.
+            const clean = cleanForSpeech(text);
+            if (!clean) return;
+
             const myId = ++ttsRequestId;
             stopAllSpeech();
+
             if (btn) btn.classList.add('speaking');
-            const words = text.trim().split(/\s+/);
-            const isSingleWord = words.length === 1 && /^[a-zA-Z'-]+$/.test(words[0]);
-            if (isSingleWord) {
-                // Cap the dictionary lookup at 1.2s so a slow network can't cause
-                // the long "press-and-wait" delay — fall back to the browser TTS
-                // immediately if it takes longer.
-                const url = await fetchWithTimeout(fetchDictionaryAudio(words[0]), 1200);
-                if (myId !== ttsRequestId) return; // a newer click superseded this one
-                if (url) {
-                    try {
-                        const audio = new Audio(url);
-                        currentAudioEl = audio;
-                        audio.onended = () => { if (btn) btn.classList.remove('speaking'); if (currentAudioEl === audio) currentAudioEl = null; };
-                        audio.onerror = () => {
-                            if (currentAudioEl === audio) currentAudioEl = null;
-                            if (myId === ttsRequestId) speakWithTTS(text, btn); else if (btn) btn.classList.remove('speaking');
-                        };
-                        await audio.play();
-                        return;
-                    } catch (err) {}
-                }
-                if (myId !== ttsRequestId) return;
-                return speakWithTTS(text, btn);
+
+            const cacheKey = `${getAccent()}:${clean.toLowerCase()}`;
+            const cachedAudio = audioBufferCache.get(cacheKey);
+
+            if (cachedAudio && typeof cachedAudio.play === 'function') {
+                try {
+                    cachedAudio.currentTime = 0;
+                    currentAudioEl = cachedAudio;
+                    cachedAudio.onended = () => {
+                        if (btn) btn.classList.remove('speaking');
+                        if (currentAudioEl === cachedAudio) currentAudioEl = null;
+                    };
+                    cachedAudio.onerror = () => {
+                        if (currentAudioEl === cachedAudio) currentAudioEl = null;
+                        if (myId === ttsRequestId) playStreamOrTTS(clean, btn, myId);
+                        else if (btn) btn.classList.remove('speaking');
+                    };
+                    await cachedAudio.play();
+                    return;
+                } catch (e) {}
             }
-            speakWithTTS(text, btn);
+
+            const words = clean.split(/\s+/);
+            if (words.length === 1 && /^[a-zA-Z'-]+$/.test(words[0])) {
+                const dictUrl = await fetchDictionaryAudioUrl(words[0]);
+                if (myId !== ttsRequestId) return;
+                if (dictUrl) {
+                    try {
+                        const a = new Audio(dictUrl);
+                        currentAudioEl = a;
+                        a.onended = () => {
+                            if (btn) btn.classList.remove('speaking');
+                            if (currentAudioEl === a) currentAudioEl = null;
+                        };
+                        a.onerror = () => {
+                            if (currentAudioEl === a) currentAudioEl = null;
+                            if (myId === ttsRequestId) playStreamOrTTS(clean, btn, myId);
+                            else if (btn) btn.classList.remove('speaking');
+                        };
+                        await a.play();
+                        return;
+                    } catch (e) {}
+                }
+            }
+
+            if (myId !== ttsRequestId) return;
+            playStreamOrTTS(clean, btn, myId);
         }
 
+        function playStreamOrTTS(clean, btn, myId) {
+            const streamUrl = getAudioStreamUrl(clean);
+            if (streamUrl) {
+                try {
+                    const audio = new Audio(streamUrl);
+                    currentAudioEl = audio;
+                    audio.onended = () => {
+                        if (btn) btn.classList.remove('speaking');
+                        if (currentAudioEl === audio) currentAudioEl = null;
+                    };
+                    audio.onerror = () => {
+                        if (currentAudioEl === audio) currentAudioEl = null;
+                        if (myId === ttsRequestId) speakWithTTS(clean, btn);
+                        else if (btn) btn.classList.remove('speaking');
+                    };
+                    audio.play().then(() => {
+                        const key = `${getAccent()}:${clean.toLowerCase()}`;
+                        audioBufferCache.set(key, audio);
+                    }).catch(() => {
+                        if (myId === ttsRequestId) speakWithTTS(clean, btn);
+                        else if (btn) btn.classList.remove('speaking');
+                    });
+                    return;
+                } catch (e) {}
+            }
+            speakWithTTS(clean, btn);
+        }
+        
         // ===== FLASHCARD =====
         const cardEl = document.getElementById('card');
         const typeLabels = { word: 'WORD', a: 'ADJ', v: 'VERB', n: 'NOUN', adv: 'ADV', 'v/n': 'VERB / NOUN',
@@ -5601,6 +5787,9 @@ body:not(.dark):not(.theme-rustic):not(.theme-modern):not(.theme-ocean):not(.the
         function renderCard() {
             if (ACTIVE.length === 0) return;
             const w = ACTIVE[order[idx]];
+            if (w && w.term) preloadAudio(w.term);
+            const nextW = ACTIVE[order[(idx + 1) % ACTIVE.length]];
+            if (nextW && nextW.term) preloadAudio(nextW.term);
             cardEl.classList.add('no-anim');
             cardEl.classList.remove('flipped');
             void cardEl.offsetWidth;
