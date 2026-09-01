@@ -9,8 +9,8 @@
     <style>
 /* ============================================================
    MINIMALIST HIGH-PERFORMANCE FLASHCARD STYLESHEET
-   Zero backdrop-filter blur Â· GPU accelerated Â· Zero scroll lag
-   Crisp typography Â· Smooth micro-interactions
+   Zero backdrop-filter blur · GPU accelerated · Zero scroll lag
+   Crisp typography · Smooth micro-interactions
    ============================================================ */
 
 /* ===== 1. RESET & VARIABLES ===== */
@@ -68,12 +68,15 @@ body {
     font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     min-height: 100vh;
     padding: 64px 16px 28px;
-    background: linear-gradient(170deg, var(--bg1) 0%, var(--bg2) 50%, var(--bg3) 100%);
+    
     color: var(--ink);
     line-height: 1.5;
     overflow-x: hidden;
     touch-action: manipulation;
+    
 }
+
+
 
 /* Neutralize body pseudo elements */
 body::before, body::after {
@@ -119,13 +122,13 @@ body::before, body::after {
 }
 
 @keyframes pageIn {
-    from {
-        opacity: 0;
-        transform: translateY(8px);
-    }
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+}
     to {
         opacity: 1;
-        transform: translateY(0);
+        transform: translateY(0) scale(1);
+        filter: blur(0);
     }
 }
 
@@ -195,7 +198,7 @@ header p {
     border-radius: 999px;
     font-size: 0.88rem;
     font-weight: 500;
-    box-shadow: var(--shadow-lg);
+    box-shadow: 0 20px 40px -10px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.06);
     z-index: 999;
     opacity: 0;
     pointer-events: none;
@@ -236,6 +239,14 @@ header p {
     padding: 28px 24px;
     box-shadow: var(--shadow-lg);
     animation: pageIn 0.3s var(--ease-smooth) both;
+}
+
+
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+        filter: blur(0);
+    }
 }
 
 .p-close {
@@ -932,6 +943,16 @@ header p {
                 radial-gradient(circle at 10% 85%, rgba(79, 174, 143, 0.06) 0%, transparent 50%);
 }
 
+
+    50% {
+        opacity: 1;
+    }
+    100% {
+        background-position: 100% 100%, 0% 0%, 50% 50%;
+        opacity: 0.85;
+    }
+}
+
 #page-landing .lp-blob,
 #page-landing #particleCanvas {
     display: none !important;
@@ -964,6 +985,12 @@ header p {
     line-height: 1.1;
     color: var(--ink);
     letter-spacing: -0.02em;
+}
+
+
+
+
+    100% { left: 200%; }
 }
 
 #page-landing h1.lp-title .lp-u {
@@ -1015,6 +1042,14 @@ header p {
     transition: transform 0.2s var(--ease-spring), box-shadow 0.2s;
 }
 
+
+
+
+
+
+    100% { left: 200%; }
+}
+
 #page-landing .lp-btn-primary:hover {
     transform: translateY(-2px);
     box-shadow: 0 14px 28px -6px rgba(211, 163, 90, 0.5);
@@ -1044,6 +1079,15 @@ header p {
     color: var(--muted);
 }
 
+
+
+
+
+
+
+    to { opacity: 1; transform: translateY(0); }
+}
+
 .lp-wotd-card {
     margin-top: 28px;
     border-radius: 20px;
@@ -1051,6 +1095,13 @@ header p {
     border: 1px solid var(--line);
     padding: 20px;
     position: relative;
+}
+
+
+
+
+
+
 }
 
 .lp-wotd-label {
@@ -1391,6 +1442,12 @@ header p {
     height: 2px;
     background: linear-gradient(90deg, transparent, var(--accent), transparent);
     opacity: 0.6;
+}
+
+
+
+
+    100% { background-position: 200% 0; }
 }
 
 .folder-card:hover {
@@ -2120,6 +2177,12 @@ header p {
 .card.flipped {
     transform: rotateY(180deg);
 }
+
+
+    50% { transform: translateY(-3px); }
+}
+
+
 
 .card.no-anim {
     transition: none !important;
@@ -3402,6 +3465,359 @@ body:not(.dark):not(.theme-rustic):not(.theme-modern):not(.theme-ocean):not(.the
     background: var(--accent);
 }
 
+
+/* ============================================================
+   LINGUAFLOW PREMIUM VISUAL OVERRIDE (FIXED & POLISHED)
+   ============================================================ */
+:root {
+    --bg1: #0B0E14;
+    --bg2: #161A29;
+    --bg3: #0B0E14;
+    --ink: #FFFFFF;
+    --muted: #A0AEC0;
+    --card-bg: rgba(18, 23, 41, 0.65); /* Glassmorphism tint */
+    --line: rgba(255, 255, 255, 0.08);
+    --accent: #A855F7;  /* Purple neon */
+    --accent2: #EC4899; /* Pink neon */
+    --accent3: #06B6D4; /* Cyan neon */
+    --good: #10B981;    /* Green */
+    --bad: #F43F5E;     /* Rose */
+    --shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.6);
+}
+
+/* 1. STUNNING BACKGROUND */
+body {
+    background: 
+        radial-gradient(circle at 80% 20%, rgba(168, 85, 247, 0.15) 0%, transparent 40%),
+        radial-gradient(circle at 20% 80%, rgba(6, 182, 212, 0.1) 0%, transparent 40%),
+        url('./linguaflow_bg.jpg') center center / cover no-repeat fixed !important;
+    background-color: #0B0E14 !important;
+    color: var(--ink);
+}
+
+/* 2. GLASSMORPHISM (SAFE - NO .card TO PREVENT 3D FLIP BUG) */
+.folder-card, .lp-feature-card, .lp-coll-card, .lp-tool-card, .lp-wotd-card, .lp-step, .settings-card, .toast, .section-img-band {
+    background: var(--card-bg) !important;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid var(--line) !important;
+    box-shadow: 0 8px 32px -8px rgba(0,0,0,0.5) !important;
+}
+
+/* Specific fix for flashcard container backgrounds */
+#page-landing .lp-board {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+/* 3. VIBRANT GRADIENT BUTTONS & SWITCHES */
+#page-landing .lp-btn-primary, .dict-btn-row .dict-btn, .tab-btn.active, .switch.on, .lp-dict-go {
+    background: linear-gradient(135deg, var(--accent), var(--accent2)) !important;
+    color: #ffffff !important;
+    border: none !important;
+    box-shadow: 0 4px 16px -4px rgba(236, 72, 153, 0.6) !important;
+    text-shadow: none !important;
+}
+#page-landing .lp-btn-primary:hover, .dict-btn-row .dict-btn:hover, .lp-dict-go:hover {
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 8px 24px -4px rgba(236, 72, 153, 0.7) !important;
+}
+
+/* 4. HOVER GLOWS ON CARDS */
+.folder-card:hover, .lp-feature-card:hover, .lp-coll-card:hover, .lp-tool-card:hover {
+    transform: translateY(-4px) scale(1.015);
+    border-color: rgba(236, 72, 153, 0.4) !important;
+    box-shadow: 0 16px 40px -10px rgba(236, 72, 153, 0.25), 0 0 0 1px rgba(236, 72, 153, 0.1) !important;
+}
+
+/* 5. FIX FLASHCARD FACES (CRISP, WHITE & CLEAN) */
+.face-front {
+    background: linear-gradient(145deg, #ffffff, #f8fafc) !important;
+    color: #0f172a !important; /* Dark text on white card */
+    box-shadow: inset 0 0 0 1px rgba(0,0,0,0.05);
+}
+/* Crucially: DO NOT OVERRIDE transform: rotateY(180deg) for face-back */
+.face-back {
+    background: linear-gradient(145deg, #f8fafc, #f1f5f9) !important;
+    color: #0f172a !important;
+    box-shadow: inset 0 0 0 1px rgba(0,0,0,0.05);
+    /* No transform override here, it falls back to original */
+}
+
+/* Crisp text colors for the white flashcard */
+.term, .back-term { color: #5B21B6 !important; }
+.ipa { color: #64748B !important; }
+.speak-btn {
+    border-color: rgba(91, 33, 182, 0.2) !important;
+    background: rgba(91, 33, 182, 0.05) !important;
+    color: #5B21B6 !important;
+}
+.speak-btn:hover { background: rgba(91, 33, 182, 0.1) !important; }
+
+/* 6. NEON HIGHLIGHTS AND ACCENTS */
+.progress-fill {
+    background: linear-gradient(90deg, var(--good), #34D399) !important;
+    box-shadow: 0 0 12px rgba(16, 185, 129, 0.4);
+}
+.lp-eyebrow, .lp-wotd-label, .sib-eyebrow, .lp-step-num {
+    color: var(--accent2) !important;
+    text-shadow: 0 0 10px rgba(236, 72, 153, 0.3);
+}
+
+/* Landing Page Typography fixes */
+#page-landing h1.lp-title {
+    color: #ffffff !important;
+    text-shadow: 0 4px 20px rgba(0,0,0,0.5);
+}
+#page-landing h1.lp-title .lp-u {
+    color: var(--accent2) !important;
+    text-shadow: 0 0 20px rgba(236, 72, 153, 0.4);
+}
+#page-landing h1.lp-title svg path {
+    stroke: var(--accent2) !important;
+}
+
+/* Ensure stats and regular text remain visible against the dark background */
+.lp-stat .lp-n, .lp-stat .lp-l, .lp-desc, p {
+    color: var(--ink) !important;
+}
+.lp-desc {
+    opacity: 0.9;
+}
+
+
+
+/* ============================================================
+   LINGUAFLOW CARD & LOGIN DECORATIONS
+   ============================================================ */
+
+/* 1. LOGIN SCREEN BACKGROUND */
+#securityGate {
+    background: url('./login_bg.jpg') center center / cover no-repeat fixed !important;
+}
+#securityGate::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(11, 14, 20, 0.4);
+    z-index: -1;
+}
+.sg-card {
+    background: rgba(18, 23, 41, 0.75) !important;
+    backdrop-filter: blur(24px) !important;
+    -webkit-backdrop-filter: blur(24px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    border-radius: 32px !important;
+    box-shadow: 0 24px 60px -10px rgba(0, 0, 0, 0.8) !important;
+    padding: 40px !important;
+}
+.sg-orb { display: none !important; }
+
+/* 2. PREMIUM WORD OF THE DAY (WOTD) CARD REDESIGN */
+#page-landing .lp-wotd-card {
+    margin-top: 32px;
+    border-radius: 28px !important;
+    background: linear-gradient(135deg, rgba(26, 32, 53, 0.8) 0%, rgba(15, 18, 32, 0.9) 100%) !important;
+    backdrop-filter: blur(24px) !important;
+    -webkit-backdrop-filter: blur(24px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.12) !important;
+    box-shadow: 0 20px 50px -15px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(168, 85, 247, 0.15), 0 10px 30px -5px rgba(168, 85, 247, 0.15) !important;
+    padding: 26px 30px !important;
+    position: relative !important;
+    overflow: hidden !important;
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease !important;
+}
+
+#page-landing .lp-wotd-card:hover {
+    transform: translateY(-4px) scale(1.01);
+    box-shadow: 0 24px 60px -12px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(236, 72, 153, 0.3), 0 12px 35px -5px rgba(236, 72, 153, 0.25) !important;
+}
+
+#page-landing .lp-wotd-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; height: 3px;
+    background: linear-gradient(90deg, #06B6D4, #A855F7, #EC4899);
+    opacity: 0.9;
+}
+
+#page-landing .lp-wotd-card::after {
+    content: '';
+    position: absolute;
+    top: -40px; right: -40px;
+    width: 140px; height: 140px;
+    background: radial-gradient(circle, rgba(236, 72, 153, 0.2) 0%, transparent 70%);
+    pointer-events: none;
+}
+
+#page-landing .lp-wotd-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: #EC4899 !important;
+    background: rgba(236, 72, 153, 0.12);
+    border: 1px solid rgba(236, 72, 153, 0.25);
+    padding: 4px 12px;
+    border-radius: 999px;
+    margin-bottom: 12px;
+}
+
+#page-landing #lp-wotd-term {
+    font-family: 'Playfair Display', 'Inter', serif !important;
+    font-weight: 800 !important;
+    font-size: 2.2rem !important;
+    letter-spacing: -0.01em;
+    color: #FFFFFF !important;
+    line-height: 1.1;
+    margin-top: 4px;
+    text-shadow: 0 2px 15px rgba(255, 255, 255, 0.2);
+}
+
+#page-landing #lp-wotd-ipa {
+    display: inline-block;
+    font-size: 0.95rem;
+    color: #94A3B8 !important;
+    margin-top: 6px;
+    font-family: 'Inter', system-ui, sans-serif;
+}
+
+#page-landing .lp-wotd-speak {
+    width: 40px;
+    height: 40px;
+    border-radius: 50% !important;
+    border: 1px solid rgba(168, 85, 247, 0.3) !important;
+    background: rgba(168, 85, 247, 0.15) !important;
+    color: #E9D5FF !important;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    margin-left: 10px;
+    vertical-align: middle;
+    transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+#page-landing .lp-wotd-speak:hover {
+    transform: scale(1.12);
+    background: linear-gradient(135deg, #A855F7, #EC4899) !important;
+    color: #FFFFFF !important;
+    border-color: transparent !important;
+    box-shadow: 0 4px 15px rgba(236, 72, 153, 0.5);
+}
+
+#page-landing .lp-wotd-reveal {
+    margin-top: 18px;
+    min-height: 52px;
+    border-radius: 18px !important;
+    background: rgba(255, 255, 255, 0.04) !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    padding: 14px 18px !important;
+    cursor: pointer;
+    font-size: 0.92rem;
+    color: #E2E8F0 !important;
+    transition: all 0.25s ease !important;
+    position: relative;
+}
+
+#page-landing .lp-wotd-reveal:hover {
+    background: rgba(255, 255, 255, 0.08) !important;
+    border-color: rgba(168, 85, 247, 0.35) !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+#page-landing #lp-wotd-tap {
+    color: #C084FC !important;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+#page-landing #lp-wotd-meaning p:first-child {
+    font-size: 1.05rem !important;
+    font-weight: 600 !important;
+    color: #F8FAFC !important;
+    margin-bottom: 6px !important;
+}
+
+#page-landing #lp-wotd-meaning p:last-child {
+    font-size: 0.88rem !important;
+    color: #38BDF8 !important;
+    opacity: 0.95 !important;
+    font-style: italic;
+}
+
+#page-landing .lp-wotd-next {
+    margin-top: 18px;
+    padding: 10px 22px !important;
+    border-radius: 999px !important;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    background: rgba(255, 255, 255, 0.06) !important;
+    color: #FFFFFF !important;
+    font-size: 0.88rem !important;
+    font-weight: 600 !important;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+#page-landing .lp-wotd-next:hover {
+    background: linear-gradient(135deg, var(--accent), var(--accent2)) !important;
+    border-color: transparent !important;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(236, 72, 153, 0.4) !important;
+}
+
+/* 3. FLASHCARD THEMES (SET VIA JS CLASS ON BODY) */
+
+/* DEFAULT (Minimal White/Light) */
+body.cardbg-default .face-front {
+    background: linear-gradient(145deg, #ffffff, #f8fafc) !important;
+    color: #0f172a !important;
+}
+body.cardbg-default .face-back {
+    background: linear-gradient(145deg, #f8fafc, #f1f5f9) !important;
+    color: #0f172a !important;
+}
+
+/* HOLOGRAM */
+body.cardbg-hologram .face-front, body.cardbg-hologram .face-back {
+    background: url('./card_bg_hologram.jpg') center center / cover no-repeat !important;
+    color: #1e1b4b !important;
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.4) !important;
+}
+body.cardbg-hologram .face-front { text-shadow: 0 0 10px rgba(255,255,255,0.5); }
+body.cardbg-hologram .term, body.cardbg-hologram .back-term { color: #831843 !important; }
+body.cardbg-hologram .ipa { color: #4c1d95 !important; }
+body.cardbg-hologram .speak-btn {
+    border-color: rgba(131, 24, 67, 0.2) !important;
+    background: rgba(131, 24, 67, 0.1) !important;
+    color: #831843 !important;
+}
+
+/* ASTRAL (Deep Space) */
+body.cardbg-astral .face-front, body.cardbg-astral .face-back {
+    background: url('./card_bg_astral.jpg') center center / cover no-repeat !important;
+    color: #f1f5f9 !important;
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.15) !important;
+}
+body.cardbg-astral .face-front { text-shadow: 0 2px 10px rgba(0,0,0,0.8); }
+body.cardbg-astral .term, body.cardbg-astral .back-term { color: #d946ef !important; }
+body.cardbg-astral .ipa { color: #a78bfa !important; }
+body.cardbg-astral .speak-btn {
+    border-color: rgba(217, 70, 239, 0.3) !important;
+    background: rgba(217, 70, 239, 0.15) !important;
+    color: #f0abfc !important;
+}
+
 </style>
 </head>
 <body class="theme-forest" style="">
@@ -3640,6 +4056,26 @@ body:not(.dark):not(.theme-rustic):not(.theme-modern):not(.theme-ocean):not(.the
                         <span>🌌 Aurora</span>
                     </button>
                 </div>
+            </div>
+
+            
+            <div class="settings-section">
+                <div class="settings-label">🎴 Hình nền thẻ Flashcard</div>
+                <div class="theme-picker" id="cardBgPicker">
+                    <button class="theme-opt active" data-cardbg="default" type="button">
+                        <span class="theme-swatch" style="background:#f1f5f9;border:1px solid #cbd5e1"></span>
+                        <span>Trắng tinh</span>
+                    </button>
+                    <button class="theme-opt" data-cardbg="hologram" type="button">
+                        <span class="theme-swatch" style="background:linear-gradient(45deg, #fbcfe8, #bfdbfe, #ddd6fe)"></span>
+                        <span>Ngọc trai</span>
+                    </button>
+                    <button class="theme-opt" data-cardbg="astral" type="button">
+                        <span class="theme-swatch" style="background:linear-gradient(45deg, #1e1b4b, #4c1d95, #000000)"></span>
+                        <span>Vũ trụ</span>
+                    </button>
+                </div>
+                <div class="settings-hint">Chọn giao diện cho mặt trước và mặt sau của thẻ học. Hình nền sẽ tự động tải mượt mà.</div>
             </div>
 
             <div class="settings-section">
@@ -5429,7 +5865,8 @@ body:not(.dark):not(.theme-rustic):not(.theme-modern):not(.theme-ocean):not(.the
         let currentAudioEl = null;
         window._currentUtter = null;
 
-        const audioBufferCache = new Map();
+        const audioUrlCache = new Map();
+        const pendingFetches = new Set();
 
         function loadVoices() {
             if ('speechSynthesis' in window) {
@@ -5575,7 +6012,8 @@ body:not(.dark):not(.theme-rustic):not(.theme-modern):not(.theme-ocean):not(.the
             if (currentAudioEl) {
                 try {
                     currentAudioEl.pause();
-                    currentAudioEl.currentTime = 0;
+                    currentAudioEl.removeAttribute('src'); // Stop downloading
+                    currentAudioEl.load();
                 } catch (e) {}
                 currentAudioEl = null;
             }
@@ -5590,18 +6028,60 @@ body:not(.dark):not(.theme-rustic):not(.theme-modern):not(.theme-ocean):not(.the
             return `https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&tl=${langCode}&q=${encodeURIComponent(clean)}`;
         }
 
+        async function fetchDictionaryAudioUrl(word) {
+            const clean = cleanForSpeech(word);
+            if (!clean || clean.includes(' ')) return null;
+            const acc = getAccent();
+            const cacheKey = `dict:${acc}:${clean.toLowerCase()}`;
+            
+            if (audioUrlCache.has(cacheKey)) return audioUrlCache.get(cacheKey);
+            if (pendingFetches.has(cacheKey)) return null;
+
+            pendingFetches.add(cacheKey);
+            try {
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 600);
+                const res = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${encodeURIComponent(clean.toLowerCase())}`, {
+                    signal: controller.signal
+                });
+                clearTimeout(timeoutId);
+                if (!res.ok) {
+                    audioUrlCache.set(cacheKey, null);
+                    pendingFetches.delete(cacheKey);
+                    return null;
+                }
+                const data = await res.json();
+                const accentRe = acc === 'us' ? /-us\.|en-us|american/i : /-uk\.|en-gb|british/i;
+                let audioUrl = null;
+
+                for (const entry of data) {
+                    const phonetics = entry.phonetics || [];
+                    const match = phonetics.find(p => p.audio && accentRe.test(p.audio));
+                    if (match && match.audio) { audioUrl = match.audio; break; }
+                }
+                if (!audioUrl) {
+                    for (const entry of data) {
+                        const withAudio = (entry.phonetics || []).find(p => p.audio);
+                        if (withAudio && withAudio.audio) { audioUrl = withAudio.audio; break; }
+                    }
+                }
+                audioUrlCache.set(cacheKey, audioUrl || null);
+                pendingFetches.delete(cacheKey);
+                return audioUrl;
+            } catch (e) {
+                audioUrlCache.set(cacheKey, null);
+                pendingFetches.delete(cacheKey);
+                return null;
+            }
+        }
+
         function preloadAudio(text) {
             const clean = cleanForSpeech(text);
             if (!clean) return;
-            const key = `${getAccent()}:${clean.toLowerCase()}`;
-            if (audioBufferCache.has(key)) return;
-            const url = getAudioStreamUrl(clean);
-            try {
-                const a = new Audio();
-                a.preload = 'auto';
-                a.src = url;
-                audioBufferCache.set(key, a);
-            } catch (e) {}
+            const words = clean.split(/\s+/);
+            if (words.length === 1 && /^[a-zA-Z'-]+$/.test(words[0])) {
+                fetchDictionaryAudioUrl(words[0]); 
+            }
         }
 
         function speakWithTTS(text, btn) {
@@ -5650,133 +6130,88 @@ body:not(.dark):not(.theme-rustic):not(.theme-modern):not(.theme-ocean):not(.the
                 } catch (e) {
                     if (btn) btn.classList.remove('speaking');
                 }
-            }, 15);
+            }, 10);
         }
 
-        async function fetchDictionaryAudioUrl(word) {
-            const clean = cleanForSpeech(word);
-            if (!clean || clean.includes(' ')) return null;
-            const acc = getAccent();
-            const cacheKey = `dict:${acc}:${clean.toLowerCase()}`;
-            if (audioBufferCache.has(cacheKey)) return audioBufferCache.get(cacheKey);
-
+        function playUrl(url, clean, btn, myId, fallbackToTTS) {
             try {
-                const controller = new AbortController();
-                const timeoutId = setTimeout(() => controller.abort(), 350);
-                const res = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${encodeURIComponent(clean.toLowerCase())}`, {
-                    signal: controller.signal
-                });
-                clearTimeout(timeoutId);
-                if (!res.ok) {
-                    audioBufferCache.set(cacheKey, null);
-                    return null;
-                }
-                const data = await res.json();
-                const accentRe = acc === 'us' ? /-us\.|en-us|american/i : /-uk\.|en-gb|british/i;
-                let audioUrl = null;
-
-                for (const entry of data) {
-                    const phonetics = entry.phonetics || [];
-                    const match = phonetics.find(p => p.audio && accentRe.test(p.audio));
-                    if (match && match.audio) { audioUrl = match.audio; break; }
-                }
-                if (!audioUrl) {
-                    for (const entry of data) {
-                        const withAudio = (entry.phonetics || []).find(p => p.audio);
-                        if (withAudio && withAudio.audio) { audioUrl = withAudio.audio; break; }
+                const audio = new Audio(url);
+                currentAudioEl = audio;
+                
+                audio.onended = () => {
+                    if (btn) btn.classList.remove('speaking');
+                    if (currentAudioEl === audio) currentAudioEl = null;
+                };
+                
+                audio.onerror = () => {
+                    if (currentAudioEl === audio) currentAudioEl = null;
+                    if (myId === ttsRequestId) {
+                        if (fallbackToTTS) speakWithTTS(clean, btn);
+                        else playUrl(getAudioStreamUrl(clean), clean, btn, myId, true);
                     }
+                    else if (btn) btn.classList.remove('speaking');
+                };
+                
+                const playPromise = audio.play();
+                if (playPromise !== undefined) {
+                    playPromise.catch(e => {
+                        if (e.name === 'AbortError' || e.name === 'NotAllowedError') {
+                            if (btn) btn.classList.remove('speaking');
+                            return;
+                        }
+                        if (myId === ttsRequestId) {
+                            if (fallbackToTTS) speakWithTTS(clean, btn);
+                            else playUrl(getAudioStreamUrl(clean), clean, btn, myId, true);
+                        } else {
+                            if (btn) btn.classList.remove('speaking');
+                        }
+                    });
                 }
-                audioBufferCache.set(cacheKey, audioUrl || null);
-                return audioUrl;
             } catch (e) {
-                audioBufferCache.set(cacheKey, null);
-                return null;
+                if (myId === ttsRequestId) {
+                    if (fallbackToTTS) speakWithTTS(clean, btn);
+                    else playUrl(getAudioStreamUrl(clean), clean, btn, myId, true);
+                }
             }
         }
 
-        async function speakText(text, btn) {
+        let iosTtsUnlocked = false;
+
+        function speakText(text, btn) {
+            if (!iosTtsUnlocked && 'speechSynthesis' in window) {
+                iosTtsUnlocked = true;
+                try {
+                    const unlock = new SpeechSynthesisUtterance('');
+                    unlock.volume = 0;
+                    window.speechSynthesis.speak(unlock);
+                } catch(e) {}
+            }
+
             const clean = cleanForSpeech(text);
             if (!clean) return;
 
             const myId = ++ttsRequestId;
-            stopAllSpeech();
+            stopAllSpeech(); 
 
             if (btn) btn.classList.add('speaking');
 
-            const cacheKey = `${getAccent()}:${clean.toLowerCase()}`;
-            const cachedAudio = audioBufferCache.get(cacheKey);
-
-            if (cachedAudio && typeof cachedAudio.play === 'function') {
-                try {
-                    cachedAudio.currentTime = 0;
-                    currentAudioEl = cachedAudio;
-                    cachedAudio.onended = () => {
-                        if (btn) btn.classList.remove('speaking');
-                        if (currentAudioEl === cachedAudio) currentAudioEl = null;
-                    };
-                    cachedAudio.onerror = () => {
-                        if (currentAudioEl === cachedAudio) currentAudioEl = null;
-                        if (myId === ttsRequestId) playStreamOrTTS(clean, btn, myId);
-                        else if (btn) btn.classList.remove('speaking');
-                    };
-                    await cachedAudio.play();
-                    return;
-                } catch (e) {}
-            }
-
             const words = clean.split(/\s+/);
+            const acc = getAccent();
+            
             if (words.length === 1 && /^[a-zA-Z'-]+$/.test(words[0])) {
-                const dictUrl = await fetchDictionaryAudioUrl(words[0]);
-                if (myId !== ttsRequestId) return;
-                if (dictUrl) {
-                    try {
-                        const a = new Audio(dictUrl);
-                        currentAudioEl = a;
-                        a.onended = () => {
-                            if (btn) btn.classList.remove('speaking');
-                            if (currentAudioEl === a) currentAudioEl = null;
-                        };
-                        a.onerror = () => {
-                            if (currentAudioEl === a) currentAudioEl = null;
-                            if (myId === ttsRequestId) playStreamOrTTS(clean, btn, myId);
-                            else if (btn) btn.classList.remove('speaking');
-                        };
-                        await a.play();
+                const cacheKey = `dict:${acc}:${clean.toLowerCase()}`;
+                if (audioUrlCache.has(cacheKey)) {
+                    const dictUrl = audioUrlCache.get(cacheKey);
+                    if (dictUrl) {
+                        playUrl(dictUrl, clean, btn, myId, false);
                         return;
-                    } catch (e) {}
+                    }
+                } else {
+                    fetchDictionaryAudioUrl(words[0]); 
                 }
             }
 
-            if (myId !== ttsRequestId) return;
-            playStreamOrTTS(clean, btn, myId);
-        }
-
-        function playStreamOrTTS(clean, btn, myId) {
-            const streamUrl = getAudioStreamUrl(clean);
-            if (streamUrl) {
-                try {
-                    const audio = new Audio(streamUrl);
-                    currentAudioEl = audio;
-                    audio.onended = () => {
-                        if (btn) btn.classList.remove('speaking');
-                        if (currentAudioEl === audio) currentAudioEl = null;
-                    };
-                    audio.onerror = () => {
-                        if (currentAudioEl === audio) currentAudioEl = null;
-                        if (myId === ttsRequestId) speakWithTTS(clean, btn);
-                        else if (btn) btn.classList.remove('speaking');
-                    };
-                    audio.play().then(() => {
-                        const key = `${getAccent()}:${clean.toLowerCase()}`;
-                        audioBufferCache.set(key, audio);
-                    }).catch(() => {
-                        if (myId === ttsRequestId) speakWithTTS(clean, btn);
-                        else if (btn) btn.classList.remove('speaking');
-                    });
-                    return;
-                } catch (e) {}
-            }
-            speakWithTTS(clean, btn);
+            playUrl(getAudioStreamUrl(clean), clean, btn, myId, true);
         }
         
         // ===== FLASHCARD =====
@@ -7649,7 +8084,7 @@ body:not(.dark):not(.theme-rustic):not(.theme-modern):not(.theme-ocean):not(.the
   #page-landing { padding-top: 10px; }
   #page-landing .lp-nav { margin-bottom: 20px; padding: 0 4px; }
   #page-landing .lp-blob, #page-landing #particleCanvas { display: none !important; }
-  body::before, body::after { display: none !important; }
+  body::after { display: none !important; }
 
   /* Mobile touch */
   @media (max-width: 480px) {
@@ -7815,4 +8250,26 @@ body:not(.dark):not(.theme-rustic):not(.theme-modern):not(.theme-ocean):not(.the
 <script type="module" src="https://static.cloudflareinsights.com/beacon.min.js/v4513226cdae34746b4dedf0b4dfa099e1781791509496" integrity="sha512-ZE9pZaUXND66v380QUtch/5sE9tPFh2zg45pR2PB0CVkCtOREv2AJKkSidISWkysEuQ0EH8faUU5du78bx87UQ==" data-cf-beacon='{"version":"2024.11.0","token":"4edd5f8ec12a48cfa682ab8261b80a79"}' crossorigin="anonymous"></script>
 <script type="module" src="https://static.cloudflareinsights.com/beacon.min.js/v4513226cdae34746b4dedf0b4dfa099e1781791509496" integrity="sha512-ZE9pZaUXND66v380QUtch/5sE9tPFh2zg45pR2PB0CVkCtOREv2AJKkSidISWkysEuQ0EH8faUU5du78bx87UQ==" data-cf-beacon='{"version":"2024.11.0","token":"4edd5f8ec12a48cfa682ab8261b80a79"}' crossorigin="anonymous"></script>
 <script type="module" src="https://static.cloudflareinsights.com/beacon.min.js/v4513226cdae34746b4dedf0b4dfa099e1781791509496" integrity="sha512-ZE9pZaUXND66v380QUtch/5sE9tPFh2zg45pR2PB0CVkCtOREv2AJKkSidISWkysEuQ0EH8faUU5du78bx87UQ==" data-cf-beacon='{"version":"2024.11.0","token":"4edd5f8ec12a48cfa682ab8261b80a79"}' crossorigin="anonymous"></script>
+
+<script id="card-bg-logic">
+(function(){
+    function applyCardBg(bg, save) {
+        document.body.classList.remove('cardbg-default', 'cardbg-hologram', 'cardbg-astral');
+        document.body.classList.add('cardbg-' + bg);
+        document.querySelectorAll('#cardBgPicker .theme-opt').forEach(btn => {
+            btn.classList.toggle('active', btn.dataset.cardbg === bg);
+        });
+        if (save) {
+            try { localStorage.setItem('vocab_card_bg', bg); } catch(e){}
+        }
+    }
+    document.querySelectorAll('#cardBgPicker .theme-opt').forEach(btn => {
+        btn.addEventListener('click', () => applyCardBg(btn.dataset.cardbg, true));
+    });
+    let saved = 'default';
+    try { saved = localStorage.getItem('vocab_card_bg') || 'default'; } catch(e){}
+    applyCardBg(saved, false);
+})();
+</script>
+
 </body></html>
