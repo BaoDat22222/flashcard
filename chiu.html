@@ -397,6 +397,26 @@ header p {
 .swatch-forest { background: linear-gradient(135deg, #2f7d4f, #a3d977); }
 .swatch-cosmic { background: linear-gradient(135deg, #8b5cf6, #f6a6c2); }
 
+/* ===== PREMIUM ULTRA MAX EXCLUSIVE SWATCHES ===== */
+.swatch-royal { background: linear-gradient(135deg, #0b0b0f, #d4af37 55%, #fff3c4); background-size: 220% 220%; animation: swatchShift 3.5s ease-in-out infinite; }
+.swatch-neon { background: linear-gradient(135deg, #ff2e92, #00e5ff); background-size: 220% 220%; animation: swatchShift 2.6s ease-in-out infinite; }
+.swatch-aurora2 { background: linear-gradient(135deg, #00ffa3, #7c3aed 55%, #38bdf8); background-size: 220% 220%; animation: swatchShift 4s ease-in-out infinite; }
+.swatch-sakura { background: linear-gradient(135deg, #ffb7d1, #fff0f5 45%, #d4af8c); background-size: 220% 220%; animation: swatchShift 3.2s ease-in-out infinite; }
+.swatch-inferno { background: linear-gradient(135deg, #ff4d00, #ffd23f 50%, #7a0c0c); background-size: 220% 220%; animation: swatchShift 2.2s ease-in-out infinite; }
+
+@keyframes swatchShift {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+}
+
+.theme-opt[data-theme="royal"] .theme-swatch,
+.theme-opt[data-theme="neon"] .theme-swatch,
+.theme-opt[data-theme="aurora2"] .theme-swatch,
+.theme-opt[data-theme="sakura"] .theme-swatch,
+.theme-opt[data-theme="inferno"] .theme-swatch {
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.25);
+}
+
 .acc-row {
     display: flex;
     gap: 8px;
@@ -3089,12 +3109,13 @@ header p {
     margin-bottom: 10px;
 }
 
-/* ===== 19. SECURITY GATE (LOGIN SCREEN) ===== */
+
+/* ===== 19. ENTERPRISE SECURITY GATE (MODERN REDESIGN) ===== */
 html.locked {
-    overflow: hidden;
+    overflow: hidden !important;
 }
 
-html.locked body > *:not(#securityGate) {
+html.locked body > *:not(#securityGate):not(#settingsBtn):not(#settingsModal) {
     display: none !important;
 }
 
@@ -3105,212 +3126,449 @@ html.locked body > *:not(#securityGate) {
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 20px;
-    background: radial-gradient(circle at 50% 30%, #161b2e 0%, #090c14 80%);
-    overflow: hidden;
+    padding: 24px 16px;
+    background: #070913 !important;
+    overflow-x: hidden;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Inter", "Segoe UI", Roboto, sans-serif;
 }
 
-#securityGate::before, #securityGate::after {
-    display: none !important;
+/* Ambient glow beam at top */
+#securityGate::before {
+    content: '' !important;
+    position: absolute !important;
+    top: -150px !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    width: 600px !important;
+    height: 400px !important;
+    border-radius: 50% !important;
+    background: radial-gradient(circle, rgba(99, 102, 241, 0.35) 0%, rgba(168, 85, 247, 0.2) 45%, transparent 70%) !important;
+    filter: blur(80px) !important;
+    pointer-events: none !important;
+    z-index: 0 !important;
+    animation: sgBeamPulse 8s ease-in-out infinite alternate !important;
 }
 
-/* Lightweight floating particles (CSS-only, no blur, no filter) */
+/* Ambient glow bottom */
+#securityGate::after {
+    content: '' !important;
+    position: absolute !important;
+    bottom: -150px !important;
+    right: 10% !important;
+    width: 500px !important;
+    height: 350px !important;
+    border-radius: 50% !important;
+    background: radial-gradient(circle, rgba(56, 189, 248, 0.22) 0%, rgba(99, 102, 241, 0.15) 50%, transparent 70%) !important;
+    filter: blur(90px) !important;
+    pointer-events: none !important;
+    z-index: 0 !important;
+    animation: sgBeamPulse 10s ease-in-out infinite alternate-reverse !important;
+}
+
+@keyframes sgBeamPulse {
+    0% { transform: translate(-50%, 0) scale(1); opacity: 0.8; }
+    100% { transform: translate(-50%, 40px) scale(1.15); opacity: 1; }
+}
+
+/* High-tech grid overlay */
+.sg-grid-bg {
+    position: absolute;
+    inset: 0;
+    background-image: 
+        linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+    background-size: 44px 44px;
+    mask-image: radial-gradient(ellipse 70% 65% at 50% 50%, #000 30%, transparent 85%);
+    -webkit-mask-image: radial-gradient(ellipse 70% 65% at 50% 50%, #000 30%, transparent 85%);
+    pointer-events: none;
+    z-index: 1;
+}
+
+/* Floating ambient orbs */
 .sg-orb {
     position: absolute;
     border-radius: 50%;
     pointer-events: none;
-    opacity: 0.35;
-    animation: sgFloat 7s ease-in-out infinite alternate;
+    filter: blur(40px);
+    opacity: 0.45;
+    z-index: 1;
+    animation: sgFloatOrb 12s ease-in-out infinite alternate;
+}
+.sg-orb-1 { width: 220px; height: 220px; top: 15%; left: 8%; background: rgba(99, 102, 241, 0.35); }
+.sg-orb-2 { width: 180px; height: 180px; bottom: 15%; right: 12%; background: rgba(236, 72, 153, 0.28); animation-delay: -3s; }
+.sg-orb-3 { width: 140px; height: 140px; top: 45%; right: 18%; background: rgba(56, 189, 248, 0.25); animation-delay: -6s; }
+
+@keyframes sgFloatOrb {
+    0% { transform: translate(0, 0) scale(1); }
+    50% { transform: translate(30px, -25px) scale(1.12); }
+    100% { transform: translate(-20px, 35px) scale(0.95); }
 }
 
-.sg-orb-1 { width: 18px; height: 18px; top: 18%; left: 12%; background: var(--accent); }
-.sg-orb-2 { width: 14px; height: 14px; bottom: 22%; right: 15%; background: var(--accent3); animation-delay: 2s; }
-.sg-orb-3 { width: 10px; height: 10px; top: 45%; right: 20%; background: var(--accent2); animation-delay: 4s; }
-.sg-orb-4 { width: 8px; height: 8px; bottom: 35%; left: 18%; background: var(--good); animation-delay: 1.5s; }
-.sg-orb-5 { width: 6px; height: 6px; top: 28%; right: 35%; background: var(--accent); animation-delay: 3s; }
-.sg-orb-6 { width: 6px; height: 6px; bottom: 18%; left: 38%; background: var(--accent3); animation-delay: 5s; }
-
-@keyframes sgFloat {
-    from { transform: translateY(0); }
-    to { transform: translateY(-16px); }
+/* THEME SUPPORT FOR SECURITY GATE */
+body.theme-rustic #securityGate {
+    background: #0f0c09 !important;
+}
+body.theme-rustic #securityGate::before {
+    background: radial-gradient(circle, rgba(217, 154, 78, 0.38) 0%, rgba(180, 110, 45, 0.2) 45%, transparent 70%) !important;
+}
+body.theme-rustic #securityGate::after {
+    background: radial-gradient(circle, rgba(245, 158, 11, 0.25) 0%, rgba(154, 106, 47, 0.15) 50%, transparent 70%) !important;
+}
+body.theme-rustic .sg-orb-1 { background: rgba(217, 154, 78, 0.35); }
+body.theme-rustic .sg-orb-2 { background: rgba(245, 158, 11, 0.28); }
+body.theme-rustic .sg-card {
+    border-color: rgba(217, 154, 78, 0.22) !important;
+    box-shadow: 0 30px 80px -15px rgba(0, 0, 0, 0.95), 0 0 50px -10px rgba(217, 154, 78, 0.15) !important;
+}
+body.theme-rustic .sg-submit {
+    background: linear-gradient(135deg, #d99a4e 0%, #b4722c 100%) !important;
+    color: #120d08 !important;
+    box-shadow: 0 10px 25px -5px rgba(217, 154, 78, 0.45) !important;
+}
+body.theme-rustic .sg-badge-top {
+    background: rgba(217, 154, 78, 0.12);
+    border-color: rgba(217, 154, 78, 0.3);
+    color: #fbd38d;
+}
+body.theme-rustic .sg-pulse-dot {
+    background: #d99a4e;
+    box-shadow: 0 0 10px #d99a4e;
+}
+body.theme-rustic .sg-icon-box {
+    background: linear-gradient(135deg, rgba(217, 154, 78, 0.2), rgba(30, 20, 12, 0.8));
+    border-color: rgba(217, 154, 78, 0.35);
+    box-shadow: 0 8px 24px -4px rgba(217, 154, 78, 0.3);
 }
 
+/* THE ENTERPRISE LOGIN CARD */
 .sg-card {
-    position: relative;
-    z-index: 2;
-    width: 100%;
-    max-width: 360px;
-    padding: 34px 26px 26px;
-    border-radius: 22px;
-    text-align: center;
-    background: #141926;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    box-shadow: 0 25px 60px -20px rgba(0, 0, 0, 0.7);
-    animation: sgCardIn 0.4s var(--ease-smooth) both;
-}
-
-.sg-card::before, .sg-card::after {
-    display: none !important;
+    position: relative !important;
+    z-index: 10 !important;
+    width: 100% !important;
+    max-width: 430px !important;
+    padding: 38px 32px 30px !important;
+    border-radius: 28px !important;
+    text-align: center !important;
+    background: linear-gradient(180deg, rgba(17, 22, 38, 0.78) 0%, rgba(10, 14, 25, 0.88) 100%) !important;
+    backdrop-filter: blur(28px) saturate(180%) !important;
+    -webkit-backdrop-filter: blur(28px) saturate(180%) !important;
+    border: 1px solid rgba(255, 255, 255, 0.12) !important;
+    box-shadow: 
+        0 30px 80px -15px rgba(0, 0, 0, 0.9),
+        0 0 50px -10px rgba(99, 102, 241, 0.15),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;
+    animation: sgCardIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) both !important;
+    transition: transform 0.2s ease, box-shadow 0.2s ease !important;
 }
 
 @keyframes sgCardIn {
-    from { opacity: 0; transform: translateY(18px); }
-    to { opacity: 1; transform: translateY(0); }
+    from { opacity: 0; transform: translateY(22px) scale(0.97); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
 }
 
 .sg-card.sg-shake {
-    animation: shake 0.35s ease;
+    animation: sgShake 0.4s cubic-bezier(.36,.07,.19,.97) both !important;
 }
 
-.sg-icon {
-    width: 56px;
-    height: 56px;
-    margin: 0 auto 14px;
-    border-radius: 50%;
-    display: flex;
+@keyframes sgShake {
+    0%, 100% { transform: translateX(0); }
+    20%, 60% { transform: translateX(-9px); }
+    40%, 80% { transform: translateX(9px); }
+}
+
+/* Enterprise Header Elements */
+.sg-badge-top {
+    display: inline-flex;
     align-items: center;
-    justify-content: center;
-    font-size: 1.5rem;
-    background: var(--accent);
-    color: #0e111a;
-    box-shadow: 0 8px 20px -4px rgba(211, 163, 90, 0.4);
-}
-
-#securityGate h2 {
-    font-family: 'Playfair Display', 'Inter', serif;
-    font-size: 1.35rem;
-    color: var(--ink);
-    margin-bottom: 4px;
-}
-
-#securityGate p.sg-sub {
-    color: var(--muted);
-    font-size: 0.82rem;
+    gap: 7px;
+    padding: 5px 13px;
+    border-radius: 999px;
+    background: rgba(99, 102, 241, 0.12);
+    border: 1px solid rgba(99, 102, 241, 0.3);
+    color: #a5b4fc;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
     margin-bottom: 20px;
 }
 
-.sg-input-wrap {
-    position: relative;
-    margin-bottom: 12px;
+.sg-pulse-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #6366f1;
+    box-shadow: 0 0 8px #6366f1;
+    animation: sgPulse 2s infinite;
 }
 
-.sg-input-wrap .sg-field-icon {
-    position: absolute;
-    left: 14px;
-    top: 50%;
-    transform: translateY(-50%);
-    font-size: 0.95rem;
-    opacity: 0.5;
-    pointer-events: none;
+@keyframes sgPulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.4; transform: scale(0.8); }
 }
 
-.sg-input-wrap input {
-    width: 100%;
-    padding: 12px 14px 12px 38px;
-    border-radius: 12px;
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    background: #0d111c;
-    color: #fff;
-    font-size: 0.95rem;
-    outline: none;
-    transition: border-color 0.2s;
-}
-
-.sg-input-wrap input#sgPasswordInput {
-    padding-right: 42px;
-}
-
-.sg-input-wrap input::placeholder {
-    color: rgba(255, 255, 255, 0.35);
-}
-
-.sg-input-wrap input:focus {
-    border-color: var(--accent);
-}
-
-.sg-toggle-eye {
-    position: absolute;
-    right: 8px;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 28px;
-    height: 28px;
-    border: none;
-    background: transparent;
-    color: rgba(255, 255, 255, 0.5);
-    cursor: pointer;
-}
-
-.sg-toggle-eye:hover {
-    color: #fff;
-}
-
-.sg-submit {
-    width: 100%;
-    padding: 12px;
-    border: none;
-    border-radius: 12px;
-    font-size: 0.92rem;
-    font-weight: 700;
-    color: #0e111a;
-    background: var(--accent);
-    cursor: pointer;
-    box-shadow: 0 8px 20px -6px rgba(211, 163, 90, 0.4);
-    transition: transform 0.15s;
-}
-
-.sg-submit:hover {
-    transform: translateY(-2px);
-}
-
-.sg-submit:active {
-    transform: scale(0.98);
-}
-
-.sg-error {
-    min-height: 18px;
-    margin-top: 10px;
-    font-size: 0.8rem;
-    color: var(--bad);
-    opacity: 0;
-    transition: opacity 0.2s;
-}
-
-.sg-error.sg-show {
-    opacity: 1;
-}
-
-.sg-note {
-    margin-top: 16px;
-    padding-top: 14px;
-    border-top: 1px solid rgba(255, 255, 255, 0.08);
-    font-size: 0.75rem;
-    color: var(--muted);
+.sg-icon-box {
+    width: 62px;
+    height: 62px;
+    margin: 0 auto 16px;
+    border-radius: 20px;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 6px;
+    font-size: 1.8rem;
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.22) 0%, rgba(20, 26, 46, 0.8) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    box-shadow: 0 12px 28px -6px rgba(99, 102, 241, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+}
+
+#securityGate h2 {
+    font-family: inherit !important;
+    font-size: 1.65rem !important;
+    font-weight: 800 !important;
+    letter-spacing: -0.03em !important;
+    color: #ffffff !important;
+    margin: 0 0 6px 0 !important;
+    text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+}
+
+#securityGate p.sg-sub {
+    color: rgba(226, 232, 240, 0.65) !important;
+    font-size: 0.86rem !important;
+    line-height: 1.45 !important;
+    margin: 0 0 24px 0 !important;
+}
+
+/* Fields & Labels */
+.sg-field-group {
+    text-align: left;
+    margin-bottom: 14px;
+}
+
+.sg-field-label {
+    display: block;
+    font-size: 0.74rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    color: rgba(226, 232, 240, 0.75);
+    margin-bottom: 6px;
+    margin-left: 2px;
+}
+
+.sg-input-wrap {
+    position: relative !important;
+    margin-bottom: 0 !important;
+}
+
+.sg-input-wrap .sg-field-icon {
+    position: absolute !important;
+    left: 15px !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    font-size: 1.05rem !important;
+    opacity: 0.65 !important;
+    pointer-events: none !important;
+    transition: opacity 0.2s;
+}
+
+.sg-input-wrap input {
+    width: 100% !important;
+    height: 48px !important;
+    padding: 0 16px 0 44px !important;
+    border-radius: 14px !important;
+    border: 1px solid rgba(255, 255, 255, 0.12) !important;
+    background: rgba(7, 10, 20, 0.65) !important;
+    color: #ffffff !important;
+    font-size: 16px !important; /* CRUCIAL: 16px prevents iOS Safari auto-zoom on focus */
+    font-weight: 500 !important;
+    outline: none !important;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.4) !important;
+    transition: border-color 0.2s, box-shadow 0.2s, background 0.2s !important;
+    box-sizing: border-box !important;
+}
+
+.sg-input-wrap input#sgPasswordInput {
+    padding-right: 46px !important;
+}
+
+.sg-input-wrap input::placeholder {
+    color: rgba(255, 255, 255, 0.28) !important;
+    font-size: 0.9rem !important;
+}
+
+.sg-input-wrap input:focus {
+    border-color: #6366f1 !important;
+    background: rgba(8, 12, 24, 0.9) !important;
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.25), inset 0 2px 4px rgba(0,0,0,0.3) !important;
+}
+body.theme-rustic .sg-input-wrap input:focus {
+    border-color: #d99a4e !important;
+    box-shadow: 0 0 0 3px rgba(217, 154, 78, 0.25), inset 0 2px 4px rgba(0,0,0,0.3) !important;
+}
+
+.sg-toggle-eye {
+    position: absolute !important;
+    right: 12px !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    width: 32px !important;
+    height: 32px !important;
+    border: none !important;
+    border-radius: 8px !important;
+    background: transparent !important;
+    color: rgba(255, 255, 255, 0.5) !important;
+    cursor: pointer !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    font-size: 1rem !important;
+    transition: all 0.15s !important;
+}
+
+.sg-toggle-eye:hover {
+    color: #ffffff !important;
+    background: rgba(255, 255, 255, 0.08) !important;
+}
+
+/* Submit Button */
+.sg-submit {
+    width: 100% !important;
+    height: 48px !important;
+    margin-top: 8px !important;
+    border: none !important;
+    border-radius: 14px !important;
+    font-size: 0.96rem !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.01em !important;
+    color: #ffffff !important;
+    background: linear-gradient(135deg, #6366f1 0%, #4f46e5 50%, #4338ca 100%) !important;
+    cursor: pointer !important;
+    box-shadow: 0 12px 26px -6px rgba(99, 102, 241, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.25) !important;
+    transition: transform 0.15s, box-shadow 0.15s, filter 0.15s !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 8px !important;
+}
+
+.sg-submit:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 16px 32px -6px rgba(99, 102, 241, 0.65), inset 0 1px 0 rgba(255, 255, 255, 0.3) !important;
+    filter: brightness(1.06) !important;
+}
+
+.sg-submit:active {
+    transform: scale(0.98) !important;
+    box-shadow: 0 6px 16px -4px rgba(99, 102, 241, 0.4) !important;
+}
+
+/* Error Message Pill */
+.sg-error {
+    min-height: 20px !important;
+    margin-top: 10px !important;
+    padding: 0 !important;
+    font-size: 0.82rem !important;
+    font-weight: 600 !important;
+    color: #f87171 !important;
+    opacity: 0 !important;
+    transition: opacity 0.2s !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 6px !important;
+}
+
+.sg-error.sg-show {
+    opacity: 1 !important;
+    padding: 8px 14px !important;
+    background: rgba(239, 68, 68, 0.12) !important;
+    border: 1px solid rgba(239, 68, 68, 0.28) !important;
+    border-radius: 10px !important;
+}
+
+/* Footer Security Note */
+.sg-note {
+    margin-top: 22px !important;
+    padding-top: 18px !important;
+    border-top: 1px solid rgba(255, 255, 255, 0.08) !important;
+    font-size: 0.76rem !important;
+    color: rgba(226, 232, 240, 0.5) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    flex-wrap: wrap !important;
+    gap: 8px !important;
 }
 
 .sg-note-badge {
-    padding: 2px 8px;
-    border-radius: 999px;
-    font-weight: 700;
-    font-size: 0.7rem;
-    color: #0e111a;
-    background: var(--accent);
+    padding: 3px 9px !important;
+    border-radius: 999px !important;
+    font-weight: 700 !important;
+    font-size: 0.7rem !important;
+    letter-spacing: 0.02em !important;
+    color: #cbd5e1 !important;
+    background: rgba(255, 255, 255, 0.08) !important;
+    border: 1px solid rgba(255, 255, 255, 0.12) !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 4px !important;
 }
 
-.sg-note-badge .sg-note-icon {
-    display: none;
-}
-
+/* Unlock Exit Animation */
 #securityGate.sg-unlocking {
-    animation: sgGateOut 0.4s ease forwards;
+    animation: sgGateOut 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
 }
 
 @keyframes sgGateOut {
-    to { opacity: 0; visibility: hidden; }
+    0% { opacity: 1; transform: scale(1); filter: blur(0); }
+    100% { opacity: 0; transform: scale(1.05); filter: blur(12px); visibility: hidden; pointer-events: none; }
+}
+
+/* RESPONSIVE OPTIMIZATION (IPHONE / IPAD / PC) */
+@media (max-width: 480px) {
+    #securityGate {
+        padding: 20px 14px !important;
+        align-items: center !important;
+    }
+    .sg-card {
+        padding: 28px 20px 22px !important;
+        border-radius: 24px !important;
+        max-width: 100% !important;
+    }
+    .sg-icon-box {
+        width: 52px !important;
+        height: 52px !important;
+        font-size: 1.5rem !important;
+        border-radius: 16px !important;
+        margin-bottom: 12px !important;
+    }
+    #securityGate h2 {
+        font-size: 1.45rem !important;
+    }
+    #securityGate p.sg-sub {
+        font-size: 0.82rem !important;
+        margin-bottom: 18px !important;
+    }
+    .sg-badge-top {
+        font-size: 0.68rem !important;
+        padding: 4px 10px !important;
+        margin-bottom: 14px !important;
+    }
+    .sg-input-wrap input {
+        height: 46px !important;
+    }
+    .sg-submit {
+        height: 46px !important;
+    }
+}
+
+@media (min-width: 768px) and (max-width: 1024px) {
+    /* iPad / Tablet */
+    .sg-card {
+        max-width: 420px !important;
+        padding: 40px 34px !important;
+    }
 }
 
 /* ===== 20. THEMES ===== */
@@ -3379,6 +3637,134 @@ body.theme-cosmic {
     --accent3: #6366f1;
 }
 
+/* ===== 20b. PREMIUM ULTRA MAX EXCLUSIVE THEMES ===== */
+
+/* 👑 Royal Gold — luxury black & gold with a slow shimmer sweep */
+body.theme-royal {
+    --bg1: #07070a;
+    --bg2: #0f0d08;
+    --bg3: #171209;
+    --ink: #fdf3d8;
+    --muted: #b3a06a;
+    --card-bg: #120f08;
+    --card-hover: #1b1710;
+    --accent: #d4af37;
+    --accent2: #fff3c4;
+    --accent3: #a6791f;
+    background-image: linear-gradient(120deg, transparent 30%, rgba(212, 175, 55, 0.09) 45%, rgba(255, 243, 196, 0.14) 50%, rgba(212, 175, 55, 0.09) 55%, transparent 70%);
+    background-size: 260% 260%;
+    animation: royalSweep 7s linear infinite;
+}
+body.theme-royal header h1 { background: linear-gradient(135deg, #fff3c4, #d4af37 60%, #fdf3d8); -webkit-background-clip: text; background-clip: text; }
+body.theme-royal .btn-primary, body.theme-royal .lp-btn-primary { box-shadow: 0 0 18px rgba(212, 175, 55, 0.35); animation: royalGlow 2.6s ease-in-out infinite; }
+
+@keyframes royalSweep {
+    0% { background-position: 0% 50%; }
+    100% { background-position: 200% 50%; }
+}
+@keyframes royalGlow {
+    0%, 100% { box-shadow: 0 0 12px rgba(212, 175, 55, 0.25); }
+    50% { box-shadow: 0 0 26px rgba(255, 243, 196, 0.55); }
+}
+
+/* 💎 Neon Cyber — electric pink/cyan with a pulsing glow */
+body.theme-neon {
+    --bg1: #08040f;
+    --bg2: #0d0818;
+    --bg3: #150c26;
+    --ink: #f2f0ff;
+    --muted: #9a8fc2;
+    --card-bg: #110a1f;
+    --card-hover: #180f2c;
+    --accent: #ff2e92;
+    --accent2: #00e5ff;
+    --accent3: #7c3aed;
+}
+body.theme-neon header h1 { background: linear-gradient(90deg, #ff2e92, #00e5ff, #ff2e92); background-size: 200% auto; -webkit-background-clip: text; background-clip: text; animation: neonTextFlow 3.5s linear infinite; }
+body.theme-neon .card { animation: neonPulse 2.4s ease-in-out infinite; }
+body.theme-neon .btn-primary, body.theme-neon .lp-btn-primary { box-shadow: 0 0 16px rgba(0, 229, 255, 0.5); }
+
+@keyframes neonTextFlow {
+    0% { background-position: 0% center; }
+    100% { background-position: 200% center; }
+}
+@keyframes neonPulse {
+    0%, 100% { box-shadow: 0 0 0 rgba(255, 46, 146, 0); }
+    50% { box-shadow: 0 0 24px rgba(0, 229, 255, 0.35), 0 0 40px rgba(255, 46, 146, 0.15); }
+}
+
+/* 🌠 Aurora Borealis — shifting green/violet/blue night-sky gradient */
+body.theme-aurora2 {
+    --bg1: #060b12;
+    --bg2: #081420;
+    --bg3: #0b1e2e;
+    --ink: #eafaf5;
+    --muted: #86ad9f;
+    --card-bg: #0a1a24;
+    --card-hover: #10242f;
+    --accent: #00ffa3;
+    --accent2: #38bdf8;
+    --accent3: #7c3aed;
+    background-image: radial-gradient(1200px 500px at 15% -10%, rgba(0, 255, 163, 0.10), transparent 60%),
+                       radial-gradient(1000px 500px at 90% 0%, rgba(124, 58, 237, 0.14), transparent 60%),
+                       radial-gradient(900px 500px at 50% 110%, rgba(56, 189, 248, 0.10), transparent 60%);
+    background-size: 180% 180%, 180% 180%, 180% 180%;
+    animation: auroraDrift 12s ease-in-out infinite;
+}
+body.theme-aurora2 header h1 { background: linear-gradient(135deg, #00ffa3, #38bdf8 50%, #7c3aed); -webkit-background-clip: text; background-clip: text; }
+
+@keyframes auroraDrift {
+    0%, 100% { background-position: 0% 0%, 100% 0%, 50% 100%; }
+    50% { background-position: 30% 40%, 70% 40%, 60% 60%; }
+}
+
+/* 🌸 Sakura — soft rose-gold with gently drifting petal glows */
+body.theme-sakura {
+    --bg1: #180d12;
+    --bg2: #22131a;
+    --bg3: #2c1922;
+    --ink: #fdf1f4;
+    --muted: #c99cab;
+    --card-bg: #24151c;
+    --card-hover: #2f1c25;
+    --accent: #ff8fb3;
+    --accent2: #ffd6e6;
+    --accent3: #d4af8c;
+    background-image: radial-gradient(300px 300px at 10% 20%, rgba(255, 183, 209, 0.14), transparent 70%),
+                       radial-gradient(260px 260px at 85% 15%, rgba(212, 175, 140, 0.12), transparent 70%),
+                       radial-gradient(320px 320px at 60% 90%, rgba(255, 214, 230, 0.12), transparent 70%);
+    animation: sakuraDrift 9s ease-in-out infinite;
+}
+body.theme-sakura header h1 { background: linear-gradient(135deg, #ffd6e6, #ff8fb3 60%, #d4af8c); -webkit-background-clip: text; background-clip: text; }
+
+@keyframes sakuraDrift {
+    0%, 100% { background-position: 0% 0%, 100% 0%, 50% 100%; }
+    50% { background-position: 8% 12%, 92% 10%, 46% 92%; }
+}
+
+/* 🔥 Inferno — molten fire tones with a flickering ember glow */
+body.theme-inferno {
+    --bg1: #140604;
+    --bg2: #1d0906;
+    --bg3: #260c07;
+    --ink: #fff2e6;
+    --muted: #c99b83;
+    --card-bg: #1f0b07;
+    --card-hover: #2a0f09;
+    --accent: #ff5a1f;
+    --accent2: #ffd23f;
+    --accent3: #b3160c;
+}
+body.theme-inferno header h1 { background: linear-gradient(135deg, #ffd23f, #ff5a1f 55%, #b3160c); -webkit-background-clip: text; background-clip: text; }
+body.theme-inferno .card { animation: infernoFlicker 3s ease-in-out infinite; }
+body.theme-inferno .btn-primary, body.theme-inferno .lp-btn-primary { box-shadow: 0 0 18px rgba(255, 90, 31, 0.45); }
+
+@keyframes infernoFlicker {
+    0%, 100% { box-shadow: 0 0 0 rgba(255, 90, 31, 0); }
+    30% { box-shadow: 0 0 22px rgba(255, 90, 31, 0.3); }
+    60% { box-shadow: 0 0 14px rgba(255, 210, 63, 0.25); }
+}
+
 /* Dark mode default match */
 body.dark {
     --bg1: #090c14;
@@ -3389,7 +3775,7 @@ body.dark {
 }
 
 /* Light mode support if user toggles off dark */
-body:not(.dark):not(.theme-rustic):not(.theme-modern):not(.theme-ocean):not(.theme-forest):not(.theme-cosmic) {
+body:not(.dark):not(.theme-rustic):not(.theme-modern):not(.theme-ocean):not(.theme-forest):not(.theme-cosmic):not(.theme-royal):not(.theme-neon):not(.theme-aurora2):not(.theme-sakura):not(.theme-inferno) {
     --bg1: #f4f6fb;
     --bg2: #eaedf5;
     --bg3: #e0e5f0;
@@ -3449,6 +3835,225 @@ body:not(.dark):not(.theme-rustic):not(.theme-modern):not(.theme-ocean):not(.the
     }
 }
 
+
+/* ===== 10 NEW INTERFACE THEMES ===== */
+body.theme-midnight {
+    --bg1: #0a0e1a; --bg2: #111729; --bg3: #182038;
+    --ink: #e2e8f0; --muted: #7a8ba8;
+    --card-bg: #131b2e; --card-hover: #1a2540;
+    --accent: #6366f1; --accent2: #818cf8; --accent3: #4338ca;
+    --card-front: #1e1b4b; --card-front2: #312e81;
+    --card-back: #1e1b4b; --card-back2: #4338ca;
+    --line: rgba(99,102,241,0.2); --shadow: 0 4px 20px rgba(0,0,0,0.4);
+}
+body.theme-midnight header h1 { background: linear-gradient(135deg, #818cf8, #6366f1 60%, #a5b4fc); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+
+body.theme-lavender {
+    --bg1: #1a1625; --bg2: #221e30; --bg3: #2a253b;
+    --ink: #ede9fe; --muted: #a18acd;
+    --card-bg: #1e1a2c; --card-hover: #282340;
+    --accent: #a78bfa; --accent2: #c4b5fd; --accent3: #7c3aed;
+    --card-front: #2e1065; --card-front2: #4c1d95;
+    --card-back: #3b0764; --card-back2: #6d28d9;
+    --line: rgba(167,139,250,0.2); --shadow: 0 4px 20px rgba(0,0,0,0.4);
+}
+body.theme-lavender header h1 { background: linear-gradient(135deg, #c4b5fd, #a78bfa 60%, #e9d5ff); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+
+body.theme-rosegold {
+    --bg1: #1a1215; --bg2: #241a1e; --bg3: #2d2025;
+    --ink: #fce7f3; --muted: #c98da5;
+    --card-bg: #201518; --card-hover: #2c1e22;
+    --accent: #f472b6; --accent2: #fb7185; --accent3: #be185d;
+    --card-front: #831843; --card-front2: #9f1239;
+    --card-back: #701a3e; --card-back2: #be185d;
+    --line: rgba(244,114,182,0.2); --shadow: 0 4px 20px rgba(0,0,0,0.4);
+}
+body.theme-rosegold header h1 { background: linear-gradient(135deg, #fda4af, #f472b6 60%, #fecdd3); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+
+body.theme-arctic {
+    --bg1: #0c1520; --bg2: #121e2d; --bg3: #18283a;
+    --ink: #e0f2fe; --muted: #7dafcf;
+    --card-bg: #0f1a28; --card-hover: #162436;
+    --accent: #38bdf8; --accent2: #7dd3fc; --accent3: #0284c7;
+    --card-front: #0c4a6e; --card-front2: #075985;
+    --card-back: #0c4a6e; --card-back2: #0369a1;
+    --line: rgba(56,189,248,0.2); --shadow: 0 4px 20px rgba(0,0,0,0.4);
+}
+body.theme-arctic header h1 { background: linear-gradient(135deg, #7dd3fc, #38bdf8 60%, #bae6fd); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+
+body.theme-ember {
+    --bg1: #1a0f0a; --bg2: #241610; --bg3: #2d1c14;
+    --ink: #ffedd5; --muted: #c9956a;
+    --card-bg: #1e1208; --card-hover: #2a1a0e;
+    --accent: #f97316; --accent2: #fb923c; --accent3: #c2410c;
+    --card-front: #7c2d12; --card-front2: #9a3412;
+    --card-back: #7c2d12; --card-back2: #c2410c;
+    --line: rgba(249,115,22,0.2); --shadow: 0 4px 20px rgba(0,0,0,0.4);
+}
+body.theme-ember header h1 { background: linear-gradient(135deg, #fdba74, #f97316 60%, #fed7aa); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+
+body.theme-mint {
+    --bg1: #0a1a16; --bg2: #10241e; --bg3: #152e26;
+    --ink: #d1fae5; --muted: #6bc9a3;
+    --card-bg: #0c1e18; --card-hover: #142a22;
+    --accent: #34d399; --accent2: #6ee7b7; --accent3: #059669;
+    --card-front: #064e3b; --card-front2: #065f46;
+    --card-back: #064e3b; --card-back2: #047857;
+    --line: rgba(52,211,153,0.2); --shadow: 0 4px 20px rgba(0,0,0,0.4);
+}
+body.theme-mint header h1 { background: linear-gradient(135deg, #6ee7b7, #34d399 60%, #a7f3d0); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+
+body.theme-crimson {
+    --bg1: #1a0a0a; --bg2: #241010; --bg3: #2d1616;
+    --ink: #fef2f2; --muted: #c98080;
+    --card-bg: #1e0c0c; --card-hover: #2c1414;
+    --accent: #ef4444; --accent2: #f87171; --accent3: #b91c1c;
+    --card-front: #7f1d1d; --card-front2: #991b1b;
+    --card-back: #7f1d1d; --card-back2: #b91c1c;
+    --line: rgba(239,68,68,0.2); --shadow: 0 4px 20px rgba(0,0,0,0.4);
+}
+body.theme-crimson header h1 { background: linear-gradient(135deg, #fca5a5, #ef4444 60%, #fecaca); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+
+body.theme-titanium {
+    --bg1: #111315; --bg2: #1a1d20; --bg3: #22262a;
+    --ink: #e5e7eb; --muted: #9ca3af;
+    --card-bg: #17191c; --card-hover: #202428;
+    --accent: #9ca3af; --accent2: #d1d5db; --accent3: #6b7280;
+    --card-front: #1f2937; --card-front2: #374151;
+    --card-back: #1f2937; --card-back2: #4b5563;
+    --line: rgba(156,163,175,0.2); --shadow: 0 4px 20px rgba(0,0,0,0.4);
+}
+body.theme-titanium header h1 { background: linear-gradient(135deg, #e5e7eb, #9ca3af 60%, #f3f4f6); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+
+body.theme-galaxy {
+    --bg1: #0d0a1a; --bg2: #140f26; --bg3: #1b1432;
+    --ink: #f0e7ff; --muted: #a78dc8;
+    --card-bg: #110d20; --card-hover: #1a1530;
+    --accent: #c084fc; --accent2: #d8b4fe; --accent3: #9333ea;
+    --card-front: #581c87; --card-front2: #7e22ce;
+    --card-back: #4c1d95; --card-back2: #6b21a8;
+    --line: rgba(192,132,252,0.2); --shadow: 0 4px 20px rgba(0,0,0,0.4);
+}
+body.theme-galaxy header h1 { background: linear-gradient(135deg, #e9d5ff, #c084fc 60%, #f3e8ff); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+
+body.theme-desert {
+    --bg1: #1a1610; --bg2: #241e14; --bg3: #2d261c;
+    --ink: #fef3c7; --muted: #b8a070;
+    --card-bg: #1e1a10; --card-hover: #2a2418;
+    --accent: #eab308; --accent2: #fbbf24; --accent3: #a16207;
+    --card-front: #713f12; --card-front2: #854d0e;
+    --card-back: #713f12; --card-back2: #a16207;
+    --line: rgba(234,179,8,0.2); --shadow: 0 4px 20px rgba(0,0,0,0.4);
+}
+body.theme-desert header h1 { background: linear-gradient(135deg, #fde68a, #eab308 60%, #fef9c3); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+
+
+/* ===== 5 NEW CARD FACE BACKGROUNDS ===== */
+
+/* 🌊 DEEP OCEAN */
+body.cardbg-deepocean .face-front, body.cardbg-deepocean .face-back {
+    background: linear-gradient(135deg, #0a192f 0%, #0c2744 40%, #0e3a5e 100%) !important;
+    color: #e0f2fe !important;
+}
+body.cardbg-deepocean .term, body.cardbg-deepocean .back-term { color: #38bdf8 !important; }
+body.cardbg-deepocean .ipa { color: #7dd3fc !important; }
+body.cardbg-deepocean .hint { color: #bae6fd !important; }
+
+/* 🔮 MYSTIC PURPLE */
+body.cardbg-mystic .face-front, body.cardbg-mystic .face-back {
+    background: linear-gradient(135deg, #1a0533 0%, #2d0a54 40%, #4a1082 100%) !important;
+    color: #f3e8ff !important;
+}
+body.cardbg-mystic .term, body.cardbg-mystic .back-term { color: #c084fc !important; }
+body.cardbg-mystic .ipa { color: #d8b4fe !important; }
+body.cardbg-mystic .hint { color: #e9d5ff !important; }
+
+/* 🌿 EMERALD FOREST */
+body.cardbg-emerald .face-front, body.cardbg-emerald .face-back {
+    background: linear-gradient(135deg, #052e16 0%, #064e3b 40%, #047857 100%) !important;
+    color: #d1fae5 !important;
+}
+body.cardbg-emerald .term, body.cardbg-emerald .back-term { color: #34d399 !important; }
+body.cardbg-emerald .ipa { color: #6ee7b7 !important; }
+body.cardbg-emerald .hint { color: #a7f3d0 !important; }
+
+/* 🌅 SUNSET BLAZE */
+body.cardbg-sunset .face-front, body.cardbg-sunset .face-back {
+    background: linear-gradient(135deg, #7c2d12 0%, #c2410c 40%, #9a3412 100%) !important;
+    color: #ffedd5 !important;
+}
+body.cardbg-sunset .term, body.cardbg-sunset .back-term { color: #fb923c !important; }
+body.cardbg-sunset .ipa { color: #fdba74 !important; }
+body.cardbg-sunset .hint { color: #fed7aa !important; }
+
+/* ❄️ FROST CRYSTAL */
+body.cardbg-frost .face-front, body.cardbg-frost .face-back {
+    background: linear-gradient(135deg, #1e293b 0%, #334155 40%, #0f172a 100%) !important;
+    color: #f1f5f9 !important;
+}
+body.cardbg-frost .term, body.cardbg-frost .back-term { color: #94a3b8 !important; }
+body.cardbg-frost .ipa { color: #cbd5e1 !important; }
+body.cardbg-frost .hint { color: #e2e8f0 !important; }
+
+/* ===== MOBILE / IPAD FLASHCARD FIX ===== */
+@media (max-width: 1024px) {
+    .card-stage {
+        perspective: 800px;
+        margin: 4px auto 12px;
+        max-width: 100%;
+        -webkit-transform-style: preserve-3d;
+    }
+    .card {
+        min-height: 320px;
+        -webkit-transform-style: preserve-3d;
+        transform-style: preserve-3d;
+    }
+    .face {
+        -webkit-backface-visibility: hidden;
+        backface-visibility: hidden;
+    }
+    .face-back {
+        -webkit-transform: rotateY(180deg);
+    }
+    .card.flipped {
+        -webkit-transform: rotateY(180deg);
+    }
+}
+@media (max-width: 480px) {
+    .card {
+        min-height: 280px;
+    }
+    .face {
+        padding: 16px !important;
+    }
+    .front-inner {
+        gap: 6px;
+    }
+    .term {
+        font-size: 1.4rem !important;
+    }
+    .ipa {
+        font-size: 0.85rem !important;
+    }
+    .face-scroll {
+        -webkit-overflow-scrolling: touch;
+    }
+    .settings-card {
+        max-height: 80vh !important;
+        overflow-y: auto !important;
+        -webkit-overflow-scrolling: touch;
+    }
+}
+/* Touch device: ensure card taps work */
+@media (pointer: coarse) {
+    .card {
+        -webkit-tap-highlight-color: transparent;
+    }
+    .face-scroll {
+        -webkit-overflow-scrolling: touch;
+    }
+}
+
 /* ===== 22. SCROLLBAR ===== */
 ::-webkit-scrollbar {
     width: 6px;
@@ -3488,10 +4093,9 @@ body:not(.dark):not(.theme-rustic):not(.theme-modern):not(.theme-ocean):not(.the
 /* 1. STUNNING BACKGROUND */
 body {
     background: 
-        radial-gradient(circle at 80% 20%, rgba(168, 85, 247, 0.15) 0%, transparent 40%),
-        radial-gradient(circle at 20% 80%, rgba(6, 182, 212, 0.1) 0%, transparent 40%),
+        linear-gradient(180deg, rgba(12, 18, 30, 0.06) 0%, rgba(12, 18, 30, 0.22) 100%),
         url('./linguaflow_bg.jpg') center center / cover no-repeat fixed !important;
-    background-color: #0B0E14 !important;
+    background-color: #0e1e2d !important;
     color: var(--ink);
 }
 
@@ -3592,27 +4196,32 @@ body {
    LINGUAFLOW CARD & LOGIN DECORATIONS
    ============================================================ */
 
-/* 1. LOGIN SCREEN BACKGROUND */
+
+/* SETTINGS ON TOP AT LOGIN SCREEN */
+#settingsBtn {
+    z-index: 10000 !important;
+}
+#settingsModal {
+    z-index: 10001 !important;
+}
+
+/* 2 BASIC BACKGROUNDS FOR LOGIN SCREEN (RUSTIC & MODERN) */
 #securityGate {
-    background: url('./login_bg.jpg') center center / cover no-repeat fixed !important;
+    background: linear-gradient(rgba(15, 17, 23, 0.65), rgba(9, 12, 20, 0.85)), url('./login_bg.jpg') center center / cover no-repeat fixed, radial-gradient(circle at 50% 30%, #161b2e 0%, #090c14 80%) !important;
+    transition: background 0.3s ease;
 }
-#securityGate::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: rgba(11, 14, 20, 0.4);
-    z-index: -1;
+body.theme-rustic #securityGate {
+    background: linear-gradient(rgba(36, 28, 22, 0.65), rgba(18, 14, 11, 0.85)), url('./login_bg.jpg') center center / cover no-repeat fixed, radial-gradient(circle at 50% 30%, #291e17 0%, #120d0a 80%) !important;
 }
-.sg-card {
-    background: rgba(18, 23, 41, 0.75) !important;
-    backdrop-filter: blur(24px) !important;
-    -webkit-backdrop-filter: blur(24px) !important;
-    border: 1px solid rgba(255, 255, 255, 0.15) !important;
-    border-radius: 32px !important;
-    box-shadow: 0 24px 60px -10px rgba(0, 0, 0, 0.8) !important;
-    padding: 40px !important;
+body.theme-modern #securityGate {
+    background: linear-gradient(rgba(15, 17, 23, 0.65), rgba(9, 12, 20, 0.85)), url('./login_bg.jpg') center center / cover no-repeat fixed, radial-gradient(circle at 50% 30%, #161b2e 0%, #090c14 80%) !important;
 }
-.sg-orb { display: none !important; }
+
+/* 1. LOGIN SCREEN BACKGROUND */
+/* cleaned old securityGate bg */
+/* cleaned old securityGate::before */
+/* cleaned old sg-card */
+/* cleaned old sg-orb hide */
 
 /* 2. PREMIUM WORD OF THE DAY (WOTD) CARD REDESIGN */
 #page-landing .lp-wotd-card {
@@ -3816,6 +4425,70 @@ body.cardbg-astral .speak-btn {
     border-color: rgba(217, 70, 239, 0.3) !important;
     background: rgba(217, 70, 239, 0.15) !important;
     color: #f0abfc !important;
+}
+
+/* ===== PREMIUM ULTRA EXCLUSIVE CARD FACES ===== */
+
+/* 👑 ROYAL (Black & Gold foil, animated shimmer) */
+body.cardbg-royal .face-front, body.cardbg-royal .face-back {
+    background: linear-gradient(135deg, #0b0b0f 0%, #171209 35%, #4a3a12 50%, #171209 65%, #0b0b0f 100%) !important;
+    background-size: 220% 220% !important;
+    animation: cardRoyalShimmer 5s ease-in-out infinite !important;
+    color: #fdf3d8 !important;
+    box-shadow: inset 0 0 0 1px rgba(212, 175, 55, 0.35) !important;
+}
+body.cardbg-royal .face-front { text-shadow: 0 0 12px rgba(212, 175, 55, 0.5); }
+body.cardbg-royal .term, body.cardbg-royal .back-term { color: #d4af37 !important; }
+body.cardbg-royal .ipa { color: #fff3c4 !important; }
+body.cardbg-royal .speak-btn {
+    border-color: rgba(212, 175, 55, 0.35) !important;
+    background: rgba(212, 175, 55, 0.15) !important;
+    color: #fff3c4 !important;
+}
+@keyframes cardRoyalShimmer {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+}
+
+/* 💎 NEON (Cyberpunk pink/cyan glow) */
+body.cardbg-neon .face-front, body.cardbg-neon .face-back {
+    background: linear-gradient(135deg, #0d0818, #3a0f3f 40%, #0a1b33 70%, #0d0818) !important;
+    background-size: 220% 220% !important;
+    animation: cardNeonShift 4s ease-in-out infinite !important;
+    color: #f2f0ff !important;
+    box-shadow: inset 0 0 0 1px rgba(0, 229, 255, 0.35), 0 0 20px rgba(255, 46, 146, 0.15) !important;
+}
+body.cardbg-neon .face-front { text-shadow: 0 0 10px rgba(0, 229, 255, 0.6); }
+body.cardbg-neon .term, body.cardbg-neon .back-term { color: #ff2e92 !important; }
+body.cardbg-neon .ipa { color: #00e5ff !important; }
+body.cardbg-neon .speak-btn {
+    border-color: rgba(0, 229, 255, 0.35) !important;
+    background: rgba(0, 229, 255, 0.15) !important;
+    color: #00e5ff !important;
+}
+@keyframes cardNeonShift {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+}
+
+/* 🌸 SAKURA PEARL (Soft rose-gold pearl shimmer) */
+body.cardbg-sakura .face-front, body.cardbg-sakura .face-back {
+    background: linear-gradient(135deg, #fff0f5, #ffd6e6 35%, #ffe9ce 60%, #fff0f5) !important;
+    background-size: 220% 220% !important;
+    animation: cardSakuraShimmer 6s ease-in-out infinite !important;
+    color: #7a2e46 !important;
+    box-shadow: inset 0 0 0 1px rgba(255, 143, 179, 0.4) !important;
+}
+body.cardbg-sakura .term, body.cardbg-sakura .back-term { color: #d6336c !important; }
+body.cardbg-sakura .ipa { color: #b5793f !important; }
+body.cardbg-sakura .speak-btn {
+    border-color: rgba(214, 51, 108, 0.25) !important;
+    background: rgba(214, 51, 108, 0.1) !important;
+    color: #d6336c !important;
+}
+@keyframes cardSakuraShimmer {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
 }
 
 
@@ -4124,6 +4797,543 @@ body.cardbg-astral .speak-btn {
 }
 </style>
 
+<style id="pastoral-cartoon-enterprise-styles">
+
+/* ============================================================
+   ✦ 4K CARTOON COUNTRYSIDE SCENERY & ENTERPRISE LANDING/LIBRARY ✦
+   ============================================================ */
+
+/* 1. SCENERY BACKGROUND FOR LANDING & LIBRARY */
+.pastoral-scenery-container {
+    position: relative;
+    width: 100%;
+    margin-bottom: 28px;
+    border-radius: 32px;
+    overflow: hidden;
+    box-shadow: 0 25px 60px -15px rgba(22, 54, 30, 0.25), 0 0 0 1px rgba(255, 255, 255, 0.25);
+    background: linear-gradient(180deg, #38bdf8 0%, #7dd3fc 35%, #fed7aa 65%, #86efac 100%);
+}
+
+.pastoral-svg-backdrop {
+    width: 100%;
+    height: 380px;
+    display: block;
+    object-fit: cover;
+}
+
+/* Floating animation for cartoon clouds */
+@keyframes cloudDrift1 {
+    0% { transform: translateX(-10%); }
+    50% { transform: translateX(5%); }
+    100% { transform: translateX(-10%); }
+}
+
+@keyframes cloudDrift2 {
+    0% { transform: translateX(5%); }
+    50% { transform: translateX(-8%); }
+    100% { transform: translateX(5%); }
+}
+
+@keyframes sunPulseGlow {
+    0%, 100% { transform: scale(1); opacity: 0.9; }
+    50% { transform: scale(1.06); opacity: 1; filter: drop-shadow(0 0 45px rgba(253, 224, 71, 0.9)); }
+}
+
+@keyframes windmillSpin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+@keyframes grassSway {
+    0%, 100% { transform: skewX(0deg); }
+    50% { transform: skewX(3deg); }
+}
+
+.anim-cloud-1 { animation: cloudDrift1 45s ease-in-out infinite alternate; }
+.anim-cloud-2 { animation: cloudDrift2 55s ease-in-out infinite alternate; }
+.anim-sun-glow { animation: sunPulseGlow 6s ease-in-out infinite; transform-origin: center; }
+.anim-windmill-blades { animation: windmillSpin 14s linear infinite; transform-origin: 430px 172px; }
+
+/* 2. ENTERPRISE HERO BOARD OVERHAUL */
+.lp-board {
+    position: relative !important;
+    border-radius: 32px !important;
+    padding: clamp(32px, 5vw, 56px) !important;
+    margin-bottom: 32px !important;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.88) 0%, rgba(240, 253, 244, 0.82) 100%) !important;
+    backdrop-filter: blur(28px) saturate(180%) !important;
+    -webkit-backdrop-filter: blur(28px) saturate(180%) !important;
+    border: 1px solid rgba(255, 255, 255, 0.8) !important;
+    box-shadow: 
+        0 30px 70px -15px rgba(34, 84, 45, 0.18),
+        0 0 40px rgba(52, 211, 153, 0.12),
+        inset 0 2px 0 rgba(255, 255, 255, 0.9) !important;
+    overflow: hidden !important;
+}
+
+/* Dark mode theme support for Hero board */
+body.dark .lp-board,
+body.theme-modern .lp-board,
+body.theme-rustic .lp-board,
+body.theme-midnight .lp-board {
+    background: linear-gradient(135deg, rgba(20, 28, 42, 0.88) 0%, rgba(12, 18, 28, 0.92) 100%) !important;
+    border-color: rgba(255, 255, 255, 0.14) !important;
+    box-shadow: 0 30px 80px -15px rgba(0, 0, 0, 0.8), 0 0 50px rgba(16, 185, 129, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;
+}
+
+/* Hero Badge */
+.lp-eyebrow {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    padding: 6px 14px !important;
+    border-radius: 999px !important;
+    background: rgba(16, 185, 129, 0.12) !important;
+    border: 1px solid rgba(16, 185, 129, 0.3) !important;
+    color: #059669 !important;
+    font-size: 0.76rem !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.08em !important;
+    text-transform: uppercase !important;
+    margin-bottom: 16px !important;
+}
+body.dark .lp-eyebrow,
+body.theme-modern .lp-eyebrow,
+body.theme-rustic .lp-eyebrow {
+    color: #34d399 !important;
+    background: rgba(16, 185, 129, 0.16) !important;
+}
+
+.lp-dot-live {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #10b981;
+    box-shadow: 0 0 10px #10b981;
+    animation: liveDotPulse 2s infinite;
+}
+@keyframes liveDotPulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.4; transform: scale(0.85); }
+}
+
+/* Hero Title */
+.lp-title {
+    font-family: 'Playfair Display', 'Plus Jakarta Sans', Georgia, serif !important;
+    font-weight: 800 !important;
+    font-size: clamp(2.3rem, 5.5vw, 3.8rem) !important;
+    line-height: 1.12 !important;
+    color: var(--ink) !important;
+    letter-spacing: -0.03em !important;
+    margin-bottom: 18px !important;
+}
+
+.lp-title .lp-u {
+    position: relative !important;
+    color: #059669 !important;
+    background: linear-gradient(135deg, #059669 0%, #10b981 50%, #047857 100%);
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+}
+body.dark .lp-title .lp-u,
+body.theme-modern .lp-title .lp-u {
+    background: linear-gradient(135deg, #34d399 0%, #6ee7b7 50%, #10b981 100%);
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+}
+
+.lp-sub {
+    font-size: 1.08rem !important;
+    line-height: 1.65 !important;
+    color: var(--muted) !important;
+    max-width: 680px !important;
+    margin-bottom: 28px !important;
+}
+
+/* CTA Button */
+.lp-btn-primary {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+    padding: 16px 36px !important;
+    border-radius: 18px !important;
+    font-size: 1.05rem !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.01em !important;
+    color: #ffffff !important;
+    background: linear-gradient(135deg, #059669 0%, #10b981 50%, #047857 100%) !important;
+    border: none !important;
+    box-shadow: 0 14px 30px -6px rgba(16, 185, 129, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.35) !important;
+    cursor: pointer !important;
+    transition: transform 0.2s ease, box-shadow 0.2s ease !important;
+}
+
+.lp-btn-primary:hover {
+    transform: translateY(-3px) scale(1.02) !important;
+    box-shadow: 0 18px 36px -6px rgba(16, 185, 129, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.45) !important;
+}
+
+.lp-btn-primary:active {
+    transform: scale(0.98) !important;
+}
+
+/* Stats Row */
+.lp-stat-row {
+    display: flex !important;
+    gap: 20px !important;
+    margin-top: 36px !important;
+    padding-top: 26px !important;
+    border-top: 1px solid rgba(0, 0, 0, 0.08) !important;
+    flex-wrap: wrap !important;
+}
+body.dark .lp-stat-row,
+body.theme-modern .lp-stat-row,
+body.theme-rustic .lp-stat-row {
+    border-top-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+.lp-stat {
+    padding: 14px 22px !important;
+    border-radius: 18px !important;
+    background: rgba(255, 255, 255, 0.5) !important;
+    border: 1px solid rgba(255, 255, 255, 0.6) !important;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04) !important;
+}
+body.dark .lp-stat,
+body.theme-modern .lp-stat,
+body.theme-rustic .lp-stat {
+    background: rgba(255, 255, 255, 0.06) !important;
+    border-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+.lp-stat .lp-n {
+    font-size: 1.85rem !important;
+    font-weight: 800 !important;
+    color: #059669 !important;
+}
+body.dark .lp-stat .lp-n,
+body.theme-modern .lp-stat .lp-n {
+    color: #34d399 !important;
+}
+
+/* Word of the Day Card on Landing */
+.lp-wotd-card {
+    border-radius: 26px !important;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.85) 0%, rgba(240, 253, 244, 0.9) 100%) !important;
+    backdrop-filter: blur(20px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.8) !important;
+    box-shadow: 0 16px 40px -10px rgba(16, 185, 129, 0.2) !important;
+}
+body.dark .lp-wotd-card,
+body.theme-modern .lp-wotd-card,
+body.theme-rustic .lp-wotd-card {
+    background: linear-gradient(135deg, rgba(22, 30, 46, 0.85) 0%, rgba(14, 20, 32, 0.92) 100%) !important;
+    border-color: rgba(255, 255, 255, 0.14) !important;
+}
+
+/* 3. LIBRARY / FOLDERS PAGE OVERHAUL */
+#page-folders {
+    position: relative;
+}
+
+.folders-hero {
+    position: relative !important;
+    border-radius: 28px !important;
+    padding: 34px 30px !important;
+    margin-bottom: 24px !important;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.85) 0%, rgba(240, 253, 244, 0.78) 100%) !important;
+    backdrop-filter: blur(24px) saturate(180%) !important;
+    border: 1px solid rgba(255, 255, 255, 0.75) !important;
+    box-shadow: 0 20px 50px -15px rgba(22, 54, 30, 0.15) !important;
+    overflow: hidden !important;
+}
+body.dark .folders-hero,
+body.theme-modern .folders-hero,
+body.theme-rustic .folders-hero {
+    background: linear-gradient(135deg, rgba(20, 28, 44, 0.85) 0%, rgba(12, 18, 30, 0.92) 100%) !important;
+    border-color: rgba(255, 255, 255, 0.14) !important;
+    box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.7) !important;
+}
+
+.folders-hero h2 {
+    font-family: 'Playfair Display', 'Plus Jakarta Sans', serif !important;
+    font-size: 2rem !important;
+    font-weight: 800 !important;
+    letter-spacing: -0.02em !important;
+    margin-bottom: 6px !important;
+}
+
+/* Search bar styling */
+.search-box {
+    border-radius: 20px !important;
+    background: rgba(255, 255, 255, 0.85) !important;
+    backdrop-filter: blur(16px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.6) !important;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.06) !important;
+    padding: 10px 18px !important;
+    transition: all 0.2s ease !important;
+}
+body.dark .search-box,
+body.theme-modern .search-box,
+body.theme-rustic .search-box {
+    background: rgba(18, 24, 38, 0.82) !important;
+    border-color: rgba(255, 255, 255, 0.12) !important;
+}
+
+.search-box:focus-within {
+    border-color: #10b981 !important;
+    box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.2), 0 12px 28px -5px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* FOLDER CARDS: STORYBOOK ENTERPRISE MODULES */
+.folder-grid {
+    display: grid !important;
+    grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)) !important;
+    gap: 16px !important;
+    margin: 20px 0 !important;
+}
+
+.folder-card {
+    position: relative !important;
+    padding: 24px 20px !important;
+    border-radius: 22px !important;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.88) 0%, rgba(246, 252, 248, 0.82) 100%) !important;
+    backdrop-filter: blur(20px) !important;
+    -webkit-backdrop-filter: blur(20px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.75) !important;
+    box-shadow: 
+        0 14px 30px -8px rgba(22, 54, 30, 0.1),
+        0 4px 10px rgba(0, 0, 0, 0.03),
+        inset 0 1px 0 rgba(255, 255, 255, 0.8) !important;
+    cursor: pointer !important;
+    transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.22s ease, border-color 0.22s ease !important;
+    overflow: hidden !important;
+}
+
+body.dark .folder-card,
+body.theme-modern .folder-card,
+body.theme-rustic .folder-card,
+body.theme-midnight .folder-card {
+    background: linear-gradient(135deg, rgba(22, 30, 46, 0.85) 0%, rgba(14, 20, 32, 0.92) 100%) !important;
+    border-color: rgba(255, 255, 255, 0.12) !important;
+    box-shadow: 0 16px 36px -10px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.15) !important;
+}
+
+.folder-card::before {
+    content: '' !important;
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    height: 4px !important;
+    background: linear-gradient(90deg, #10b981, #38bdf8, #f59e0b) !important;
+    opacity: 0.85 !important;
+}
+
+.folder-card:hover {
+    transform: translateY(-6px) scale(1.02) !important;
+    border-color: #10b981 !important;
+    box-shadow: 
+        0 22px 45px -10px rgba(16, 185, 129, 0.3),
+        0 0 25px rgba(16, 185, 129, 0.15) !important;
+}
+
+.folder-card .f-icon {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 46px !important;
+    height: 46px !important;
+    border-radius: 14px !important;
+    background: rgba(16, 185, 129, 0.12) !important;
+    border: 1px solid rgba(16, 185, 129, 0.25) !important;
+    font-size: 1.65rem !important;
+    margin-bottom: 12px !important;
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.15) !important;
+}
+
+.folder-card .f-name {
+    font-family: 'Playfair Display', 'Plus Jakarta Sans', serif !important;
+    font-weight: 700 !important;
+    font-size: 1.14rem !important;
+    color: var(--ink) !important;
+    margin-bottom: 8px !important;
+    letter-spacing: -0.01em !important;
+}
+
+.folder-card .f-count {
+    display: inline-block !important;
+    padding: 3px 10px !important;
+    border-radius: 999px !important;
+    font-size: 0.76rem !important;
+    font-weight: 600 !important;
+    color: #059669 !important;
+    background: rgba(16, 185, 129, 0.1) !important;
+    border: 1px solid rgba(16, 185, 129, 0.2) !important;
+}
+body.dark .folder-card .f-count,
+body.theme-modern .folder-card .f-count {
+    color: #6ee7b7 !important;
+    background: rgba(16, 185, 129, 0.14) !important;
+}
+
+/* Side panel cards (WOTD mini, overview stats, streak) */
+.wotd-mini-card,
+.dash-overview,
+.quick-access-block,
+.lib-dict {
+    border-radius: 24px !important;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.85) 0%, rgba(246, 252, 248, 0.8) 100%) !important;
+    backdrop-filter: blur(20px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.75) !important;
+    box-shadow: 0 14px 30px -8px rgba(22, 54, 30, 0.1) !important;
+}
+body.dark .wotd-mini-card,
+body.dark .dash-overview,
+body.dark .quick-access-block,
+body.dark .lib-dict,
+body.theme-modern .wotd-mini-card,
+body.theme-modern .dash-overview,
+body.theme-modern .quick-access-block,
+body.theme-modern .lib-dict {
+    background: linear-gradient(135deg, rgba(22, 30, 46, 0.85) 0%, rgba(14, 20, 32, 0.92) 100%) !important;
+    border-color: rgba(255, 255, 255, 0.12) !important;
+    box-shadow: 0 16px 36px -10px rgba(0, 0, 0, 0.7) !important;
+}
+
+/* Feature cards & Collection cards on landing */
+.lp-feature-card,
+.lp-coll-card,
+.lp-tool-card,
+.lp-step {
+    border-radius: 22px !important;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.85) 0%, rgba(246, 252, 248, 0.8) 100%) !important;
+    backdrop-filter: blur(18px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.75) !important;
+    box-shadow: 0 12px 28px -6px rgba(22, 54, 30, 0.08) !important;
+    transition: transform 0.2s ease, box-shadow 0.2s ease !important;
+}
+body.dark .lp-feature-card,
+body.dark .lp-coll-card,
+body.dark .lp-tool-card,
+body.dark .lp-step,
+body.theme-modern .lp-feature-card,
+body.theme-modern .lp-coll-card,
+body.theme-modern .lp-tool-card,
+body.theme-modern .lp-step {
+    background: linear-gradient(135deg, rgba(22, 30, 46, 0.85) 0%, rgba(14, 20, 32, 0.92) 100%) !important;
+    border-color: rgba(255, 255, 255, 0.12) !important;
+    box-shadow: 0 14px 32px -8px rgba(0, 0, 0, 0.6) !important;
+}
+
+.lp-feature-card:hover,
+.lp-coll-card:hover,
+.lp-tool-card:hover,
+.lp-step:hover {
+    transform: translateY(-4px) !important;
+    border-color: #10b981 !important;
+    box-shadow: 0 18px 36px -8px rgba(16, 185, 129, 0.25) !important;
+}
+
+</style>
+<style id="cartoon-4k-ambience">
+
+/* 4K CARTOON COUNTRYSIDE AMBIENCE FOR LANDING & LIBRARY */
+.wrap {
+    background: transparent !important;
+}
+
+#page-landing,
+#page-folders {
+    background: transparent !important;
+}
+
+/* Frosted glass cards that let the 4K cartoon countryside glow through */
+.lp-board,
+.folders-hero,
+.folder-card,
+.wotd-mini-card,
+.dash-overview,
+.quick-access-block,
+.lib-dict,
+.lp-feature-card,
+.lp-coll-card,
+.lp-tool-card,
+.lp-step {
+    backdrop-filter: blur(20px) saturate(170%) !important;
+    -webkit-backdrop-filter: blur(20px) saturate(170%) !important;
+}
+
+</style>
+<style id="live-landscape-css">
+
+/* ===== 60FPS / 120FPS 4K LIVING ANIME LANDSCAPE ENGINE ===== */
+#liveLandscapeContainer {
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -2;
+    overflow: hidden;
+    pointer-events: none;
+}
+
+#liveLandscapeImg {
+    position: absolute;
+    top: -4%;
+    left: -4%;
+    width: 108%;
+    height: 108%;
+    object-fit: cover;
+    object-position: center 32%;
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+    filter: contrast(1.12) saturate(1.22) brightness(1.02);
+    animation: liveLandscapePan 36s ease-in-out infinite alternate;
+    will-change: transform;
+    transform-origin: center center;
+}
+
+@keyframes liveLandscapePan {
+    0% { transform: scale(1) translate(0, 0); }
+    50% { transform: scale(1.035) translate(-14px, -8px); }
+    100% { transform: scale(1.015) translate(12px, -10px); }
+}
+
+#liveLandscapeCanvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.live-landscape-vignette {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 50% 35%, transparent 55%, rgba(6, 11, 20, 0.4) 100%);
+    pointer-events: none;
+    z-index: 2;
+}
+
+/* Ensure wrap and pages are transparent so 4K landscape shines through */
+body {
+    background: #0B0E14 !important;
+}
+
+.wrap {
+    position: relative;
+    z-index: 2;
+    background: transparent !important;
+}
+
+#page-landing,
+#page-folders {
+    background: transparent !important;
+}
+
+</style>
 </head>
 <body class="theme-forest" style="">
 
@@ -4177,32 +5387,53 @@ body.cardbg-astral .speak-btn {
 </div>
 
 
-    <!-- ===== SECURITY GATE ===== -->
+        <!-- ===== SECURITY GATE (ENTERPRISE EDITION) ===== -->
     <div id="securityGate">
+        <div class="sg-grid-bg"></div>
         <span class="sg-orb sg-orb-1"></span>
         <span class="sg-orb sg-orb-2"></span>
         <span class="sg-orb sg-orb-3"></span>
-        <span class="sg-orb sg-orb-4"></span>
-        <span class="sg-orb sg-orb-5"></span>
-        <span class="sg-orb sg-orb-6"></span>
+        
         <div class="sg-card" id="sgCard">
-            <div class="sg-icon">🪞</div>
+            <div class="sg-badge-top">
+                <span class="sg-pulse-dot"></span>
+                <span>LINGUAFLOW ENTERPRISE</span>
+            </div>
+            
+            <div class="sg-icon-box">✦</div>
             <h2>Đăng nhập</h2>
-            <p class="sg-sub">Nhập tài khoản để mở khoá Flashcard</p>
+            <p class="sg-sub">Truy cập kho dữ liệu từ vựng &amp; không gian học tập chuyên sâu</p>
+            
             <form id="sgForm" autocomplete="off">
-                <div class="sg-input-wrap">
-                    <span class="sg-field-icon">👤</span>
-                    <input type="text" id="sgUserInput" placeholder="Tên đăng nhập" autocomplete="off" autocapitalize="off" spellcheck="false">
+                <div class="sg-field-group">
+                    <label class="sg-field-label" for="sgUserInput">TÀI KHOẢN</label>
+                    <div class="sg-input-wrap">
+                        <span class="sg-field-icon">👤</span>
+                        <input type="text" id="sgUserInput" placeholder="Nhập tên tài khoản..." autocomplete="off" autocapitalize="off" spellcheck="false" required>
+                    </div>
                 </div>
-                <div class="sg-input-wrap">
-                    <span class="sg-field-icon">🔑</span>
-                    <input type="password" id="sgPasswordInput" placeholder="Mật khẩu" autocomplete="off">
-                    <button type="button" class="sg-toggle-eye" id="sgToggleEye" title="Hiện/ẩn mật khẩu" aria-label="Hiện/ẩn mật khẩu">👁️</button>
+                
+                <div class="sg-field-group">
+                    <label class="sg-field-label" for="sgPasswordInput">MẬT KHẨU</label>
+                    <div class="sg-input-wrap">
+                        <span class="sg-field-icon">🔒</span>
+                        <input type="password" id="sgPasswordInput" placeholder="Nhập mật khẩu bảo mật..." autocomplete="off" required>
+                        <button type="button" class="sg-toggle-eye" id="sgToggleEye" title="Hiện/ẩn mật khẩu" aria-label="Hiện/ẩn mật khẩu">👁️</button>
+                    </div>
                 </div>
-                <button type="submit" class="sg-submit">Đăng nhập →</button>
+                
+                <button type="submit" class="sg-submit" id="sgSubmitBtn">
+                    <span>Đăng nhập hệ thống</span>
+                    <span style="font-size: 1.1rem; line-height: 1;">→</span>
+                </button>
+                
                 <div class="sg-error" id="sgError"></div>
             </form>
-            <div class="sg-note"><span class="sg-note-badge"><span class="sg-note-icon">🪞</span>Admin</span><span>mới được phép tạo tài khoản mới.</span></div>
+            
+            <div class="sg-note">
+                <span class="sg-note-badge">🛡️ BẢO MẬT</span>
+                <span>Chỉ tài khoản được phê duyệt mới có quyền truy cập.</span>
+            </div>
         </div>
     </div>
     <script id="security-guard">
@@ -4411,6 +5642,67 @@ body.cardbg-astral .speak-btn {
                         <span class="theme-swatch swatch-cosmic"></span>
                         <span>🌌 Aurora</span>
                     </button>
+                    <button class="theme-opt" data-theme="royal" type="button">
+                        <span class="theme-swatch swatch-royal"></span>
+                        <span>👑 Royal Gold</span>
+                    </button>
+                    <button class="theme-opt" data-theme="neon" type="button">
+                        <span class="theme-swatch swatch-neon"></span>
+                        <span>💎 Neon Cyber</span>
+                    </button>
+                    <button class="theme-opt" data-theme="aurora2" type="button">
+                        <span class="theme-swatch swatch-aurora2"></span>
+                        <span>🌠 Bắc Cực Quang</span>
+                    </button>
+                    <button class="theme-opt" data-theme="sakura" type="button">
+                        <span class="theme-swatch swatch-sakura"></span>
+                        <span>🌸 Sakura</span>
+                    </button>
+                    <button class="theme-opt" data-theme="inferno" type="button">
+                        <span class="theme-swatch swatch-inferno"></span>
+                        <span>🔥 Inferno</span>
+                    </button>
+
+                    <button class="theme-opt" data-theme="midnight" type="button">
+                        <span class="theme-swatch" style="background:linear-gradient(135deg, #0a0e1a, #6366f1)"></span>
+                        <span>🌃 Midnight</span>
+                    </button>
+                    <button class="theme-opt" data-theme="lavender" type="button">
+                        <span class="theme-swatch" style="background:linear-gradient(135deg, #1a1625, #a78bfa)"></span>
+                        <span>💜 Lavender</span>
+                    </button>
+                    <button class="theme-opt" data-theme="rosegold" type="button">
+                        <span class="theme-swatch" style="background:linear-gradient(135deg, #1a1215, #f472b6)"></span>
+                        <span>🌹 Rosegold</span>
+                    </button>
+                    <button class="theme-opt" data-theme="arctic" type="button">
+                        <span class="theme-swatch" style="background:linear-gradient(135deg, #0c1520, #38bdf8)"></span>
+                        <span>❄️ Arctic</span>
+                    </button>
+                    <button class="theme-opt" data-theme="ember" type="button">
+                        <span class="theme-swatch" style="background:linear-gradient(135deg, #1a0f0a, #f97316)"></span>
+                        <span>🔶 Ember</span>
+                    </button>
+                    <button class="theme-opt" data-theme="mint" type="button">
+                        <span class="theme-swatch" style="background:linear-gradient(135deg, #0a1a16, #34d399)"></span>
+                        <span>🍃 Mint</span>
+                    </button>
+                    <button class="theme-opt" data-theme="crimson" type="button">
+                        <span class="theme-swatch" style="background:linear-gradient(135deg, #1a0a0a, #ef4444)"></span>
+                        <span>🩸 Crimson</span>
+                    </button>
+                    <button class="theme-opt" data-theme="titanium" type="button">
+                        <span class="theme-swatch" style="background:linear-gradient(135deg, #111315, #9ca3af)"></span>
+                        <span>⚙️ Titanium</span>
+                    </button>
+                    <button class="theme-opt" data-theme="galaxy" type="button">
+                        <span class="theme-swatch" style="background:linear-gradient(135deg, #0d0a1a, #c084fc)"></span>
+                        <span>🪐 Galaxy</span>
+                    </button>
+                    <button class="theme-opt" data-theme="desert" type="button">
+                        <span class="theme-swatch" style="background:linear-gradient(135deg, #1a1610, #eab308)"></span>
+                        <span>🏜️ Desert</span>
+                    </button>
                 </div>
             </div>
 
@@ -4429,6 +5721,39 @@ body.cardbg-astral .speak-btn {
                     <button class="theme-opt" data-cardbg="astral" type="button">
                         <span class="theme-swatch" style="background:linear-gradient(45deg, #1e1b4b, #4c1d95, #000000)"></span>
                         <span>Vũ trụ</span>
+                    </button>
+                    <button class="theme-opt" data-cardbg="royal" type="button">
+                        <span class="theme-swatch swatch-royal"></span>
+                        <span>👑 Hoàng Gia</span>
+                    </button>
+                    <button class="theme-opt" data-cardbg="neon" type="button">
+                        <span class="theme-swatch swatch-neon"></span>
+                        <span>💎 Neon</span>
+                    </button>
+                    <button class="theme-opt" data-cardbg="sakura" type="button">
+                        <span class="theme-swatch" style="background:linear-gradient(135deg, #fff0f5, #ffd6e6 40%, #ffe9ce); background-size:220% 220%; animation: swatchShift 3.2s ease-in-out infinite;"></span>
+                        <span>🌸 Sakura Pearl</span>
+                    </button>
+
+                    <button class="theme-opt" data-cardbg="deepocean" type="button">
+                        <span class="theme-swatch" style="background:linear-gradient(135deg, #0a192f, #0e3a5e)"></span>
+                        <span>🌊 Deep Ocean</span>
+                    </button>
+                    <button class="theme-opt" data-cardbg="mystic" type="button">
+                        <span class="theme-swatch" style="background:linear-gradient(135deg, #1a0533, #4a1082)"></span>
+                        <span>🔮 Mystic</span>
+                    </button>
+                    <button class="theme-opt" data-cardbg="emerald" type="button">
+                        <span class="theme-swatch" style="background:linear-gradient(135deg, #052e16, #047857)"></span>
+                        <span>🌿 Emerald</span>
+                    </button>
+                    <button class="theme-opt" data-cardbg="sunset" type="button">
+                        <span class="theme-swatch" style="background:linear-gradient(135deg, #7c2d12, #c2410c)"></span>
+                        <span>🌅 Sunset</span>
+                    </button>
+                    <button class="theme-opt" data-cardbg="frost" type="button">
+                        <span class="theme-swatch" style="background:linear-gradient(135deg, #1e293b, #334155)"></span>
+                        <span>❄️ Frost</span>
                     </button>
                 </div>
                 <div class="settings-hint">Chọn giao diện cho mặt trước và mặt sau của thẻ học. Hình nền sẽ tự động tải mượt mà.</div>
@@ -4456,6 +5781,18 @@ body.cardbg-astral .speak-btn {
                 <div class="settings-hint">Used for the real dictionary audio (Cambridge) &amp; Google audio.</div>
             </div>
 
+            
+            <div class="settings-section">
+                <div class="settings-label">⚡ Tần số quét nền (FPS Limit)</div>
+                <div class="acc-row" id="fpsRow" style="margin-top:6px;">
+                    <span class="acc-pill" data-fps="30">🔋 30 FPS</span>
+                    <span class="acc-pill active" data-fps="60">⚡ 60 FPS</span>
+                    <span class="acc-pill" data-fps="90">🚀 90 FPS</span>
+                    <span class="acc-pill" data-fps="120">🔥 120 FPS</span>
+                </div>
+                <div class="settings-hint">Tùy chỉnh theo cấu hình máy: 30 FPS (tiết kiệm pin máy yếu), 60 FPS (tiêu chuẩn), 90–120 FPS (siêu mượt ProMotion / PC).</div>
+            </div>
+
             <div class="settings-section">
                 <div class="settings-row">
                     <div class="settings-label">🌙 Dark mode</div>
@@ -4469,6 +5806,14 @@ body.cardbg-astral .speak-btn {
     <div class="toast" id="toastEl" data-original-display="" style=""></div>
 
     <!-- ===== WRAP ===== -->
+    
+    <!-- ===== 60FPS / 120FPS 4K LIVING ANIME LANDSCAPE CONTAINER ===== -->
+    <div id="liveLandscapeContainer" aria-hidden="true">
+        <img id="liveLandscapeImg" src="./linguaflow_bg.jpg" alt="4K Cartoon Countryside Living Wallpaper">
+        <canvas id="liveLandscapeCanvas"></canvas>
+        <div class="live-landscape-vignette"></div>
+    </div>
+
     <div class="wrap" data-original-display="" style="">
 
         <!-- ===== HEADER ===== -->
@@ -4486,6 +5831,191 @@ body.cardbg-astral .speak-btn {
                 
             </nav>
 
+            
+    <!-- ===== 4K CARTOON COUNTRYSIDE HERO SCENERY (STUDIO GHIBLI / PASTORAL MEADOW) ===== -->
+    <div class="pastoral-scenery-container" id="pastoralScenery">
+        <svg class="pastoral-svg-backdrop" viewBox="0 0 1440 380" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+                <!-- Sky Gradient: Radiant Sapphire Azure to Morning Gold -->
+                <linearGradient id="ghibliSky" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" stop-color="#0284c7" />
+                    <stop offset="35%" stop-color="#38bdf8" />
+                    <stop offset="65%" stop-color="#bae6fd" />
+                    <stop offset="85%" stop-color="#fef08a" />
+                    <stop offset="100%" stop-color="#fef9c3" />
+                </linearGradient>
+
+                <!-- Sun Radial Glow -->
+                <radialGradient id="ghibliSun" cx="50%" cy="50%" r="50%">
+                    <stop offset="0%" stop-color="#ffffff" stop-opacity="1" />
+                    <stop offset="25%" stop-color="#fef08a" stop-opacity="0.95" />
+                    <stop offset="60%" stop-color="#fde047" stop-opacity="0.5" />
+                    <stop offset="100%" stop-color="#f59e0b" stop-opacity="0" />
+                </radialGradient>
+
+                <!-- Volumetric Sunbeam Linear Gradient -->
+                <linearGradient id="sunBeamGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#ffffff" stop-opacity="0.45" />
+                    <stop offset="100%" stop-color="#fef08a" stop-opacity="0" />
+                </linearGradient>
+
+                <!-- Distant Mountains Gradient -->
+                <linearGradient id="mountainsGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" stop-color="#93c5fd" stop-opacity="0.8" />
+                    <stop offset="100%" stop-color="#60a5fa" stop-opacity="0.9" />
+                </linearGradient>
+
+                <!-- Rolling Hills Tier 1 (Pastoral Emerald) -->
+                <linearGradient id="hillTier1" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" stop-color="#34d399" />
+                    <stop offset="100%" stop-color="#059669" />
+                </linearGradient>
+
+                <!-- Rolling Hills Tier 2 (Lush Meadow) -->
+                <linearGradient id="hillTier2" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" stop-color="#4ade80" />
+                    <stop offset="100%" stop-color="#15803d" />
+                </linearGradient>
+
+                <!-- Foreground Meadow (Sunny Grassland) -->
+                <linearGradient id="hillTier3" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" stop-color="#86efac" />
+                    <stop offset="60%" stop-color="#22c55e" />
+                    <stop offset="100%" stop-color="#166534" />
+                </linearGradient>
+
+                <!-- Cartoon Cloud Gradient -->
+                <linearGradient id="cloudWhite" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" stop-color="#ffffff" />
+                    <stop offset="70%" stop-color="#f8fafc" />
+                    <stop offset="100%" stop-color="#e0e7ff" />
+                </linearGradient>
+            </defs>
+
+            <!-- 1. SKY -->
+            <rect width="1440" height="380" fill="url(#ghibliSky)" />
+
+            <!-- 2. VOLUMETRIC GOD RAYS (SUNBEAMS) -->
+            <polygon points="260,0 200,380 340,380" fill="url(#sunBeamGrad)" opacity="0.35" />
+            <polygon points="260,0 420,380 580,380" fill="url(#sunBeamGrad)" opacity="0.4" />
+            <polygon points="260,0 60,380 160,380" fill="url(#sunBeamGrad)" opacity="0.3" />
+            <polygon points="260,0 750,380 920,380" fill="url(#sunBeamGrad)" opacity="0.25" />
+
+            <!-- 3. GOLDEN SUN -->
+            <circle class="anim-sun-glow" cx="260" cy="85" r="75" fill="url(#ghibliSun)" />
+            <circle cx="260" cy="85" r="32" fill="#ffffff" opacity="0.95" />
+
+            <!-- 4. DRIFTING FLUFFY CARTOON CLOUDS -->
+            <g class="anim-cloud-1" opacity="0.92">
+                <!-- Big Cloud Left -->
+                <path d="M70,110 Q95,75 135,80 Q170,55 210,75 Q245,60 275,85 Q305,80 320,105 Q335,125 315,145 Q290,165 240,160 Q170,165 110,155 Q65,145 70,110 Z" fill="url(#cloudWhite)" />
+                <!-- Small Cloud Center -->
+                <path d="M580,90 Q605,65 640,70 Q670,50 705,70 Q735,75 750,95 Q765,115 745,130 Q710,145 660,140 Q610,142 580,120 Q565,105 580,90 Z" fill="url(#cloudWhite)" opacity="0.85" />
+            </g>
+
+            <g class="anim-cloud-2" opacity="0.88">
+                <!-- Majestic Cloud Right -->
+                <path d="M980,85 Q1020,45 1075,55 Q1120,30 1170,50 Q1220,35 1260,65 Q1300,55 1330,90 Q1355,120 1330,145 Q1290,165 1220,160 Q1120,165 1040,155 Q980,140 980,85 Z" fill="url(#cloudWhite)" />
+            </g>
+
+            <!-- 5. DISTANT MOUNTAINS -->
+            <path d="M0,230 L110,195 L240,225 L380,180 L520,220 L660,175 L800,215 L950,170 L1100,210 L1260,165 L1380,205 L1440,190 L1440,380 L0,380 Z" fill="url(#mountainsGrad)" opacity="0.6" />
+
+            <!-- 6. TIER 1 ROLLING HILLS (WITH CARTOON PINE GROVES & WINDMILL) -->
+            <path d="M0,240 C200,190 420,270 680,225 C920,185 1160,255 1440,210 L1440,380 L0,380 Z" fill="url(#hillTier1)" />
+
+            <!-- Rustic English Windmill on the hill -->
+            <g transform="translate(415, 148)">
+                <!-- Tower -->
+                <polygon points="10,48 20,48 18,22 12,22" fill="#fef3c7" stroke="#b45309" stroke-width="1.2" />
+                <polygon points="10,22 20,22 15,14" fill="#991b1b" />
+                <!-- Mill Blades -->
+                <g class="anim-windmill-blades">
+                    <line x1="15" y1="24" x2="15" y2="4" stroke="#78350f" stroke-width="1.8" stroke-linecap="round" />
+                    <line x1="15" y1="24" x2="15" y2="44" stroke="#78350f" stroke-width="1.8" stroke-linecap="round" />
+                    <line x1="15" y1="24" x2="-5" y2="24" stroke="#78350f" stroke-width="1.8" stroke-linecap="round" />
+                    <line x1="15" y1="24" x2="35" y2="24" stroke="#78350f" stroke-width="1.8" stroke-linecap="round" />
+                    <!-- Sails -->
+                    <rect x="16" y="5" width="5" height="15" fill="#ffffff" opacity="0.85" />
+                    <rect x="9" y="25" width="5" height="15" fill="#ffffff" opacity="0.85" />
+                    <rect x="-4" y="18" width="15" height="5" fill="#ffffff" opacity="0.85" />
+                    <rect x="16" y="25" width="15" height="5" fill="#ffffff" opacity="0.85" />
+                </g>
+                <circle cx="15" cy="24" r="2.5" fill="#451a03" />
+            </g>
+
+            <!-- Charming Countryside Trees on Tier 1 -->
+            <circle cx="180" cy="225" r="14" fill="#047857" />
+            <circle cx="195" cy="222" r="18" fill="#10b981" />
+            <circle cx="212" cy="227" r="13" fill="#059669" />
+            <circle cx="750" cy="210" r="15" fill="#047857" />
+            <circle cx="768" cy="206" r="20" fill="#10b981" />
+            <circle cx="788" cy="212" r="14" fill="#059669" />
+
+            <!-- 7. TIER 2 ROLLING HILLS (LUSH MEADOWS) -->
+            <path d="M0,285 C240,240 540,320 860,265 C1140,220 1320,295 1440,260 L1440,380 L0,380 Z" fill="url(#hillTier2)" />
+
+            <!-- Quaint Countryside Cottage with smoking chimney -->
+            <g transform="translate(880, 235)">
+                <!-- Cottage Body -->
+                <rect x="0" y="16" width="36" height="24" rx="2" fill="#fffbeb" stroke="#d97706" stroke-width="1" />
+                <!-- Cottage Roof -->
+                <polygon points="-4,16 18,2 40,16" fill="#b91c1c" />
+                <!-- Windows and door -->
+                <rect x="14" y="24" width="8" height="16" rx="1" fill="#78350f" />
+                <rect x="4" y="20" width="7" height="7" fill="#38bdf8" />
+                <rect x="25" y="20" width="7" height="7" fill="#38bdf8" />
+                <!-- Chimney -->
+                <rect x="26" y="4" width="5" height="10" fill="#78350f" />
+            </g>
+
+            <!-- 8. FOREGROUND MEADOW WITH WILDFLOWERS -->
+            <path d="M0,325 C260,290 620,360 980,315 C1220,285 1360,340 1440,310 L1440,380 L0,380 Z" fill="url(#hillTier3)" />
+
+            <!-- Colorful Wildflower Dots across Foreground Meadow -->
+            <!-- Poppies (Red) -->
+            <circle cx="120" cy="345" r="3" fill="#ef4444" />
+            <circle cx="132" cy="352" r="2.5" fill="#f87171" />
+            <circle cx="340" cy="358" r="3.2" fill="#ef4444" />
+            <circle cx="560" cy="342" r="3" fill="#ef4444" />
+            <circle cx="780" cy="350" r="3" fill="#ef4444" />
+            <circle cx="1040" cy="338" r="3" fill="#ef4444" />
+            <circle cx="1250" cy="355" r="3.2" fill="#ef4444" />
+            
+            <!-- Daisies (White / Yellow center) -->
+            <circle cx="80" cy="350" r="3" fill="#ffffff" />
+            <circle cx="80" cy="350" r="1.2" fill="#facc15" />
+            <circle cx="240" cy="340" r="3.2" fill="#ffffff" />
+            <circle cx="240" cy="340" r="1.3" fill="#facc15" />
+            <circle cx="480" cy="360" r="3" fill="#ffffff" />
+            <circle cx="480" cy="360" r="1.2" fill="#facc15" />
+            <circle cx="690" cy="348" r="3" fill="#ffffff" />
+            <circle cx="690" cy="348" r="1.2" fill="#facc15" />
+            <circle cx="910" cy="335" r="3" fill="#ffffff" />
+            <circle cx="910" cy="335" r="1.2" fill="#facc15" />
+            <circle cx="1180" cy="345" r="3" fill="#ffffff" />
+            <circle cx="1180" cy="345" r="1.2" fill="#facc15" />
+            <circle cx="1360" cy="335" r="3" fill="#ffffff" />
+            <circle cx="1360" cy="335" r="1.2" fill="#facc15" />
+
+            <!-- Lavender (Purple) -->
+            <circle cx="170" cy="355" r="2.8" fill="#c084fc" />
+            <circle cx="420" cy="345" r="3" fill="#a855f7" />
+            <circle cx="620" cy="352" r="2.8" fill="#c084fc" />
+            <circle cx="840" cy="342" r="3" fill="#a855f7" />
+            <circle cx="1120" cy="350" r="3" fill="#a855f7" />
+            <circle cx="1310" cy="360" r="2.8" fill="#c084fc" />
+
+            <!-- Sparkle Fireflies / Sun Dust -->
+            <circle cx="310" cy="270" r="2" fill="#ffffff" opacity="0.8" />
+            <circle cx="520" cy="240" r="2.5" fill="#fef08a" opacity="0.9" />
+            <circle cx="710" cy="290" r="2" fill="#ffffff" opacity="0.75" />
+            <circle cx="860" cy="260" r="2.2" fill="#fef08a" opacity="0.85" />
+            <circle cx="1020" cy="280" r="2" fill="#ffffff" opacity="0.8" />
+            <circle cx="1210" cy="250" r="2.5" fill="#fef08a" opacity="0.9" />
+        </svg>
+    </div>
+
             <div class="lp-board">
                 <div class="lp-hero-bg" aria-hidden="true">
                     <span class="lp-blob lp-blob-1"></span>
@@ -4494,7 +6024,7 @@ body.cardbg-astral .speak-btn {
                     <canvas id="particleCanvas" width="759" height="782"></canvas>
                 </div>
                 <div class="lp-board-inner">
-                    <span class="lp-eyebrow">✦ flashcard — mirror-mouth study</span>
+                    <span class="lp-eyebrow"><span class="lp-dot-live"></span> OXFORD &amp; CAMBRIDGE ACADEMIC ENGLISH PLATFORM</span>
                     <h1 class="lp-title" data-reflect="Mirror the words, and the words stick to you">Mirror the words,<br> and the words <span class="lp-u">stick to you</span>
                         <svg viewBox="0 0 200 16" preserveAspectRatio="none"><path d="M2 10 Q50 2 100 8 T198 6" stroke="#c44569" stroke-width="4" fill="none" stroke-linecap="round"></path></svg>
                     </h1>
@@ -4604,6 +6134,7 @@ body.cardbg-astral .speak-btn {
                 <div class="sun"></div>
                 <div class="hero-copy">
                     <div class="lp-logo"><span class="lp-ico"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" aria-hidden="true"><ellipse cx="12" cy="11" rx="7" ry="8" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"></ellipse><path d="M12 19.2 11 22M11 22h2M12 19.2l-1 2.8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"></path><path d="M8.8 10.6c0 1.8 1.4 3 3.2 3s3.2-1.2 3.2-3M8.8 10.6h6.4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path><path d="M8.8 8.9c.5-1.3 1.8-2.2 3.2-2.2s2.7.9 3.2 2.2" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"></path></svg></span>Flashcard<span class="lp-pro">✦</span></div>
+                    <div class="lp-eyebrow" style="margin-bottom:10px;"><span class="lp-dot-live"></span> SHELF CURATED BY OXFORD &amp; CAMBRIDGE</div>
                     <h2>📚 Your library</h2>
                     <p>Every topic has its own mood — honey, lagoon, aurora or pure challenge. Pick one and start.</p>
                 </div>
@@ -5287,6 +6818,18 @@ body.cardbg-astral .speak-btn {
             return true;
         }
 
+        // 3 hình nền thẻ mới (royal/neon/sakura) chỉ yêu cầu tier PREMIUM ULTRA trở lên,
+        // trong khi hologram/astral cũ vẫn giữ nguyên yêu cầu PREMIUM ULTRA MAX như trước.
+        function checkCardBgAccess(bg) {
+            if (bg === 'default') return true;
+            const userTier = getUserTier();
+            const userLevel = TIER_LEVELS[userTier];
+            if (false) { // All card BGs now require PREMIUM ULTRA MAX
+                return userLevel >= TIER_LEVELS['PREMIUM ULTRA'];
+            }
+            return userLevel >= TIER_LEVELS['PREMIUM ULTRA MAX'];
+        }
+
         // ===== VOCAB DATA =====
         const VOCAB = JSON.parse(document.getElementById('vocab-data').textContent);
         document.getElementById('wordCountLabel').textContent = `Total words: ${VOCAB.length}`;
@@ -5313,10 +6856,10 @@ body.cardbg-astral .speak-btn {
         function safeSessionRemove(key) { try { sessionStorage.removeItem(key); } catch (err) { /* ignore */ } }
 
         // ===== THEME ENGINE =====
-        const THEME_LIST = ['rustic', 'modern', 'ocean', 'forest', 'cosmic'];
+        const THEME_LIST = ['rustic', 'modern', 'ocean', 'forest', 'cosmic', 'royal', 'neon', 'aurora2', 'sakura', 'inferno', 'midnight', 'lavender', 'rosegold', 'arctic', 'ember', 'mint', 'crimson', 'titanium', 'galaxy', 'desert'];
 
         function applyTheme(theme, save) {
-    if(theme !== "rustic" && !checkThemeAccess()) return;
+    if(theme !== "rustic" && theme !== "modern" && !checkThemeAccess()) return;
 
             // Remove all theme classes
             THEME_LIST.forEach(t => {
@@ -5364,6 +6907,7 @@ body.cardbg-astral .speak-btn {
 
         // Settings modal
         document.getElementById('settingsBtn').addEventListener('click', () => {
+            if (typeof applySettingsLocks === 'function') applySettingsLocks();
             document.getElementById('settingsModal').classList.remove('hidden');
         });
         document.getElementById('settingsCloseBtn').addEventListener('click', () => {
@@ -8596,7 +10140,10 @@ body.cardbg-astral .speak-btn {
     });
   };
 
-  cardEl.addEventListener('pointerdown', (e) => {
+  // Use card-stage (never rotates) for reliable touch on both front & back faces
+  const cardStageEl = cardEl.closest('.card-stage') || cardEl.parentElement;
+
+  cardStageEl.addEventListener('pointerdown', (e) => {
     if (e.pointerType === 'mouse' && e.button !== 0) return;
     downX = e.clientX;
     downY = e.clientY;
@@ -8604,17 +10151,17 @@ body.cardbg-astral .speak-btn {
     if (!downOnInteractive) cardEl.classList.add('is-touch-press');
   }, { passive: true });
 
-  cardEl.addEventListener('pointermove', (e) => {
+  cardStageEl.addEventListener('pointermove', (e) => {
     if (Math.abs(e.clientX - downX) > 12 || Math.abs(e.clientY - downY) > 12) {
       cardEl.classList.remove('is-touch-press');
     }
   }, { passive: true });
 
-  cardEl.addEventListener('pointercancel', () => {
+  cardStageEl.addEventListener('pointercancel', () => {
     cardEl.classList.remove('is-touch-press');
   }, { passive: true });
 
-  cardEl.addEventListener('pointerup', (e) => {
+  cardStageEl.addEventListener('pointerup', (e) => {
     const moved = Math.abs(e.clientX - downX) > 12 || Math.abs(e.clientY - downY) > 12;
     const wasInteractive = downOnInteractive || isInteractive(e.target);
     cardEl.classList.remove('is-touch-press');
@@ -8624,7 +10171,8 @@ body.cardbg-astral .speak-btn {
     requestFlip();
   });
 
-  cardEl.addEventListener('click', (e) => {
+  // Block ghost click after pointer flip
+  cardStageEl.addEventListener('click', (e) => {
     if (isInteractive(e.target)) return;
     if (Date.now() - lastPointerTs < 700) {
       e.preventDefault();
@@ -8683,9 +10231,9 @@ body.cardbg-astral .speak-btn {
 <script id="card-bg-logic">
 (function(){
     function applyCardBg(bg, save) {
-    if(bg !== "default" && !checkThemeAccess()) return;
+    if(bg !== "default" && !checkCardBgAccess(bg)) return;
 
-        document.body.classList.remove('cardbg-default', 'cardbg-hologram', 'cardbg-astral');
+        document.body.classList.remove('cardbg-default', 'cardbg-hologram', 'cardbg-astral', 'cardbg-royal', 'cardbg-neon', 'cardbg-sakura', 'cardbg-deepocean', 'cardbg-mystic', 'cardbg-emerald', 'cardbg-sunset', 'cardbg-frost');
         document.body.classList.add('cardbg-' + bg);
         document.querySelectorAll('#cardBgPicker .theme-opt').forEach(btn => {
             btn.classList.toggle('active', btn.dataset.cardbg === bg);
@@ -9039,14 +10587,7 @@ document.addEventListener("DOMContentLoaded", function() {
             if (typeof flipCard === 'function') flipCard();
         }
     });
-    const mainCard = document.getElementById('card');
-    if (mainCard) {
-        mainCard.addEventListener('click', (e) => {
-            // Don't flip if they clicked a button (like speak, lookup)
-            if (e.target.tagName.toLowerCase() === 'button' || e.target.closest('button')) return;
-            if (typeof flipCard === 'function') flipCard();
-        });
-    }
+// Pointer/touch flip handled by the built-in pointer system above.
 
     function getSrsKey() {
         const user = window.MY_LOGGED_IN_ACCOUNT ? window.MY_LOGGED_IN_ACCOUNT.user : 'guest';
@@ -9277,18 +10818,24 @@ document.addEventListener("DOMContentLoaded", function() {
 
     // Add Lock icons to restricted settings (Themes and Backgrounds)
     function applySettingsLocks() {
-        if (typeof window.MY_LOGGED_IN_ACCOUNT === "undefined") return;
-        const userTier = typeof getUserTier === 'function' ? getUserTier() : 'FREE';
-        if (typeof TIER_LEVELS !== 'undefined' && TIER_LEVELS[userTier] < TIER_LEVELS['PREMIUM ULTRA MAX']) {
-            const themeOpts = document.querySelectorAll('.theme-opt, .bg-opt');
-            themeOpts.forEach(opt => {
-                // Ignore the default theme/bg so they can at least see it's selected
-                if (opt.dataset.theme === 'rustic' || opt.dataset.bg === 'classic') return;
-                
+        const userTier = (typeof getUserTier === 'function' && window.MY_LOGGED_IN_ACCOUNT) ? getUserTier() : 'FREE';
+        const isMax = (typeof TIER_LEVELS !== 'undefined' && TIER_LEVELS[userTier] >= TIER_LEVELS['PREMIUM ULTRA MAX']);
+        
+        const themeOpts = document.querySelectorAll('.theme-opt');
+        themeOpts.forEach(opt => {
+            // 1. Interface Theme buttons: 2 basic themes (rustic & modern) are always unlocked
+            if (opt.dataset.theme) {
+                if (opt.dataset.theme === 'rustic' || opt.dataset.theme === 'modern' || isMax) {
+                    opt.style.opacity = '1';
+                    opt.style.pointerEvents = 'auto';
+                    const lock = opt.querySelector('.s-lock');
+                    if (lock) lock.remove();
+                    return;
+                }
+                // Lock other 8 themes
                 opt.style.opacity = '0.4';
-                opt.style.pointerEvents = 'none'; // Lock clicks
+                opt.style.pointerEvents = 'none';
                 opt.style.position = 'relative';
-                
                 if (!opt.querySelector('.s-lock')) {
                     const lock = document.createElement('div');
                     lock.className = 's-lock';
@@ -9299,9 +10846,37 @@ document.addEventListener("DOMContentLoaded", function() {
                     lock.style.fontSize = '0.9rem';
                     opt.appendChild(lock);
                 }
-            });
-        }
+            }
+            
+            // 2. Card Background buttons: default is basic/unlocked
+            if (opt.dataset.cardbg) {
+                const bg = opt.dataset.cardbg;
+                const hasBgAccess = (bg === 'default') || isMax || (typeof checkCardBgAccess === 'function' && checkCardBgAccess(bg));
+                if (hasBgAccess) {
+                    opt.style.opacity = '1';
+                    opt.style.pointerEvents = 'auto';
+                    const lock = opt.querySelector('.s-lock');
+                    if (lock) lock.remove();
+                    return;
+                }
+                // Lock non-accessible card backgrounds
+                opt.style.opacity = '0.4';
+                opt.style.pointerEvents = 'none';
+                opt.style.position = 'relative';
+                if (!opt.querySelector('.s-lock')) {
+                    const lock = document.createElement('div');
+                    lock.className = 's-lock';
+                    lock.innerHTML = '🔒';
+                    lock.style.position = 'absolute';
+                    lock.style.top = '5px';
+                    lock.style.right = '5px';
+                    lock.style.fontSize = '0.9rem';
+                    opt.appendChild(lock);
+                }
+            }
+        });
     }
+    setTimeout(applySettingsLocks, 300);
     setTimeout(applySettingsLocks, 800);
     if(window.__loginSuccess) {
         const oldLog2 = window.__loginSuccess;
@@ -9467,6 +11042,288 @@ document.addEventListener("DOMContentLoaded", function() {
         window.fireParticles && window.fireParticles();
     };
 
+})();
+</script>
+
+
+<script id="live-4k-landscape-engine">
+(() => {
+    // 60FPS / 120FPS Hardware-Accelerated 4K Living Countryside Landscape Engine
+    // With dynamic 30 / 60 / 90 / 120 FPS throttling & battery optimization
+    const canvas = document.getElementById('liveLandscapeCanvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d', { alpha: true });
+    if (!ctx) return;
+    const imgEl = document.getElementById('liveLandscapeImg');
+
+    let width = 0;
+    let height = 0;
+    let dpr = 1;
+
+    function resize() {
+        dpr = Math.min(window.devicePixelRatio || 1, 2); // 4K Retina sharp rendering
+        width = window.innerWidth;
+        height = window.innerHeight;
+        canvas.width = Math.floor(width * dpr);
+        canvas.height = Math.floor(height * dpr);
+        ctx.scale(dpr, dpr);
+    }
+    window.addEventListener('resize', resize, { passive: true });
+    resize();
+
+    // FPS REGULATION & DYNAMIC PERFORMANCE SCALING
+    let targetFps = Number(localStorage.getItem('vocab_fps_limit') || 60);
+    let activeParticleCount = 35;
+    let activePetalCount = 10;
+    let activeSparkleCount = 16;
+
+    function applyFpsConfig(fps) {
+        targetFps = Number(fps);
+        localStorage.setItem('vocab_fps_limit', String(targetFps));
+
+        // Update UI pills
+        const row = document.getElementById('fpsRow');
+        if (row) {
+            row.querySelectorAll('.acc-pill').forEach(p => {
+                p.classList.toggle('active', Number(p.dataset.fps) === targetFps);
+            });
+        }
+
+        // Optimize simulation load according to target FPS
+        if (targetFps <= 30) {
+            activeParticleCount = 18;
+            activePetalCount = 6;
+            activeSparkleCount = 8;
+            if (imgEl) imgEl.style.animationDuration = '45s';
+        } else if (targetFps <= 60) {
+            activeParticleCount = 35;
+            activePetalCount = 10;
+            activeSparkleCount = 16;
+            if (imgEl) imgEl.style.animationDuration = '36s';
+        } else {
+            // 90 or 120 FPS
+            activeParticleCount = 45;
+            activePetalCount = 14;
+            activeSparkleCount = 20;
+            if (imgEl) imgEl.style.animationDuration = '32s';
+        }
+    }
+
+    // Init FPS pills event listener
+    const fpsRow = document.getElementById('fpsRow');
+    if (fpsRow) {
+        fpsRow.querySelectorAll('.acc-pill').forEach(pill => {
+            pill.addEventListener('click', () => {
+                applyFpsConfig(pill.dataset.fps);
+            });
+        });
+    }
+    applyFpsConfig(targetFps);
+
+    // 1. DANDELION SEEDS & SUN DUST PARTICLES (Golden Pollen)
+    const maxParticles = 50;
+    const particles = [];
+    for (let i = 0; i < maxParticles; i++) {
+        particles.push({
+            x: Math.random() * (width || 1200),
+            y: Math.random() * (height || 800),
+            r: Math.random() * 2.4 + 1.2,
+            vx: Math.random() * 0.45 + 0.2, // Drifting right in wind
+            vy: Math.sin(Math.random() * Math.PI) * 0.25 - 0.1,
+            phase: Math.random() * Math.PI * 2,
+            phaseSpeed: Math.random() * 0.03 + 0.015,
+            opacity: Math.random() * 0.55 + 0.35,
+            hue: Math.random() > 0.3 ? 48 : 38 // Warm golden pollen
+        });
+    }
+
+    // 2. COUNTRYSIDE FLOWER PETALS (Dancing on the wind)
+    const maxPetals = 16;
+    const petals = [];
+    const petalColors = ['rgba(244, 63, 94, ', 'rgba(251, 113, 133, ', 'rgba(255, 255, 255, ', 'rgba(250, 204, 21, '];
+    for (let i = 0; i < maxPetals; i++) {
+        petals.push({
+            x: Math.random() * (width || 1200),
+            y: Math.random() * (height || 800),
+            size: Math.random() * 6 + 4,
+            speedX: Math.random() * 1.2 + 0.6,
+            speedY: Math.random() * 0.5 + 0.15,
+            angle: Math.random() * Math.PI * 2,
+            spin: (Math.random() - 0.5) * 0.04,
+            wobble: Math.random() * Math.PI * 2,
+            wobbleSpeed: Math.random() * 0.04 + 0.02,
+            colorBase: petalColors[Math.floor(Math.random() * petalColors.length)],
+            opacity: Math.random() * 0.45 + 0.4
+        });
+    }
+
+    // 3. SHIMMERING WATER & MEADOW SPARKLES (Stars)
+    const maxSparkles = 24;
+    const sparkles = [];
+    for (let i = 0; i < maxSparkles; i++) {
+        sparkles.push({
+            x: (width || 1200) * (0.35 + Math.random() * 0.55),
+            y: (height || 800) * (0.55 + Math.random() * 0.4),
+            size: Math.random() * 3 + 1.5,
+            alpha: 0,
+            targetAlpha: Math.random() * 0.85 + 0.15,
+            twinkleSpeed: Math.random() * 0.04 + 0.02,
+            state: Math.random() > 0.5 ? 1 : -1
+        });
+    }
+
+    // 4. ANIMATED GOD RAYS & TIMING LOOP
+    let time = 0;
+    let lastFrameTime = performance.now();
+
+    function render(now) {
+        requestAnimationFrame(render);
+
+        // Pause completely when tab is hidden to save battery & CPU
+        if (document.hidden) return;
+
+        // FPS Throttling
+        const interval = 1000 / targetFps;
+        const delta = now - lastFrameTime;
+        if (delta < interval - 1.5) return; // Throttle to target FPS
+        lastFrameTime = now - (delta % interval);
+
+        ctx.clearRect(0, 0, width, height);
+
+        const dt = Math.min(delta / 1000, 0.1);
+        time += dt;
+
+        // --- A. VOLUMETRIC GOD RAYS (SWEEPING SUNBEAMS) ---
+        ctx.save();
+        ctx.globalCompositeOperation = 'screen';
+        const sunX = width * 0.58;
+        const sunY = height * 0.38;
+
+        const rayCount = 4;
+        for (let i = 0; i < rayCount; i++) {
+            const sweepOffset = Math.sin(time * 0.35 + i * 1.3) * 0.08;
+            const angle = (0.75 + i * 0.22 + sweepOffset);
+            const rayWidth = (0.12 + Math.sin(time * 0.5 + i) * 0.03);
+
+            const endX1 = sunX + Math.cos(angle - rayWidth) * height * 1.6;
+            const endY1 = sunY + Math.sin(angle - rayWidth) * height * 1.6;
+            const endX2 = sunX + Math.cos(angle + rayWidth) * height * 1.6;
+            const endY2 = sunY + Math.sin(angle + rayWidth) * height * 1.6;
+
+            const rayGrad = ctx.createRadialGradient(sunX, sunY, 10, sunX, sunY, height * 1.4);
+            const alpha = (0.12 + Math.sin(time * 0.4 + i * 2) * 0.04);
+            rayGrad.addColorStop(0, 'rgba(254, 240, 138, ' + (alpha * 1.4) + ')');
+            rayGrad.addColorStop(0.4, 'rgba(253, 224, 71, ' + alpha + ')');
+            rayGrad.addColorStop(1, 'rgba(253, 224, 71, 0)');
+
+            ctx.fillStyle = rayGrad;
+            ctx.beginPath();
+            ctx.moveTo(sunX, sunY);
+            ctx.lineTo(endX1, endY1);
+            ctx.lineTo(endX2, endY2);
+            ctx.closePath();
+            ctx.fill();
+        }
+        ctx.restore();
+
+        // --- B. FLOATING DANDELION SEEDS / SUN DUST (POLLEN) ---
+        ctx.save();
+        for (let i = 0; i < activeParticleCount; i++) {
+            const p = particles[i];
+            p.phase += p.phaseSpeed;
+            p.x += p.vx + Math.sin(p.phase) * 0.35;
+            p.y += p.vy + Math.cos(p.phase * 0.8) * 0.25;
+
+            // Wrap around
+            if (p.x > width + 20) p.x = -20;
+            if (p.x < -20) p.x = width + 20;
+            if (p.y > height + 20) p.y = -20;
+            if (p.y < -20) p.y = height + 20;
+
+            const glow = (Math.sin(p.phase) * 0.25 + 0.75) * p.opacity;
+
+            // Soft radial glow halo
+            const grad = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r * 3.5);
+            grad.addColorStop(0, 'hsla(' + p.hue + ', 95%, 85%, ' + glow + ')');
+            grad.addColorStop(0.4, 'hsla(' + p.hue + ', 90%, 65%, ' + (glow * 0.6) + ')');
+            grad.addColorStop(1, 'hsla(' + p.hue + ', 90%, 65%, 0)');
+
+            ctx.fillStyle = grad;
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, p.r * 3.5, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Bright core dot
+            ctx.fillStyle = '#ffffff';
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, p.r * 0.65, 0, Math.PI * 2);
+            ctx.fill();
+        }
+        ctx.restore();
+
+        // --- C. DANCING COUNTRYSIDE FLOWER PETALS ---
+        ctx.save();
+        for (let i = 0; i < activePetalCount; i++) {
+            const pt = petals[i];
+            pt.angle += pt.spin;
+            pt.wobble += pt.wobbleSpeed;
+            pt.x += pt.speedX + Math.sin(pt.wobble) * 0.6;
+            pt.y += pt.speedY + Math.cos(pt.wobble * 0.7) * 0.3;
+
+            if (pt.x > width + 30) pt.x = -30;
+            if (pt.y > height + 30) pt.y = -30;
+
+            ctx.save();
+            ctx.translate(pt.x, pt.y);
+            ctx.rotate(pt.angle);
+            ctx.scale(Math.cos(pt.wobble), 1);
+
+            ctx.fillStyle = pt.colorBase + pt.opacity + ')';
+            ctx.beginPath();
+            ctx.ellipse(0, 0, pt.size, pt.size * 0.55, 0, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.restore();
+        }
+        ctx.restore();
+
+        // --- D. SHIMMERING RIVER & WILDFLOWER SPARKLES (4-POINT STARS) ---
+        ctx.save();
+        ctx.globalCompositeOperation = 'lighter';
+        for (let i = 0; i < activeSparkleCount; i++) {
+            const sp = sparkles[i];
+            sp.alpha += sp.twinkleSpeed * sp.state;
+            if (sp.alpha >= sp.targetAlpha) {
+                sp.state = -1;
+            } else if (sp.alpha <= 0) {
+                sp.state = 1;
+                sp.x = width * (0.35 + Math.random() * 0.55);
+                sp.y = height * (0.55 + Math.random() * 0.4);
+                sp.targetAlpha = Math.random() * 0.85 + 0.15;
+            }
+
+            if (sp.alpha > 0) {
+                const s = sp.size;
+                ctx.strokeStyle = 'rgba(255, 255, 255, ' + sp.alpha + ')';
+                ctx.lineWidth = 1.2;
+
+                // 4-point sparkle
+                ctx.beginPath();
+                ctx.moveTo(sp.x - s, sp.y);
+                ctx.lineTo(sp.x + s, sp.y);
+                ctx.moveTo(sp.x, sp.y - s);
+                ctx.lineTo(sp.x, sp.y + s);
+                ctx.stroke();
+
+                ctx.fillStyle = 'rgba(254, 240, 138, ' + (sp.alpha * 0.8) + ')';
+                ctx.beginPath();
+                ctx.arc(sp.x, sp.y, s * 0.4, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+        ctx.restore();
+    }
+
+    requestAnimationFrame(render);
 })();
 </script>
 
