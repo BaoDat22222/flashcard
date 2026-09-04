@@ -3869,6 +3869,31 @@ body {
     pointer-events: none !important;
 }
 
+#countryside-canvas {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    display: none;
+    z-index: -1 !important;
+    pointer-events: none !important;
+}
+
+.beta-badge {
+    display: inline-block;
+    font-size: 0.62rem;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    padding: 2px 7px;
+    margin-left: 6px;
+    border-radius: 999px;
+    background: rgba(245, 158, 11, 0.18);
+    border: 1px solid rgba(245, 158, 11, 0.5);
+    color: #f59e0b;
+    vertical-align: middle;
+}
+
 /* 2. GLASSMORPHISM (SAFE - NO .card TO PREVENT 3D FLIP BUG) */
 .folder-card, .lp-feature-card, .lp-coll-card, .lp-tool-card, .lp-wotd-card, .lp-step, .settings-card, .toast, .section-img-band {
     background: var(--card-bg) !important;
@@ -5255,6 +5280,21 @@ body.cardbg-transparent .speak-btn {
                 </div>
             </div>
 
+            <div class="settings-section">
+                <div class="settings-label">🖼️ Hình nền động ứng dụng <span class="beta-badge">BETA</span></div>
+                <div class="theme-picker" id="bgStylePicker">
+                    <button class="theme-opt active" data-bgstyle="cntt" type="button">
+                        <span class="theme-swatch" style="background:linear-gradient(135deg, #02060f, #38bdf8)"></span>
+                        <span>🖥️ CNTT</span>
+                    </button>
+                    <button class="theme-opt" data-bgstyle="que" type="button">
+                        <span class="theme-swatch" style="background:linear-gradient(135deg, #2d0b3f, #f59e0b)"></span>
+                        <span>🌾 Quê Hương</span>
+                    </button>
+                </div>
+                <div class="settings-hint">Chọn phong cách hình nền động cho toàn bộ app: "CNTT" (mạch điện tử, AI) hoặc "Quê Hương" (sơn thuỷ, cánh hạc, hoàng hôn). Giao diện "Quê Hương" đang ở giai đoạn Beta và chỉ mở khoá cho gói PREMIUM ULTRA MAX — các gói thấp hơn chưa thể chuyển sang.</div>
+            </div>
+
             
             <div class="settings-section">
                 <div class="settings-label">🎴 Hình nền thẻ Flashcard</div>
@@ -5349,6 +5389,7 @@ body.cardbg-transparent .speak-btn {
 
     <!-- ===== WRAP ===== -->
     <canvas id="universe-canvas"></canvas>
+    <canvas id="countryside-canvas"></canvas>
     <div class="wrap" data-original-display="" style="">
 
         <!-- ===== HEADER ===== -->
@@ -6247,11 +6288,41 @@ body.cardbg-transparent .speak-btn {
             if (typeof syncIslandDarkBtn === 'function') syncIslandDarkBtn();
         }
 
+        // ===== ANIMATED BACKGROUND STYLE (CNTT / Quê Hương — Beta) =====
+        function checkBgStyleAccess(style) {
+            if (style === 'cntt') return true; // giao diện mặc định, luôn mở
+            const userTier = getUserTier();
+            return TIER_LEVELS[userTier] >= TIER_LEVELS['PREMIUM ULTRA MAX'];
+        }
+
+        window.__bgStyle = 'cntt';
+
+        function applyBgStyle(style, save) {
+            if (style !== 'cntt' && !checkBgStyleAccess(style)) {
+                if (typeof showToast === 'function') {
+                    showToast('🔒 Giao diện "Quê Hương" (Beta) yêu cầu gói PREMIUM ULTRA MAX');
+                }
+                if (typeof applySettingsLocks === 'function') applySettingsLocks();
+                return;
+            }
+            window.__bgStyle = style;
+            const uc = document.getElementById('universe-canvas');
+            const cc = document.getElementById('countryside-canvas');
+            if (uc) uc.style.display = (style === 'que') ? 'none' : 'block';
+            if (cc) cc.style.display = (style === 'que') ? 'block' : 'none';
+            document.querySelectorAll('#bgStylePicker .theme-opt').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.bgstyle === style);
+            });
+            if (save) safeLocalSet('vocab_bg_style', style);
+        }
+
         // Load saved settings
         (function loadSettings() {
             const savedTheme = safeLocalGet('vocab_theme') || 'rustic';
             applyTheme(savedTheme, false);
             applyDark(safeLocalGet('vocab_dark') === '1', false);
+            const savedBgStyle = safeLocalGet('vocab_bg_style') || 'cntt';
+            applyBgStyle(checkBgStyleAccess(savedBgStyle) ? savedBgStyle : 'cntt', false);
         })();
 
         // Settings modal
@@ -6267,7 +6338,10 @@ body.cardbg-transparent .speak-btn {
         });
 
         document.querySelectorAll('.theme-opt').forEach(btn => {
-            btn.addEventListener('click', () => applyTheme(btn.dataset.theme, true));
+            if (btn.dataset.theme) btn.addEventListener('click', () => applyTheme(btn.dataset.theme, true));
+        });
+        document.querySelectorAll('#bgStylePicker .theme-opt').forEach(btn => {
+            btn.addEventListener('click', () => applyBgStyle(btn.dataset.bgstyle, true));
         });
         document.getElementById('darkModeToggle').addEventListener('click', () => {
             applyDark(!document.body.classList.contains('dark'), true);
@@ -10197,6 +10271,33 @@ document.addEventListener("DOMContentLoaded", function() {
                 }
             }
             
+            // 1b. Animated background style buttons (CNTT / Quê Hương Beta)
+            if (opt.dataset.bgstyle) {
+                const style = opt.dataset.bgstyle;
+                const hasAccess = (typeof checkBgStyleAccess === 'function') ? checkBgStyleAccess(style) : (style === 'cntt');
+                if (hasAccess) {
+                    opt.style.opacity = '1';
+                    opt.style.pointerEvents = 'auto';
+                    const lock = opt.querySelector('.s-lock');
+                    if (lock) lock.remove();
+                    return;
+                }
+                opt.style.opacity = '0.4';
+                opt.style.pointerEvents = 'none';
+                opt.style.position = 'relative';
+                if (!opt.querySelector('.s-lock')) {
+                    const lock = document.createElement('div');
+                    lock.className = 's-lock';
+                    lock.innerHTML = '🔒';
+                    lock.style.position = 'absolute';
+                    lock.style.top = '5px';
+                    lock.style.right = '5px';
+                    lock.style.fontSize = '0.9rem';
+                    opt.appendChild(lock);
+                }
+                return;
+            }
+
             // 2. Card Background buttons: default is basic/unlocked
             if (opt.dataset.cardbg) {
                 const bg = opt.dataset.cardbg;
@@ -10971,6 +11072,7 @@ document.addEventListener("DOMContentLoaded", function() {
       requestAnimationFrame(renderLoop);
 
       if (!State.isTabActive) return;
+      if (window.__bgStyle === 'que') return; // Đang hiển thị giao diện "Quê Hương" (Beta)
 
       State.deltaTime = Math.min((currentTime - State.lastFrameTime) / 1000, 0.1);
       State.lastFrameTime = currentTime;
@@ -11016,6 +11118,476 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 
     requestAnimationFrame(renderLoop);
+})();
+</script>
+
+<!-- ===== COUNTRYSIDE (QUÊ HƯƠNG) ANIMATED BACKGROUND — BETA ===== -->
+<script id="countryside-canvas-engine">
+(() => {
+  const canvas = document.getElementById('countryside-canvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  if (!ctx) return;
+
+  /* Đàn hạc bay sải cánh */
+  class Crane {
+    constructor(isFar = false) {
+      this.isFar = isFar;
+      this.reset(window.innerWidth || 800, window.innerHeight || 600, true);
+    }
+    reset(w, h, randomX = false) {
+      this.x = randomX ? Math.random() * w : -80 - Math.random() * 140;
+      this.y = this.isFar ? h * 0.12 + Math.random() * (h * 0.22) : h * 0.18 + Math.random() * (h * 0.28);
+      this.speed = this.isFar ? (0.6 + Math.random() * 0.4) : (1.3 + Math.random() * 0.6);
+      this.scale = this.isFar ? (0.35 + Math.random() * 0.2) : (0.7 + Math.random() * 0.35);
+      this.wingCycle = Math.random() * Math.PI * 2;
+      this.wingSpeed = 0.05 + Math.random() * 0.02;
+      this.glideTimer = Math.random() * 260;
+      this.isGliding = false;
+    }
+    update(w, h) {
+      this.x += this.speed * (this.isGliding ? 0.9 : 1.15);
+      this.y += Math.sin(this.wingCycle * 0.5) * 0.35;
+      this.glideTimer++;
+      if (this.glideTimer > 180 && Math.random() < 0.015) {
+        this.isGliding = !this.isGliding;
+        this.glideTimer = 0;
+      }
+      if (!this.isGliding) this.wingCycle += this.wingSpeed;
+      else this.wingCycle = Math.PI * 0.18;
+      if (this.x > w + 100) this.reset(w, h, false);
+    }
+    draw(ctx) {
+      ctx.save();
+      ctx.translate(this.x, this.y);
+      ctx.scale(this.scale, this.scale);
+      const flap = Math.sin(this.wingCycle);
+      const tipY = flap * 18;
+      const midY = flap * 8;
+      ctx.fillStyle = '#ffffff';
+      ctx.beginPath();
+      ctx.ellipse(0, 0, 14, 4, 0.08, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.strokeStyle = '#ffffff';
+      ctx.lineWidth = 2.2;
+      ctx.beginPath();
+      ctx.moveTo(12, 0);
+      ctx.quadraticCurveTo(18, -3, 26, -4);
+      ctx.stroke();
+      ctx.strokeStyle = '#f59e0b';
+      ctx.lineWidth = 1.3;
+      ctx.beginPath();
+      ctx.moveTo(26, -4);
+      ctx.lineTo(33, -4.5);
+      ctx.stroke();
+      ctx.strokeStyle = '#1e102f';
+      ctx.lineWidth = 1.2;
+      ctx.beginPath();
+      ctx.moveTo(-14, 0);
+      ctx.lineTo(-26, 2);
+      ctx.stroke();
+      ctx.fillStyle = '#ffffff';
+      ctx.beginPath();
+      ctx.moveTo(2, -2);
+      ctx.quadraticCurveTo(-4, -14 - midY, -12, -22 - tipY);
+      ctx.quadraticCurveTo(-16, -12 - midY, -5, 0);
+      ctx.closePath();
+      ctx.fill();
+      ctx.strokeStyle = '#180d28';
+      ctx.lineWidth = 1.6;
+      ctx.beginPath();
+      ctx.moveTo(-6, -14 - tipY * 0.7);
+      ctx.lineTo(-12, -22 - tipY);
+      ctx.stroke();
+      ctx.fillStyle = '#e2e8f0';
+      ctx.beginPath();
+      ctx.moveTo(4, 2);
+      ctx.quadraticCurveTo(0, 12 + midY, -8, 20 + tipY);
+      ctx.quadraticCurveTo(-12, 10 + midY, -4, 0);
+      ctx.closePath();
+      ctx.fill();
+      ctx.restore();
+    }
+  }
+
+  /* Bộ máy đồ hoạ phong cảnh Sơn Hà Bất Tận */
+  class SceneryEngine {
+    constructor() {
+      this.canvas = canvas;
+      this.ctx = ctx;
+      this.dpr = Math.min(window.devicePixelRatio || 1, 2);
+      this.width = 0;
+      this.height = 0;
+      this.mouse = { x: 0, y: 0, tx: 0, ty: 0 };
+      this.ripples = [];
+      this.moodIndex = 0;
+      this.moods = [
+        { name: "HOÀNG HÔN", top: "#080216", mid1: "#2d0b3f", mid2: "#78184c", mid3: "#d94e28", bot: "#fbc468", sun: "#ffea9f", peakLit: "#ffdf8a", peakShadow: "#341842" },
+        { name: "RẠNG ĐÔNG", top: "#050e24", mid1: "#10234a", mid2: "#1d4b68", mid3: "#d97757", bot: "#fed093", sun: "#fff2cc", peakLit: "#ffe4b5", peakShadow: "#192841" },
+        { name: "DẠ NGUYỆT", top: "#02040c", mid1: "#0a1329", mid2: "#182c54", mid3: "#2b4c7e", bot: "#7097c2", sun: "#e6f2ff", peakLit: "#d4e6f9", peakShadow: "#0b1220" }
+      ];
+      this.cranes = [];
+      for (let i = 0; i < 5; i++) this.cranes.push(new Crane(false));
+      for (let i = 0; i < 7; i++) this.cranes.push(new Crane(true));
+      this.particles = [];
+      for (let i = 0; i < 60; i++) {
+        this.particles.push({
+          x: Math.random() * (window.innerWidth || 800),
+          y: Math.random() * (window.innerHeight || 600),
+          r: Math.random() * 2.2 + 0.8,
+          vx: 0.3 + Math.random() * 0.5,
+          vy: -(0.2 + Math.random() * 0.35),
+          alpha: Math.random() * 0.7 + 0.3
+        });
+      }
+      this.waterSpray = [];
+      for (let i = 0; i < 35; i++) {
+        this.waterSpray.push({ x: 0, y: 0, vx: (Math.random() - 0.5) * 2, vy: -Math.random() * 3 - 1, r: Math.random() * 2.5 + 0.8 });
+      }
+      this.init();
+    }
+    init() {
+      this.resize();
+      window.addEventListener('resize', () => this.resize(), { passive: true });
+      const updatePos = (cx, cy) => { this.mouse.tx = cx; this.mouse.ty = cy; };
+      window.addEventListener('mousemove', (e) => updatePos(e.clientX, e.clientY), { passive: true });
+      window.addEventListener('touchmove', (e) => {
+        if (e.touches && e.touches[0]) updatePos(e.touches[0].clientX, e.touches[0].clientY);
+      }, { passive: true });
+      this.mouse.x = this.width / 2;
+      this.mouse.y = this.height / 2;
+      this.mouse.tx = this.mouse.x;
+      this.mouse.ty = this.mouse.y;
+    }
+    resize() {
+      this.width = window.innerWidth || document.documentElement.clientWidth || 360;
+      this.height = window.innerHeight || document.documentElement.clientHeight || 640;
+      this.canvas.width = Math.floor(this.width * this.dpr);
+      this.canvas.height = Math.floor(this.height * this.dpr);
+      this.ctx.setTransform(this.dpr, 0, 0, this.dpr, 0, 0);
+    }
+    render(now) {
+      this.mouse.x += (this.mouse.tx - this.mouse.x) * 0.035;
+      this.mouse.y += (this.mouse.ty - this.mouse.y) * 0.035;
+      const px = (this.mouse.x - this.width / 2) * 0.02;
+      const py = (this.mouse.y - this.height / 2) * 0.02;
+
+      this.ctx.clearRect(0, 0, this.width, this.height);
+      const mood = this.moods[this.moodIndex];
+
+      const sky = this.ctx.createLinearGradient(0, 0, 0, this.height * 0.72);
+      sky.addColorStop(0, mood.top);
+      sky.addColorStop(0.28, mood.mid1);
+      sky.addColorStop(0.55, mood.mid2);
+      sky.addColorStop(0.78, mood.mid3);
+      sky.addColorStop(1, mood.bot);
+      this.ctx.fillStyle = sky;
+      this.ctx.fillRect(0, 0, this.width, this.height);
+
+      const sunX = this.width * 0.74 + px * 0.3;
+      const sunY = this.height * 0.22 + py * 0.3;
+      const corona = this.ctx.createRadialGradient(sunX, sunY, 15, sunX, sunY, this.width * 0.42);
+      corona.addColorStop(0, 'rgba(255, 240, 200, 0.45)');
+      corona.addColorStop(0.3, 'rgba(255, 140, 60, 0.2)');
+      corona.addColorStop(0.7, 'rgba(217, 70, 239, 0.07)');
+      corona.addColorStop(1, 'rgba(0, 0, 0, 0)');
+      this.ctx.fillStyle = corona;
+      this.ctx.beginPath();
+      this.ctx.arc(sunX, sunY, this.width * 0.42, 0, Math.PI * 2);
+      this.ctx.fill();
+
+      const orb = this.ctx.createRadialGradient(sunX, sunY, 0, sunX, sunY, 46);
+      orb.addColorStop(0, '#ffffff');
+      orb.addColorStop(0.6, mood.sun);
+      orb.addColorStop(1, 'rgba(255, 200, 100, 0)');
+      this.ctx.fillStyle = orb;
+      this.ctx.beginPath();
+      this.ctx.arc(sunX, sunY, 46, 0, Math.PI * 2);
+      this.ctx.fill();
+
+      this.ctx.save();
+      this.ctx.translate(sunX, sunY);
+      const time = now * 0.0003;
+      for (let i = 0; i < 8; i++) {
+        const angle = -Math.PI * 0.72 + (i * 0.2) + Math.sin(time + i * 1.5) * 0.035;
+        const rayGrad = this.ctx.createLinearGradient(0, 0, Math.cos(angle) * this.width * 0.8, Math.sin(angle) * this.width * 0.8);
+        rayGrad.addColorStop(0, 'rgba(255, 235, 180, 0.2)');
+        rayGrad.addColorStop(0.5, 'rgba(255, 150, 70, 0.08)');
+        rayGrad.addColorStop(1, 'rgba(0, 0, 0, 0)');
+        this.ctx.fillStyle = rayGrad;
+        this.ctx.beginPath();
+        this.ctx.moveTo(0, 0);
+        this.ctx.arc(0, 0, this.width * 0.8, angle - 0.065, angle + 0.065);
+        this.ctx.closePath();
+        this.ctx.fill();
+      }
+      this.ctx.restore();
+
+      this.ctx.save();
+      this.ctx.translate(px * 0.35, py * 0.35);
+      const mistY = this.height * 0.52;
+      const mistGrad = this.ctx.createLinearGradient(0, mistY - 40, 0, mistY + 100);
+      mistGrad.addColorStop(0, 'rgba(255, 220, 180, 0)');
+      mistGrad.addColorStop(0.5, 'rgba(255, 190, 160, 0.25)');
+      mistGrad.addColorStop(1, 'rgba(40, 15, 60, 0)');
+      this.ctx.fillStyle = mistGrad;
+      this.ctx.beginPath();
+      this.ctx.moveTo(0, mistY);
+      for (let x = 0; x <= this.width; x += 40) {
+        const wave = Math.sin(x * 0.004 + time * 1.3) * 28 + Math.sin(x * 0.009 - time * 1.5) * 14;
+        this.ctx.lineTo(x, mistY + wave);
+      }
+      this.ctx.lineTo(this.width, this.height * 0.7);
+      this.ctx.lineTo(0, this.height * 0.7);
+      this.ctx.closePath();
+      this.ctx.fill();
+      this.ctx.restore();
+
+      this.ctx.save();
+      this.ctx.translate(px * 0.45, py * 0.45);
+      this.ctx.fillStyle = '#211033';
+      this.ctx.beginPath();
+      this.ctx.moveTo(0, this.height * 0.65);
+      this.ctx.lineTo(this.width * 0.15, this.height * 0.46);
+      this.ctx.lineTo(this.width * 0.32, this.height * 0.60);
+      this.ctx.lineTo(this.width * 0.52, this.height * 0.42);
+      this.ctx.lineTo(this.width * 0.78, this.height * 0.62);
+      this.ctx.lineTo(this.width, this.height * 0.58);
+      this.ctx.lineTo(this.width, this.height * 0.7);
+      this.ctx.lineTo(0, this.height * 0.7);
+      this.ctx.fill();
+      this.ctx.restore();
+
+      this.cranes.forEach(c => { c.update(this.width, this.height); c.draw(this.ctx); });
+
+      this.ctx.save();
+      this.ctx.translate(px * 0.65, py * 0.65);
+      const peakX = this.width * 0.74;
+      const peakY = this.height * 0.19;
+      const baseY = this.height * 0.68;
+      const darkSide = this.ctx.createLinearGradient(peakX - 200, peakY, peakX, baseY);
+      darkSide.addColorStop(0, mood.peakShadow);
+      darkSide.addColorStop(0.5, '#190a2a');
+      darkSide.addColorStop(1, '#0b0417');
+      this.ctx.fillStyle = darkSide;
+      this.ctx.beginPath();
+      this.ctx.moveTo(peakX, peakY);
+      this.ctx.lineTo(this.width * 0.36, baseY);
+      this.ctx.lineTo(peakX, baseY + 30);
+      this.ctx.closePath();
+      this.ctx.fill();
+      const litSide = this.ctx.createLinearGradient(peakX, peakY, peakX + 240, baseY);
+      litSide.addColorStop(0, '#ffffff');
+      litSide.addColorStop(0.12, mood.peakLit);
+      litSide.addColorStop(0.35, '#f27329');
+      litSide.addColorStop(0.72, '#931c55');
+      litSide.addColorStop(1, '#1b082c');
+      this.ctx.fillStyle = litSide;
+      this.ctx.beginPath();
+      this.ctx.moveTo(peakX, peakY);
+      this.ctx.lineTo(this.width * 0.98, baseY);
+      this.ctx.lineTo(peakX, baseY + 30);
+      this.ctx.closePath();
+      this.ctx.fill();
+      this.ctx.strokeStyle = '#fff5cf';
+      this.ctx.lineWidth = 2.2;
+      this.ctx.beginPath();
+      this.ctx.moveTo(peakX, peakY);
+      this.ctx.lineTo(peakX + 6, peakY + 95);
+      this.ctx.lineTo(peakX - 3, baseY);
+      this.ctx.stroke();
+      const fallX = peakX - 54;
+      const fallStartY = peakY + 115;
+      const fallEndY = baseY - 2;
+      const fallGrad = this.ctx.createLinearGradient(fallX, fallStartY, fallX, fallEndY);
+      fallGrad.addColorStop(0, 'rgba(255, 255, 255, 0.85)');
+      fallGrad.addColorStop(0.5, 'rgba(200, 230, 255, 0.65)');
+      fallGrad.addColorStop(1, 'rgba(255, 220, 160, 0.9)');
+      this.ctx.strokeStyle = fallGrad;
+      this.ctx.lineWidth = 3.6;
+      this.ctx.beginPath();
+      this.ctx.moveTo(fallX, fallStartY);
+      this.ctx.lineTo(fallX + 4, fallStartY + 75);
+      this.ctx.lineTo(fallX - 2, fallEndY);
+      this.ctx.stroke();
+      this.ctx.fillStyle = 'rgba(255, 245, 220, 0.7)';
+      this.waterSpray.forEach(sp => {
+        sp.x = (fallX - 2) + Math.sin(now * 0.01 + sp.vy) * 12;
+        sp.y = fallEndY + sp.vy;
+        this.ctx.beginPath();
+        this.ctx.arc(sp.x, sp.y, sp.r, 0, Math.PI * 2);
+        this.ctx.fill();
+      });
+      this.ctx.restore();
+
+      const lakeY = this.height * 0.58;
+      this.ctx.save();
+      this.ctx.translate(px * 0.8, py * 0.8);
+      const water = this.ctx.createLinearGradient(0, lakeY, 0, this.height);
+      water.addColorStop(0, '#100c28');
+      water.addColorStop(0.35, '#1b143c');
+      water.addColorStop(0.85, '#060312');
+      this.ctx.fillStyle = water;
+      this.ctx.fillRect(0, lakeY, this.width, this.height - lakeY);
+      const reflectX = this.width * 0.70;
+      const reflectGrad = this.ctx.createLinearGradient(0, lakeY, 0, lakeY + 200);
+      reflectGrad.addColorStop(0, 'rgba(255, 175, 75, 0.45)');
+      reflectGrad.addColorStop(0.45, 'rgba(220, 80, 60, 0.2)');
+      reflectGrad.addColorStop(1, 'rgba(0, 0, 0, 0)');
+      this.ctx.fillStyle = reflectGrad;
+      this.ctx.fillRect(reflectX - 180, lakeY, 360, 200);
+      this.ctx.strokeStyle = 'rgba(255, 215, 160, 0.2)';
+      this.ctx.lineWidth = 1.2;
+      for (let i = 0; i < 9; i++) {
+        const y = lakeY + 20 + i * 18;
+        const shift = Math.sin(now * 0.0025 + i * 1.2) * 22;
+        this.ctx.beginPath();
+        this.ctx.moveTo(this.width * 0.32 + shift, y);
+        this.ctx.lineTo(this.width * 0.86 + shift, y);
+        this.ctx.stroke();
+      }
+      const drawRock = (rx, ry, rw, rh) => {
+        this.ctx.fillStyle = '#060312';
+        this.ctx.beginPath();
+        this.ctx.ellipse(rx, ry, rw, rh, 0, 0, Math.PI * 2);
+        this.ctx.fill();
+        this.ctx.strokeStyle = 'rgba(255, 180, 110, 0.35)';
+        this.ctx.lineWidth = 1.5;
+        this.ctx.beginPath();
+        this.ctx.arc(rx, ry - rh * 0.28, rw * 0.72, Math.PI * 0.8, Math.PI * 1.8);
+        this.ctx.stroke();
+      };
+      drawRock(this.width * 0.20, lakeY + 55, 34, 20);
+      drawRock(this.width * 0.32, lakeY + 90, 48, 26);
+      drawRock(this.width * 0.48, lakeY + 70, 24, 15);
+      for (let i = this.ripples.length - 1; i >= 0; i--) {
+        const r = this.ripples[i];
+        r.r += 2.2;
+        r.alpha -= 0.012;
+        if (r.alpha <= 0 || r.r >= r.maxR) { this.ripples.splice(i, 1); continue; }
+        this.ctx.strokeStyle = `rgba(255, 215, 150, ${r.alpha})`;
+        this.ctx.lineWidth = 1.5;
+        this.ctx.beginPath();
+        this.ctx.ellipse(r.x, r.y, r.r, r.r * 0.36, 0, 0, Math.PI * 2);
+        this.ctx.stroke();
+      }
+      this.ctx.restore();
+
+      this.ctx.save();
+      const cliffX = this.width * 0.85 + px * 1.3;
+      const cliffY = this.height * 0.64 + py * 1.3;
+      const cliffGrad = this.ctx.createLinearGradient(cliffX - 240, cliffY, this.width, this.height);
+      cliffGrad.addColorStop(0, '#1a0c28');
+      cliffGrad.addColorStop(0.45, '#090412');
+      cliffGrad.addColorStop(1, '#020108');
+      this.ctx.fillStyle = cliffGrad;
+      this.ctx.beginPath();
+      this.ctx.moveTo(this.width * 0.60, this.height);
+      this.ctx.quadraticCurveTo(this.width * 0.74, cliffY + 25, this.width, cliffY + 48);
+      this.ctx.lineTo(this.width, this.height);
+      this.ctx.closePath();
+      this.ctx.fill();
+      this.ctx.strokeStyle = '#080312';
+      this.ctx.lineWidth = 5.5;
+      this.ctx.beginPath();
+      this.ctx.moveTo(cliffX + 65, cliffY + 75);
+      this.ctx.quadraticCurveTo(cliffX + 35, cliffY - 18, cliffX + 8, cliffY - 45);
+      this.ctx.stroke();
+      this.ctx.fillStyle = '#0f1f1d';
+      for (let i = 0; i < 4; i++) {
+        this.ctx.beginPath();
+        this.ctx.ellipse(cliffX + 12 - i * 16, cliffY - 45 + (i % 2) * 9, 22, 9, -0.2, 0, Math.PI * 2);
+        this.ctx.fill();
+      }
+      this.ctx.save();
+      this.ctx.translate(cliffX, cliffY);
+      this.ctx.fillStyle = '#e87320';
+      this.ctx.beginPath();
+      this.ctx.moveTo(-18, 25);
+      this.ctx.lineTo(18, 25);
+      this.ctx.lineTo(28, 86);
+      this.ctx.lineTo(-30, 86);
+      this.ctx.closePath();
+      this.ctx.fill();
+      this.ctx.fillStyle = '#160a22';
+      this.ctx.beginPath();
+      this.ctx.moveTo(-18, 25);
+      this.ctx.lineTo(0, 25);
+      this.ctx.lineTo(-8, 86);
+      this.ctx.lineTo(-30, 86);
+      this.ctx.closePath();
+      this.ctx.fill();
+      this.ctx.fillStyle = '#d9822a';
+      this.ctx.beginPath();
+      this.ctx.ellipse(0, 8, 36, 11, -0.16, 0, Math.PI * 2);
+      this.ctx.fill();
+      this.ctx.fillStyle = '#f5ab3c';
+      this.ctx.beginPath();
+      this.ctx.moveTo(-18, 6);
+      this.ctx.lineTo(0, -13);
+      this.ctx.lineTo(18, 8);
+      this.ctx.closePath();
+      this.ctx.fill();
+      const wind = Math.sin(now * 0.0035) * 8;
+      this.ctx.fillStyle = '#991b34';
+      this.ctx.fillRect(-14, 18, 28, 11);
+      this.ctx.beginPath();
+      this.ctx.moveTo(-9, 29);
+      this.ctx.quadraticCurveTo(-20 + wind, 43, -18 + wind * 1.6, 60);
+      this.ctx.lineTo(-24 + wind * 1.6, 58);
+      this.ctx.quadraticCurveTo(-27 + wind, 40, -14, 29);
+      this.ctx.fill();
+      this.ctx.fillStyle = 'rgba(255, 180, 60, 0.92)';
+      this.ctx.beginPath();
+      this.ctx.ellipse(16, 52, 5.5, 8.5, 0, 0, Math.PI * 2);
+      this.ctx.fill();
+      this.ctx.restore();
+      this.ctx.restore();
+
+      this.ctx.save();
+      this.ctx.translate(px * 1.6, py * 1.6);
+      const count = 75;
+      const reedBaseY = this.height + 15;
+      for (let i = 0; i < count; i++) {
+        const x = (this.width / count) * i + Math.sin(i * 13) * 10;
+        const h = 125 + Math.sin(i * 4.5) * 55;
+        const sway = Math.sin(now * 0.0032 + i * 0.38) * 26;
+        this.ctx.strokeStyle = (i % 3 === 0) ? '#d97430' : (i % 2 === 0 ? '#421d4c' : '#120924');
+        this.ctx.lineWidth = 2.4;
+        this.ctx.beginPath();
+        this.ctx.moveTo(x, reedBaseY);
+        this.ctx.quadraticCurveTo(x + sway * 0.5, reedBaseY - h * 0.6, x + sway, reedBaseY - h);
+        this.ctx.stroke();
+        this.ctx.fillStyle = 'rgba(255, 230, 185, 0.8)';
+        this.ctx.beginPath();
+        this.ctx.arc(x + sway, reedBaseY - h, 2.6, 0, Math.PI * 2);
+        this.ctx.fill();
+      }
+      this.ctx.restore();
+
+      this.ctx.save();
+      this.particles.forEach((p, i) => {
+        p.x += p.vx;
+        p.y += p.vy + Math.sin(now * 0.002 + i) * 0.35;
+        if (p.x > this.width) p.x = 0;
+        if (p.y < 0) p.y = this.height;
+        this.ctx.fillStyle = `rgba(255, 220, 140, ${p.alpha})`;
+        this.ctx.beginPath();
+        this.ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        this.ctx.fill();
+      });
+      this.ctx.restore();
+    }
+  }
+
+  let engine = null;
+  function renderLoop(now) {
+    requestAnimationFrame(renderLoop);
+    if (window.__bgStyle !== 'que') return; // Chỉ vẽ khi đang chọn giao diện "Quê Hương"
+    if (!engine) engine = new SceneryEngine();
+    engine.render(now);
+  }
+  requestAnimationFrame(renderLoop);
 })();
 </script>
 
