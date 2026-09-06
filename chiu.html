@@ -5,7 +5,7 @@
     <title>Flashcard ♥️🇻🇳 · Tự luyện tập</title>
     <link rel="preconnect" href="https://fonts.googleapis.com/">
     <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700;800&family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,500;1,9..144,600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700;800&family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,500;1,9..144,600&family=Orbitron:wght@500;700;800;900&family=JetBrains+Mono:ital,wght@0,300;0,400;0,600;0,800;1,400&display=swap" rel="stylesheet">
     <style>
 /* ============================================================
    MINIMALIST HIGH-PERFORMANCE FLASHCARD STYLESHEET
@@ -3757,6 +3757,56 @@ body.cardbg-frost .term, body.cardbg-frost .back-term { color: #94a3b8 !importan
 body.cardbg-frost .ipa { color: #cbd5e1 !important; }
 body.cardbg-frost .hint { color: #e2e8f0 !important; }
 
+/* 🌌 VIP KHÔNG GIAN — viền dịch chuyển không gian xoay quanh thẻ + nền sao trôi động bên trong (chỉ gói PREMIUM ULTRA MAX) */
+@keyframes vipBorderSpin { to { transform: rotate(360deg); } }
+@keyframes vipStarDrift {
+    0%   { background-position: 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%; }
+    100% { background-position: 240px 400px, -300px 250px, 150px -350px, -180px -220px, 260px 120px, -140px 300px, 0% 0%; }
+}
+@keyframes vipNebulaPulse { 0%, 100% { opacity: 0.55; } 50% { opacity: 1; } }
+
+body.cardbg-vip-warp .face-front,
+body.cardbg-vip-warp .face-back {
+    position: relative !important;
+    isolation: isolate;
+    background:
+        radial-gradient(1.6px 1.6px at 20px 30px, #fff, transparent),
+        radial-gradient(1.2px 1.2px at 90px 120px, #fff, transparent),
+        radial-gradient(1.6px 1.6px at 160px 60px, #fff, transparent),
+        radial-gradient(1px 1px at 220px 180px, #fff, transparent),
+        radial-gradient(1.2px 1.2px at 40px 200px, #fff, transparent),
+        radial-gradient(1.6px 1.6px at 280px 40px, #fff, transparent),
+        radial-gradient(120% 90% at 15% 10%, rgba(176,38,255,0.35), transparent 60%),
+        linear-gradient(150deg, #05010f 0%, #150a35 45%, #05010f 100%) !important;
+    background-size: 260px 260px, 260px 260px, 260px 260px, 260px 260px, 260px 260px, 260px 260px, 100% 100%, 100% 100% !important;
+    animation: vipStarDrift 16s linear infinite !important;
+    color: #e0f2fe !important;
+}
+body.cardbg-vip-warp .face-front::after,
+body.cardbg-vip-warp .face-back::after {
+    content: "";
+    position: absolute;
+    inset: -6px;
+    border-radius: inherit;
+    padding: 3px;
+    background: conic-gradient(from 0deg, #00f0ff, #b026ff, #ff2a55, #ffee00, #00ff88, #00f0ff);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    animation: vipBorderSpin 3.5s linear infinite, vipNebulaPulse 2.4s ease-in-out infinite;
+    pointer-events: none;
+    z-index: 3;
+    filter: drop-shadow(0 0 8px rgba(0, 240, 255, 0.6));
+}
+body.cardbg-vip-warp .face-front::before { z-index: 1; opacity: 0.15; }
+body.cardbg-vip-warp .term, body.cardbg-vip-warp .back-term { color: #a5f3fc !important; text-shadow: 0 0 12px rgba(0, 240, 255, 0.6); }
+body.cardbg-vip-warp .ipa { color: #d8b4fe !important; }
+body.cardbg-vip-warp .hint { color: #fbcfe8 !important; }
+body.cardbg-vip-warp .speak-btn {
+    background: rgba(0, 240, 255, 0.15) !important;
+    border: 1px solid rgba(0, 240, 255, 0.4) !important;
+}
+
 /* ===== MOBILE / IPAD FLASHCARD FIX ===== */
 @media (max-width: 1024px) {
     .card-stage {
@@ -3877,6 +3927,28 @@ body {
     height: 100vh !important;
     display: none;
     z-index: -1 !important;
+    pointer-events: none !important;
+}
+
+#pcb-canvas {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    display: none;
+    z-index: -1 !important;
+    pointer-events: none !important;
+}
+
+#pcb-cursor-canvas {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    display: none;
+    z-index: 9990 !important;
     pointer-events: none !important;
 }
 
@@ -4900,6 +4972,24 @@ body.cardbg-transparent .speak-btn {
 }
 
 </style>
+
+<!-- ===== FONT KỸ THUẬT / HIỆN ĐẠI TOÀN APP (trừ chữ bên trong Flashcard) ===== -->
+<style id="tech-font-override-css">
+body, button, input, select, textarea, p, span, div, a, li, td, th, label, small {
+    font-family: 'JetBrains Mono', 'Consolas', ui-monospace, monospace !important;
+}
+h1, h2, h3, h4, .lp-title, header h1, .settings-card h2, .lp-logo,
+.brand-title, .lp-eyebrow, .lp-btn-primary, .lp-btn-ghost {
+    font-family: 'Orbitron', 'JetBrains Mono', sans-serif !important;
+    letter-spacing: 0.02em;
+}
+
+/* Ngoại lệ: giữ nguyên font gốc cho toàn bộ nội dung BÊN TRONG flashcard */
+.card, .card *, .face, .face *, #practiceCard, #practiceCard * {
+    font-family: 'Inter', 'Playfair Display', 'Fraunces', system-ui, sans-serif !important;
+    letter-spacing: normal !important;
+}
+</style>
 </head>
 <body class="theme-forest" style="">
 
@@ -5291,8 +5381,12 @@ body.cardbg-transparent .speak-btn {
                         <span class="theme-swatch" style="background:linear-gradient(135deg, #2d0b3f, #f59e0b)"></span>
                         <span>🌾 Quê Hương</span>
                     </button>
+                    <button class="theme-opt" data-bgstyle="pcb" type="button">
+                        <span class="theme-swatch" style="background:linear-gradient(135deg, #020409, #00f0ff)"></span>
+                        <span>⚡ Bo Mạch PCB</span>
+                    </button>
                 </div>
-                <div class="settings-hint">Chọn phong cách hình nền động cho toàn bộ app: "CNTT" (mạch điện tử, AI) hoặc "Quê Hương" (sơn thuỷ, cánh hạc, hoàng hôn). Giao diện "Quê Hương" đang ở giai đoạn Beta và chỉ mở khoá cho gói PREMIUM ULTRA MAX — các gói thấp hơn chưa thể chuyển sang.</div>
+                <div class="settings-hint">Chọn phong cách hình nền động cho toàn bộ app: "CNTT" (mạch điện tử, AI), "Quê Hương" (sơn thuỷ, cánh hạc) hoặc "Bo Mạch PCB" (bo mạch robot công nghiệp + hiệu ứng con trỏ bắn tia lửa). Cả "Quê Hương" và "Bo Mạch PCB" đang ở giai đoạn Beta và chỉ mở khoá cho gói PREMIUM ULTRA MAX — các gói thấp hơn chưa thể chuyển sang.</div>
             </div>
 
             
@@ -5349,8 +5443,12 @@ body.cardbg-transparent .speak-btn {
                         <span class="theme-swatch" style="background:linear-gradient(135deg, #1e293b, #334155)"></span>
                         <span>❄️ Frost</span>
                     </button>
+                    <button class="theme-opt" data-cardbg="vip-warp" type="button">
+                        <span class="theme-swatch" style="background:conic-gradient(from 0deg, #00f0ff, #b026ff, #ff2a55, #ffee00, #00ff88, #00f0ff); animation: vipBorderSpin 3s linear infinite;"></span>
+                        <span>🌌 VIP Không Gian</span>
+                    </button>
                 </div>
-                <div class="settings-hint">Chọn giao diện cho mặt trước và mặt sau của thẻ học. Hình nền sẽ tự động tải mượt mà.</div>
+                <div class="settings-hint">Chọn giao diện cho mặt trước và mặt sau của thẻ học. Hình nền sẽ tự động tải mượt mà. "VIP Không Gian" có viền dịch chuyển không gian xoay quanh thẻ và nền sao trôi chuyển động bên trong — chỉ dành cho gói PREMIUM ULTRA MAX.</div>
             </div>
 
             <div class="settings-section">
@@ -5390,6 +5488,8 @@ body.cardbg-transparent .speak-btn {
     <!-- ===== WRAP ===== -->
     <canvas id="universe-canvas"></canvas>
     <canvas id="countryside-canvas"></canvas>
+    <canvas id="pcb-canvas"></canvas>
+    <canvas id="pcb-cursor-canvas"></canvas>
     <div class="wrap" data-original-display="" style="">
 
         <!-- ===== HEADER ===== -->
@@ -6300,7 +6400,8 @@ body.cardbg-transparent .speak-btn {
         function applyBgStyle(style, save) {
             if (style !== 'cntt' && !checkBgStyleAccess(style)) {
                 if (typeof showToast === 'function') {
-                    showToast('🔒 Giao diện "Quê Hương" (Beta) yêu cầu gói PREMIUM ULTRA MAX');
+                    const label = (style === 'pcb') ? '"Bo Mạch PCB"' : '"Quê Hương"';
+                    showToast(`🔒 Giao diện ${label} (Beta) yêu cầu gói PREMIUM ULTRA MAX`);
                 }
                 if (typeof applySettingsLocks === 'function') applySettingsLocks();
                 return;
@@ -6308,8 +6409,12 @@ body.cardbg-transparent .speak-btn {
             window.__bgStyle = style;
             const uc = document.getElementById('universe-canvas');
             const cc = document.getElementById('countryside-canvas');
-            if (uc) uc.style.display = (style === 'que') ? 'none' : 'block';
+            const pc = document.getElementById('pcb-canvas');
+            const pcc = document.getElementById('pcb-cursor-canvas');
+            if (uc) uc.style.display = (style === 'cntt') ? 'block' : 'none';
             if (cc) cc.style.display = (style === 'que') ? 'block' : 'none';
+            if (pc) pc.style.display = (style === 'pcb') ? 'block' : 'none';
+            if (pcc) pcc.style.display = (style === 'pcb') ? 'block' : 'none';
             document.querySelectorAll('#bgStylePicker .theme-opt').forEach(btn => {
                 btn.classList.toggle('active', btn.dataset.bgstyle === style);
             });
@@ -9656,7 +9761,7 @@ body.cardbg-transparent .speak-btn {
     function applyCardBg(bg, save) {
     if(bg !== "default" && !checkCardBgAccess(bg)) return;
 
-        document.body.classList.remove('cardbg-default', 'cardbg-hologram', 'cardbg-astral', 'cardbg-royal', 'cardbg-neon', 'cardbg-sakura', 'cardbg-deepocean', 'cardbg-mystic', 'cardbg-emerald', 'cardbg-sunset', 'cardbg-frost', 'cardbg-transparent');
+        document.body.classList.remove('cardbg-default', 'cardbg-hologram', 'cardbg-astral', 'cardbg-royal', 'cardbg-neon', 'cardbg-sakura', 'cardbg-deepocean', 'cardbg-mystic', 'cardbg-emerald', 'cardbg-sunset', 'cardbg-frost', 'cardbg-transparent', 'cardbg-vip-warp');
         document.body.classList.add('cardbg-' + bg);
         document.querySelectorAll('#cardBgPicker .theme-opt').forEach(btn => {
             btn.classList.toggle('active', btn.dataset.cardbg === bg);
@@ -11586,6 +11691,489 @@ document.addEventListener("DOMContentLoaded", function() {
     if (window.__bgStyle !== 'que') return; // Chỉ vẽ khi đang chọn giao diện "Quê Hương"
     if (!engine) engine = new SceneryEngine();
     engine.render(now);
+  }
+  requestAnimationFrame(renderLoop);
+})();
+</script>
+
+<!-- ===== PCB / ROBOTICS ANIMATED BACKGROUND + SPARK CURSOR — BETA 3 ===== -->
+<script id="pcb-canvas-engine">
+(() => {
+  const canvas = document.getElementById('pcb-canvas');
+  const curCanvas = document.getElementById('pcb-cursor-canvas');
+  if (!canvas || !curCanvas) return;
+  const ctx = canvas.getContext('2d');
+  const cctx = curCanvas.getContext('2d');
+  if (!ctx || !cctx) return;
+
+  let width, height, dpr = window.devicePixelRatio || 1;
+  const TRACES = [];
+  const PACKETS = [];
+  const TEST_POINTS = [];
+  const SERPENTINES = [];
+  const SMD_COMPONENTS = [];
+  let ROBOT = null, FAN = null, AOI = null;
+  let postCode = "A6", postTimer = 0;
+  const postCodes = ["00", "A6", "F9", "C3", "4F", "AA", "7E", "39"];
+  let mousePos = { x: -1000, y: -1000 };
+
+  function resizeCanvas() {
+    dpr = Math.min(window.devicePixelRatio || 1, 2);
+    width = window.innerWidth;
+    height = window.innerHeight;
+    canvas.width = width * dpr;
+    canvas.height = height * dpr;
+    canvas.style.width = width + 'px';
+    canvas.style.height = height + 'px';
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    curCanvas.width = width;
+    curCanvas.height = height;
+    initBoardArchitecture();
+  }
+  window.addEventListener('resize', resizeCanvas, { passive: true });
+
+  function initBoardArchitecture() {
+    TRACES.length = 0; PACKETS.length = 0; TEST_POINTS.length = 0; SERPENTINES.length = 0; SMD_COMPONENTS.length = 0;
+    const traceCount = Math.floor(Math.max(width, height) / 14);
+    for (let i = 0; i < traceCount; i++) {
+      const sx = Math.random() * width, sy = Math.random() * height;
+      const angles = [0, 45, 90, 135, 180, 225, 270, 315];
+      const rad = (angles[Math.floor(Math.random() * angles.length)] * Math.PI) / 180;
+      const len1 = 40 + Math.random() * 120;
+      const mx = sx + Math.cos(rad) * len1, my = sy + Math.sin(rad) * len1;
+      const rad2 = (angles[Math.floor(Math.random() * angles.length)] * Math.PI) / 180;
+      const len2 = 30 + Math.random() * 100;
+      const ex = mx + Math.cos(rad2) * len2, ey = my + Math.sin(rad2) * len2;
+      const colorType = Math.random();
+      const color = colorType > 0.6 ? 'rgba(0, 240, 255, 0.16)' : (colorType > 0.3 ? 'rgba(255, 158, 0, 0.16)' : 'rgba(0, 255, 136, 0.14)');
+      const glowColor = colorType > 0.6 ? '#00f0ff' : (colorType > 0.3 ? '#ff9e00' : '#00ff88');
+      TRACES.push({ sx, sy, mx, my, ex, ey, color, glowColor, width: Math.random() > 0.8 ? 1.8 : 1.0 });
+      if (Math.random() > 0.25) {
+        PACKETS.push({ sx, sy, mx, my, ex, ey, progress: Math.random(), speed: 0.003 + Math.random() * 0.008, color: glowColor, tag: ['0xFF', 'ACK', 'DDR', 'INT', 'DMA', 'IO', '1.2V', 'CLK'][Math.floor(Math.random() * 8)] });
+      }
+    }
+    for (let s = 0; s < 5; s++) {
+      SERPENTINES.push({ x: width * 0.28 + s * 24, y: height * 0.28, waves: 6, amp: 8, len: 140 });
+    }
+    for (let c = 0; c < 60; c++) {
+      SMD_COMPONENTS.push({ x: Math.random() * width, y: Math.random() * height, w: 6 + Math.random() * 8, h: 3 + Math.random() * 4, type: Math.random() > 0.5 ? 'cap' : 'res' });
+    }
+    for (let t = 0; t < 16; t++) {
+      TEST_POINTS.push({ x: Math.random() * width, y: Math.random() * height, name: `TP_${t + 1}`, v: (1.0 + Math.random() * 4.0).toFixed(2) + 'V' });
+    }
+    ROBOT = { baseX: width * 0.80, baseY: height * 0.48, l1: 100, l2: 85, tX: width * 0.80 - 80, tY: height * 0.48 + 40, timer: 0, sparks: [] };
+    AOI = { x: width * 0.04, y: height * 0.08, w: width * 0.20, h: height * 0.84, scanY: height * 0.08, speed: 2.2, dir: 1 };
+    FAN = { x: width * 0.88, y: height * 0.82, radius: 65, angle: 0, speed: 0.075 };
+  }
+
+  function drawSerpentines() {
+    ctx.strokeStyle = 'rgba(0, 240, 255, 0.28)';
+    ctx.lineWidth = 1.2;
+    for (const sp of SERPENTINES) {
+      ctx.beginPath();
+      ctx.moveTo(sp.x, sp.y);
+      let cy = sp.y;
+      for (let i = 0; i < sp.waves; i++) { ctx.lineTo(sp.x + sp.amp, cy + 6); ctx.lineTo(sp.x - sp.amp, cy + 12); cy += 12; }
+      ctx.lineTo(sp.x, cy + 40);
+      ctx.stroke();
+    }
+  }
+  function drawSMDComponents() {
+    for (const comp of SMD_COMPONENTS) {
+      ctx.fillStyle = comp.type === 'cap' ? '#8b5a2b' : '#1e293b';
+      ctx.strokeStyle = 'rgba(200, 220, 240, 0.4)';
+      ctx.lineWidth = 1;
+      ctx.fillRect(comp.x, comp.y, comp.w, comp.h);
+      ctx.strokeRect(comp.x, comp.y, comp.w, comp.h);
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.6)';
+      ctx.fillRect(comp.x - 2, comp.y, 2, comp.h);
+      ctx.fillRect(comp.x + comp.w, comp.y, 2, comp.h);
+    }
+  }
+  function draw7SegmentPOST(x, y, code) {
+    ctx.fillStyle = '#000000';
+    ctx.fillRect(x, y, 22, 14);
+    ctx.strokeStyle = 'rgba(255, 42, 85, 0.5)';
+    ctx.strokeRect(x, y, 22, 14);
+    ctx.fillStyle = '#ff2a55';
+    ctx.font = 'bold 10px "Orbitron"';
+    ctx.fillText(code, x + 3, y + 11);
+  }
+  function drawCPUPackage(x, y, size) {
+    const gradIHS = ctx.createLinearGradient(x - size / 2, y - size / 2, x + size / 2, y + size / 2);
+    gradIHS.addColorStop(0, '#091322'); gradIHS.addColorStop(0.5, '#050b14'); gradIHS.addColorStop(1, '#091322');
+    ctx.fillStyle = gradIHS;
+    ctx.strokeStyle = 'rgba(0, 240, 255, 0.5)';
+    ctx.lineWidth = 2;
+    ctx.fillRect(x - size / 2, y - size / 2, size, size);
+    ctx.strokeRect(x - size / 2, y - size / 2, size, size);
+    ctx.fillStyle = '#ffb703';
+    const pins = 18;
+    for (let i = 0; i < pins; i++) {
+      const off = -size / 2 + 8 + i * ((size - 16) / (pins - 1));
+      ctx.fillRect(x + off - 1.5, y - size / 2 - 6, 3, 4);
+      ctx.fillRect(x + off - 1.5, y + size / 2 + 2, 3, 4);
+      ctx.fillRect(x - size / 2 - 6, y + off - 1.5, 4, 3);
+      ctx.fillRect(x + size / 2 + 2, y + off - 1.5, 4, 3);
+    }
+    const dieSize = size * 0.52;
+    const pulse = (Math.sin(performance.now() * 0.003) + 1) / 2;
+    const dieGrad = ctx.createRadialGradient(x, y, 5, x, y, dieSize);
+    dieGrad.addColorStop(0, `rgba(0, 240, 255, ${0.35 + pulse * 0.2})`);
+    dieGrad.addColorStop(0.6, `rgba(176, 38, 255, ${0.25 + pulse * 0.15})`);
+    dieGrad.addColorStop(1, 'rgba(4, 10, 20, 0.9)');
+    ctx.fillStyle = dieGrad;
+    ctx.fillRect(x - dieSize / 2, y - dieSize / 2, dieSize, dieSize);
+    ctx.strokeStyle = 'rgba(0, 240, 255, 0.7)';
+    ctx.strokeRect(x - dieSize / 2, y - dieSize / 2, dieSize, dieSize);
+    ctx.fillStyle = '#ffffff';
+    ctx.font = 'bold 11px "Orbitron"';
+    ctx.textAlign = 'center';
+    ctx.fillText("NEURAL SoC // 16-CORE", x, y - 8);
+    ctx.font = '9px "JetBrains Mono"';
+    ctx.fillStyle = '#ff9e00';
+    ctx.fillText("4.8GHz BGA-2100", x, y + 8);
+    ctx.fillStyle = '#00ff88';
+    ctx.fillText("TDP: 125W • 1.15V", x, y + 22);
+    ctx.textAlign = 'left';
+    draw7SegmentPOST(x + size / 2 - 28, y - size / 2 + 8, postCode);
+  }
+  function drawVRMPowerPhases(cpuX, cpuY, cpuSize) {
+    const phases = 8;
+    for (let i = 0; i < phases; i++) {
+      const cx = cpuX - cpuSize / 2 + 8 + i * ((cpuSize - 16) / (phases - 1));
+      const cy = cpuY - cpuSize / 2 - 24;
+      ctx.fillStyle = '#111827';
+      ctx.strokeStyle = 'rgba(255, 158, 0, 0.45)';
+      ctx.fillRect(cx - 5, cy - 5, 10, 10);
+      ctx.strokeRect(cx - 5, cy - 5, 10, 10);
+      ctx.fillStyle = '#ff9e00';
+      ctx.font = '6px "JetBrains Mono"';
+      ctx.fillText("R22", cx - 4, cy + 2);
+      ctx.fillStyle = '#4c1d95';
+      ctx.beginPath();
+      ctx.arc(cx, cy - 14, 4, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.strokeStyle = 'rgba(176, 38, 255, 0.6)';
+      ctx.stroke();
+    }
+  }
+  function drawDDR5Bank(x, y, w, h) {
+    const slots = 4, slotH = (h - 18) / slots;
+    for (let s = 0; s < slots; s++) {
+      const sy = y + 6 + s * (slotH + 3);
+      ctx.fillStyle = 'rgba(6, 14, 28, 0.85)';
+      ctx.strokeStyle = (s % 2 === 0) ? 'rgba(0, 240, 255, 0.4)' : 'rgba(255, 158, 0, 0.4)';
+      ctx.fillRect(x, sy, w, slotH);
+      ctx.strokeRect(x, sy, w, slotH);
+      const chips = 8, cw = (w - 20) / chips;
+      for (let c = 0; c < chips; c++) {
+        const cx = x + 8 + c * cw;
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.8)';
+        ctx.fillRect(cx, sy + 3, cw - 2, slotH - 6);
+      }
+      const blink = Math.sin(performance.now() * 0.008 + s) > 0;
+      ctx.fillStyle = blink ? '#00ff88' : 'rgba(0, 255, 136, 0.2)';
+      ctx.beginPath();
+      ctx.arc(x + w - 6, sy + slotH / 2, 2.5, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    ctx.fillStyle = '#00f0ff';
+    ctx.font = '8px "Orbitron"';
+    ctx.fillText("DDR5 QUAD-CHANNEL // 6400MT/s", x, y - 4);
+  }
+  function drawGPUCore(x, y, w, h) {
+    ctx.fillStyle = 'rgba(14, 6, 26, 0.88)';
+    ctx.strokeStyle = 'rgba(176, 38, 255, 0.55)';
+    ctx.lineWidth = 1.8;
+    ctx.fillRect(x, y, w, h);
+    ctx.strokeRect(x, y, w, h);
+    const rows = 3, cols = 5, tw = (w - 18) / cols, th = (h - 24) / rows;
+    for (let r = 0; r < rows; r++) {
+      for (let c = 0; c < cols; c++) {
+        const bx = x + 8 + c * tw, by = y + 16 + r * th;
+        const active = Math.sin(performance.now() * 0.005 + r * 1.5 + c) > 0.1;
+        ctx.fillStyle = active ? 'rgba(176, 38, 255, 0.45)' : 'rgba(0, 240, 255, 0.15)';
+        ctx.fillRect(bx + 1, by + 1, tw - 2, th - 2);
+      }
+    }
+    ctx.fillStyle = '#b026ff';
+    ctx.font = '9px "Orbitron"';
+    ctx.fillText("NPU TENSOR CORE // MATRIX ACCEL", x + 8, y + 12);
+  }
+  function drawIndustrialFan() {
+    if (!FAN) return;
+    FAN.angle += FAN.speed;
+    ctx.save();
+    ctx.translate(FAN.x, FAN.y);
+    ctx.strokeStyle = 'rgba(0, 240, 255, 0.35)';
+    ctx.lineWidth = 2.5;
+    ctx.beginPath();
+    ctx.arc(0, 0, FAN.radius, 0, Math.PI * 2);
+    ctx.stroke();
+    const fanGrad = ctx.createConicGradient ? ctx.createConicGradient(FAN.angle, 0, 0) : null;
+    if (fanGrad) {
+      fanGrad.addColorStop(0, '#00f0ff'); fanGrad.addColorStop(0.33, '#ff9e00'); fanGrad.addColorStop(0.66, '#b026ff'); fanGrad.addColorStop(1, '#00f0ff');
+      ctx.strokeStyle = fanGrad;
+    } else {
+      ctx.strokeStyle = '#00f0ff';
+    }
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    ctx.arc(0, 0, FAN.radius - 4, 0, Math.PI * 2);
+    ctx.stroke();
+    ctx.rotate(FAN.angle);
+    const blades = 7;
+    for (let b = 0; b < blades; b++) {
+      const rad = (b * Math.PI * 2) / blades;
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.12)';
+      ctx.beginPath();
+      ctx.moveTo(Math.cos(rad) * 12, Math.sin(rad) * 12);
+      ctx.quadraticCurveTo(Math.cos(rad + 0.3) * (FAN.radius - 10), Math.sin(rad + 0.3) * (FAN.radius - 10), Math.cos(rad) * (FAN.radius - 8), Math.sin(rad) * (FAN.radius - 8));
+      ctx.lineTo(Math.cos(rad - 0.2) * 12, Math.sin(rad - 0.2) * 12);
+      ctx.fill();
+    }
+    ctx.fillStyle = '#00f0ff';
+    ctx.beginPath();
+    ctx.arc(0, 0, 10, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+  }
+  function updateAndDrawRoboticArm() {
+    if (!ROBOT) return;
+    const r = ROBOT;
+    r.timer += 0.022;
+    r.tX = r.baseX - 80 + Math.sin(r.timer * 1.4) * 55;
+    r.tY = r.baseY + 45 + Math.cos(r.timer * 1.9) * 35;
+    const dx = r.tX - r.baseX, dy = r.tY - r.baseY;
+    const dist = Math.min(Math.hypot(dx, dy), r.l1 + r.l2 - 6);
+    const baseAng = Math.atan2(dy, dx);
+    const cosA1 = (dist * dist + r.l1 * r.l1 - r.l2 * r.l2) / (2 * dist * r.l1);
+    const a1 = baseAng - Math.acos(Math.max(-1, Math.min(1, cosA1)));
+    const cosA2 = (r.l1 * r.l1 + r.l2 * r.l2 - dist * dist) / (2 * r.l1 * r.l2);
+    const a2 = Math.PI - Math.acos(Math.max(-1, Math.min(1, cosA2)));
+    const j1X = r.baseX + Math.cos(a1) * r.l1, j1Y = r.baseY + Math.sin(a1) * r.l1;
+    const endX = j1X + Math.cos(a1 + a2) * r.l2, endY = j1Y + Math.sin(a1 + a2) * r.l2;
+    ctx.fillStyle = '#ff9e00';
+    ctx.beginPath();
+    ctx.arc(r.baseX, r.baseY, 15, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.strokeStyle = '#00f0ff';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+    ctx.strokeStyle = '#00f0ff';
+    ctx.lineWidth = 6;
+    ctx.beginPath();
+    ctx.moveTo(r.baseX, r.baseY);
+    ctx.lineTo(j1X, j1Y);
+    ctx.stroke();
+    ctx.fillStyle = '#ffffff';
+    ctx.beginPath();
+    ctx.arc(j1X, j1Y, 8, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.strokeStyle = '#ff9e00';
+    ctx.lineWidth = 4;
+    ctx.beginPath();
+    ctx.moveTo(j1X, j1Y);
+    ctx.lineTo(endX, endY);
+    ctx.stroke();
+    ctx.fillStyle = '#ff2a55';
+    ctx.beginPath();
+    ctx.arc(endX, endY, 5, 0, Math.PI * 2);
+    ctx.fill();
+    if (Math.sin(r.timer * 4.5) > 0.15) {
+      for (let i = 0; i < 4; i++) {
+        r.sparks.push({ x: endX, y: endY, vx: (Math.random() - 0.5) * 8, vy: (Math.random() - 0.5) * 8 - 2, life: 1.0, color: Math.random() > 0.5 ? '#00f0ff' : '#ffee00' });
+      }
+    }
+    for (let i = r.sparks.length - 1; i >= 0; i--) {
+      const sp = r.sparks[i];
+      sp.x += sp.vx; sp.y += sp.vy; sp.life -= 0.055;
+      if (sp.life <= 0) { r.sparks.splice(i, 1); continue; }
+      ctx.fillStyle = sp.color;
+      ctx.globalAlpha = sp.life;
+      ctx.beginPath();
+      ctx.arc(sp.x, sp.y, 2, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.globalAlpha = 1;
+    }
+  }
+  function updateAndDrawAOI() {
+    if (!AOI) return;
+    const a = AOI;
+    a.scanY += a.speed * a.dir;
+    if (a.scanY > a.y + a.h || a.scanY < a.y) a.dir *= -1;
+    ctx.strokeStyle = 'rgba(0, 240, 255, 0.12)';
+    ctx.strokeRect(a.x, a.y, a.w, a.h);
+    ctx.strokeStyle = '#00ff88';
+    ctx.shadowColor = '#00ff88';
+    ctx.shadowBlur = 10;
+    ctx.lineWidth = 1.8;
+    ctx.beginPath();
+    ctx.moveTo(a.x, a.scanY);
+    ctx.lineTo(a.x + a.w, a.scanY);
+    ctx.stroke();
+    ctx.shadowBlur = 0;
+    ctx.fillStyle = '#00ff88';
+    ctx.font = '8px "JetBrains Mono"';
+    ctx.fillText("AOI SCANNER // 532nm OK", a.x + 6, a.scanY - 4);
+  }
+
+  function renderPCB() {
+    ctx.clearRect(0, 0, width, height);
+    ctx.strokeStyle = 'rgba(0, 240, 255, 0.025)';
+    ctx.lineWidth = 1;
+    const gSize = 38;
+    ctx.beginPath();
+    for (let x = 0; x < width; x += gSize) { ctx.moveTo(x, 0); ctx.lineTo(x, height); }
+    for (let y = 0; y < height; y += gSize) { ctx.moveTo(0, y); ctx.lineTo(width, y); }
+    ctx.stroke();
+
+    for (const tr of TRACES) {
+      const distM = Math.hypot(mousePos.x - tr.mx, mousePos.y - tr.my);
+      const isNear = distM < 90;
+      ctx.strokeStyle = isNear ? tr.glowColor : tr.color;
+      ctx.lineWidth = isNear ? tr.width * 2 : tr.width;
+      ctx.beginPath();
+      ctx.moveTo(tr.sx, tr.sy);
+      ctx.lineTo(tr.mx, tr.my);
+      ctx.lineTo(tr.ex, tr.ey);
+      ctx.stroke();
+      ctx.fillStyle = isNear ? tr.glowColor : 'rgba(0, 240, 255, 0.35)';
+      ctx.beginPath();
+      ctx.arc(tr.sx, tr.sy, 2, 0, Math.PI * 2);
+      ctx.arc(tr.ex, tr.ey, 2, 0, Math.PI * 2);
+      ctx.fill();
+      if (isNear && Math.random() > 0.85) {
+        ctx.strokeStyle = '#00f0ff';
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(mousePos.x, mousePos.y);
+        ctx.lineTo(tr.mx, tr.my);
+        ctx.stroke();
+      }
+    }
+
+    drawSerpentines();
+    drawSMDComponents();
+
+    for (const p of PACKETS) {
+      p.progress += p.speed;
+      if (p.progress > 1) p.progress = 0;
+      let curX, curY;
+      if (p.progress < 0.5) {
+        const ratio = p.progress / 0.5;
+        curX = p.sx + (p.mx - p.sx) * ratio; curY = p.sy + (p.my - p.sy) * ratio;
+      } else {
+        const ratio = (p.progress - 0.5) / 0.5;
+        curX = p.mx + (p.ex - p.mx) * ratio; curY = p.my + (p.ey - p.my) * ratio;
+      }
+      ctx.shadowColor = p.color;
+      ctx.shadowBlur = 8;
+      ctx.fillStyle = p.color;
+      ctx.beginPath();
+      ctx.arc(curX, curY, 2.5, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.shadowBlur = 0;
+      if (Math.random() > 0.7) {
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.5)';
+        ctx.font = '7px "JetBrains Mono"';
+        ctx.fillText(p.tag, curX + 4, curY - 2);
+      }
+    }
+
+    const cpuCenterX = width * 0.46, cpuCenterY = height * 0.44, cpuSize = 135;
+    drawVRMPowerPhases(cpuCenterX, cpuCenterY, cpuSize);
+    drawCPUPackage(cpuCenterX, cpuCenterY, cpuSize);
+    drawDDR5Bank(width * 0.30, height * 0.16, 120, 80);
+    drawGPUCore(width * 0.60, height * 0.20, 160, 95);
+    drawIndustrialFan();
+    updateAndDrawRoboticArm();
+    updateAndDrawAOI();
+
+    ctx.font = '7px "JetBrains Mono"';
+    for (const tp of TEST_POINTS) {
+      ctx.fillStyle = 'rgba(255, 158, 0, 0.5)';
+      ctx.beginPath();
+      ctx.arc(tp.x, tp.y, 2.2, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = 'rgba(160, 185, 210, 0.4)';
+      ctx.fillText(`${tp.name}:${tp.v}`, tp.x + 5, tp.y + 2);
+    }
+
+    postTimer++;
+    if (postTimer % 90 === 0) postCode = postCodes[Math.floor(Math.random() * postCodes.length)];
+  }
+
+  /* ---- Con trỏ ngắm bắn tia lửa (spark reticle) ---- */
+  let m = { x: -100, y: -100, tx: -100, ty: -100, down: false };
+  const sparks = [];
+  window.addEventListener('mousemove', (e) => {
+    m.tx = e.clientX; m.ty = e.clientY;
+    mousePos.x = e.clientX; mousePos.y = e.clientY;
+    if (window.__bgStyle === 'pcb' && Math.random() > 0.35) {
+      sparks.push({ x: m.tx, y: m.ty, vx: (Math.random() - 0.5) * 5, vy: (Math.random() - 0.5) * 5, life: 1, decay: 0.03 + Math.random() * 0.04, color: Math.random() > 0.5 ? '#00f0ff' : '#ff9e00', size: 1.5 + Math.random() * 2 });
+    }
+  }, { passive: true });
+  window.addEventListener('mousedown', (e) => {
+    m.down = true;
+    if (window.__bgStyle !== 'pcb') return;
+    for (let i = 0; i < 30; i++) {
+      const ang = Math.random() * Math.PI * 2, spd = 2 + Math.random() * 7;
+      sparks.push({ x: e.clientX, y: e.clientY, vx: Math.cos(ang) * spd, vy: Math.sin(ang) * spd, life: 1, decay: 0.02 + Math.random() * 0.035, color: Math.random() > 0.4 ? '#00f0ff' : '#00ff88', size: 2 + Math.random() * 2.5 });
+    }
+  }, { passive: true });
+  window.addEventListener('mouseup', () => { m.down = false; }, { passive: true });
+
+  function renderCursor() {
+    cctx.clearRect(0, 0, curCanvas.width, curCanvas.height);
+    m.x += (m.tx - m.x) * 0.4;
+    m.y += (m.ty - m.y) * 0.4;
+    if (m.x > 0 && m.y > 0) {
+      cctx.save();
+      cctx.translate(m.x, m.y);
+      cctx.strokeStyle = 'rgba(0, 240, 255, 0.5)';
+      cctx.lineWidth = 1.2;
+      cctx.beginPath();
+      cctx.arc(0, 0, 16, 0, Math.PI * 2);
+      cctx.stroke();
+      cctx.strokeStyle = '#00f0ff';
+      cctx.lineWidth = 1.5;
+      const cr = 6;
+      cctx.beginPath();
+      cctx.moveTo(0, -22); cctx.lineTo(0, -22 + cr);
+      cctx.moveTo(0, 22); cctx.lineTo(0, 22 - cr);
+      cctx.moveTo(-22, 0); cctx.lineTo(-22 + cr, 0);
+      cctx.moveTo(22, 0); cctx.lineTo(22 - cr, 0);
+      cctx.stroke();
+      cctx.fillStyle = m.down ? '#ff2a55' : '#00ff88';
+      cctx.beginPath();
+      cctx.arc(0, 0, m.down ? 4 : 2.5, 0, Math.PI * 2);
+      cctx.fill();
+      cctx.restore();
+    }
+    for (let i = sparks.length - 1; i >= 0; i--) {
+      const s = sparks[i];
+      s.x += s.vx; s.y += s.vy; s.life -= s.decay;
+      if (s.life <= 0) { sparks.splice(i, 1); continue; }
+      cctx.fillStyle = s.color;
+      cctx.shadowColor = s.color;
+      cctx.shadowBlur = 8;
+      cctx.globalAlpha = s.life;
+      cctx.beginPath();
+      cctx.arc(s.x, s.y, s.size * s.life, 0, Math.PI * 2);
+      cctx.fill();
+      cctx.globalAlpha = 1;
+      cctx.shadowBlur = 0;
+    }
+  }
+
+  function renderLoop() {
+    requestAnimationFrame(renderLoop);
+    if (window.__bgStyle !== 'pcb') return; // Chỉ vẽ khi đang chọn giao diện "Bo Mạch PCB"
+    if (!width) resizeCanvas();
+    renderPCB();
+    renderCursor();
   }
   requestAnimationFrame(renderLoop);
 })();
