@@ -4299,6 +4299,677 @@ body.cardbg-sakura .speak-btn {
 }
 .drawer-eye-btn:hover { transform: scale(1.15); }
 
+
+
+/* ===== OLP 30/4 REWRITE TEST STYLES ===== */
+#page-rewrite-test {
+    padding: 24px 16px 80px;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.rewrite-hero {
+    position: relative;
+    padding: 28px 24px;
+    border-radius: 20px;
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.15), rgba(211, 163, 90, 0.12));
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    margin-bottom: 24px;
+    overflow: hidden;
+}
+
+.rewrite-hero::before {
+    content: '';
+    position: absolute;
+    top: -50px;
+    right: -50px;
+    width: 180px;
+    height: 180px;
+    background: radial-gradient(circle, rgba(211, 163, 90, 0.25), transparent 70%);
+    border-radius: 50%;
+    pointer-events: none;
+}
+
+.rewrite-topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.rewrite-back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid var(--line);
+    color: var(--ink);
+    padding: 8px 16px;
+    border-radius: 12px;
+    font-size: 0.88rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.rewrite-back-btn:hover {
+    background: rgba(255, 255, 255, 0.14);
+    border-color: var(--accent);
+    transform: translateX(-2px);
+}
+
+.rewrite-badge-pool {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(211, 163, 90, 0.15);
+    border: 1px solid rgba(211, 163, 90, 0.35);
+    color: var(--accent);
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+
+.rewrite-title-group h2 {
+    font-size: 1.65rem;
+    font-weight: 800;
+    margin: 0 0 8px;
+    color: var(--ink);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.rewrite-title-group p {
+    margin: 0;
+    color: var(--muted);
+    font-size: 0.95rem;
+    line-height: 1.5;
+}
+
+/* Control bar & Toggle switch */
+.rewrite-control-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--card-bg);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    padding: 14px 20px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+    gap: 14px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+.rewrite-toggle-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+    user-select: none;
+}
+
+.rewrite-toggle-switch {
+    position: relative;
+    width: 48px;
+    height: 26px;
+    display: inline-block;
+}
+
+.rewrite-toggle-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.rewrite-toggle-slider {
+    position: absolute;
+    inset: 0;
+    background-color: rgba(255, 255, 255, 0.16);
+    border: 1px solid var(--line);
+    border-radius: 26px;
+    cursor: pointer;
+    transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.rewrite-toggle-slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 4px;
+    bottom: 3px;
+    background-color: var(--ink);
+    border-radius: 50%;
+    transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.rewrite-toggle-switch input:checked + .rewrite-toggle-slider {
+    background-color: var(--accent);
+    border-color: var(--accent);
+}
+
+.rewrite-toggle-switch input:checked + .rewrite-toggle-slider:before {
+    transform: translateX(22px);
+    background-color: #0e111a;
+}
+
+.rewrite-toggle-text {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--ink);
+}
+
+.rewrite-toggle-text small {
+    display: block;
+    font-size: 0.75rem;
+    color: var(--muted);
+    font-weight: 400;
+}
+
+.rewrite-actions-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.rewrite-btn-reroll {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 9px 16px;
+    border-radius: 12px;
+    background: rgba(211, 163, 90, 0.15);
+    border: 1px solid rgba(211, 163, 90, 0.35);
+    color: var(--accent);
+    font-size: 0.88rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.rewrite-btn-reroll:hover {
+    background: var(--accent);
+    color: #0e111a;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(211, 163, 90, 0.3);
+}
+
+/* Question Cards */
+.rewrite-card {
+    background: var(--card-bg);
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    padding: 22px;
+    margin-bottom: 20px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.18);
+}
+
+.rewrite-card:hover {
+    border-color: rgba(255, 255, 255, 0.18);
+}
+
+.rewrite-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 14px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.rch-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.rch-num {
+    background: var(--line);
+    color: var(--ink);
+    padding: 4px 10px;
+    border-radius: 8px;
+    font-size: 0.82rem;
+    font-weight: 700;
+}
+
+.rch-origin {
+    color: var(--muted);
+    font-size: 0.82rem;
+    font-weight: 500;
+}
+
+.rch-status-badge {
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.rch-status-badge.correct {
+    background: rgba(16, 185, 129, 0.2);
+    border: 1px solid rgba(16, 185, 129, 0.4);
+    color: #34d399;
+}
+
+.rch-status-badge.near {
+    background: rgba(245, 158, 11, 0.2);
+    border: 1px solid rgba(245, 158, 11, 0.4);
+    color: #fbbf24;
+}
+
+.rch-status-badge.incorrect {
+    background: rgba(239, 68, 68, 0.2);
+    border: 1px solid rgba(239, 68, 68, 0.4);
+    color: #f87171;
+}
+
+.rewrite-sentence-box {
+    margin-bottom: 12px;
+}
+
+.rewrite-label {
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: var(--muted);
+    font-weight: 700;
+    margin-bottom: 6px;
+}
+
+.rewrite-term {
+    font-size: 1.08rem;
+    font-weight: 600;
+    color: var(--ink);
+    line-height: 1.5;
+}
+
+.rewrite-hint-box {
+    background: rgba(211, 163, 90, 0.08);
+    border: 1px dashed rgba(211, 163, 90, 0.35);
+    border-radius: 10px;
+    padding: 10px 14px;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.badge-hint {
+    color: var(--accent);
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.hint-text {
+    color: #fce7b0;
+    font-size: 0.95rem;
+    font-family: inherit;
+    font-weight: 600;
+}
+
+.rewrite-input-wrap {
+    margin-bottom: 8px;
+}
+
+.rewrite-input-label {
+    display: block;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--muted);
+    margin-bottom: 6px;
+}
+
+.rewrite-user-input {
+    width: 100%;
+    box-sizing: border-box;
+    background: rgba(0, 0, 0, 0.35);
+    border: 1.5px solid var(--line);
+    border-radius: 12px;
+    padding: 12px 14px;
+    color: var(--ink);
+    font-family: inherit;
+    font-size: 0.98rem;
+    line-height: 1.5;
+    resize: vertical;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    outline: none;
+}
+
+.rewrite-user-input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(211, 163, 90, 0.25);
+}
+
+.rewrite-user-input:disabled {
+    opacity: 0.9;
+    cursor: default;
+}
+
+/* Correction Section */
+.rewrite-correction {
+    margin-top: 18px;
+    padding-top: 18px;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    animation: fadeInCorr 0.3s ease;
+}
+
+@keyframes fadeInCorr {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.corr-answers-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.corr-ans-box {
+    border-radius: 12px;
+    padding: 12px 14px;
+}
+
+.corr-ans-box.user {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--line);
+}
+
+.corr-ans-box.barem {
+    background: rgba(16, 185, 129, 0.08);
+    border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.corr-ans-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 6px;
+}
+
+.corr-ans-label {
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--muted);
+}
+
+.corr-ans-box.barem .corr-ans-label {
+    color: #34d399;
+}
+
+.corr-ans-text {
+    font-size: 1rem;
+    line-height: 1.5;
+    font-weight: 600;
+    color: var(--ink);
+}
+
+.corr-tts-btn {
+    background: rgba(16, 185, 129, 0.15);
+    border: 1px solid rgba(16, 185, 129, 0.35);
+    color: #34d399;
+    padding: 3px 8px;
+    border-radius: 8px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.corr-tts-btn:hover {
+    background: rgba(16, 185, 129, 0.3);
+}
+
+/* Explanation Cards */
+.corr-explanation {
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 14px;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.corr-section {
+    padding: 10px 12px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.corr-sec-head {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 4px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.corr-sec-body {
+    font-size: 0.92rem;
+    line-height: 1.55;
+    color: var(--ink);
+}
+
+.corr-sec-body.code-style {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    background: rgba(0, 0, 0, 0.3);
+    padding: 8px 10px;
+    border-radius: 8px;
+    color: #fce7b0;
+    font-size: 0.88rem;
+}
+
+.corr-sec-body.note-style {
+    color: #fca5a5;
+    font-size: 0.9rem;
+}
+
+.corr-ex-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 6px 0;
+    border-bottom: 1px dashed rgba(255, 255, 255, 0.06);
+    font-style: italic;
+    color: #cbd5e1;
+}
+
+.corr-ex-item:last-child {
+    border-bottom: none;
+}
+
+/* Submit & Results Bottom Bar */
+.rewrite-submit-bar {
+    position: sticky;
+    bottom: 20px;
+    z-index: 50;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 16px;
+    background: rgba(20, 24, 36, 0.88);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    padding: 14px 20px;
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    margin-top: 24px;
+}
+
+.rewrite-btn-submit {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: linear-gradient(135deg, #10b981, #059669);
+    border: none;
+    color: #ffffff;
+    font-size: 1.05rem;
+    font-weight: 800;
+    padding: 13px 32px;
+    border-radius: 14px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    box-shadow: 0 4px 16px rgba(16, 185, 129, 0.35);
+}
+
+.rewrite-btn-submit:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 22px rgba(16, 185, 129, 0.5);
+}
+
+/* Score Overview Modal/Card */
+.rewrite-summary-card {
+    background: linear-gradient(135deg, rgba(20, 24, 36, 0.95), rgba(30, 36, 54, 0.95));
+    border: 2px solid var(--accent);
+    border-radius: 20px;
+    padding: 24px;
+    margin-bottom: 28px;
+    text-align: center;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+    animation: popIn 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes popIn {
+    from { opacity: 0; transform: scale(0.92); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+.rsc-score-badge {
+    font-size: 2.6rem;
+    font-weight: 900;
+    color: var(--accent);
+    margin-bottom: 6px;
+}
+
+.rsc-feedback {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 8px;
+}
+
+.rsc-detail {
+    color: var(--muted);
+    font-size: 0.92rem;
+    margin-bottom: 18px;
+}
+
+.rsc-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.rsc-btn {
+    padding: 10px 20px;
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: 0.92rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.rsc-btn.primary {
+    background: var(--accent);
+    color: #0e111a;
+    border: none;
+}
+
+.rsc-btn.primary:hover {
+    background: var(--accent-hover);
+    transform: translateY(-2px);
+}
+
+.rsc-btn.secondary {
+    background: rgba(255, 255, 255, 0.08);
+    color: var(--ink);
+    border: 1px solid var(--line);
+}
+
+.rsc-btn.secondary:hover {
+    background: rgba(255, 255, 255, 0.15);
+}
+
+/* Subfolder Banner Card */
+.rewrite-banner-card {
+    grid-column: 1 / -1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px;
+    border-radius: 18px;
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(211, 163, 90, 0.18));
+    border: 1.5px solid rgba(211, 163, 90, 0.4);
+    cursor: pointer;
+    transition: all 0.25s ease;
+    margin-bottom: 14px;
+    gap: 16px;
+}
+
+.rewrite-banner-card:hover {
+    transform: translateY(-3px);
+    border-color: var(--accent);
+    box-shadow: 0 8px 24px rgba(211, 163, 90, 0.25);
+}
+
+.rbc-left {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.rbc-icon {
+    font-size: 2rem;
+}
+
+.rbc-title {
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: var(--ink);
+    margin-bottom: 4px;
+}
+
+.rbc-desc {
+    font-size: 0.85rem;
+    color: var(--muted);
+    line-height: 1.4;
+}
+
+.rbc-btn {
+    padding: 9px 18px;
+    border-radius: 12px;
+    background: var(--accent);
+    color: #0e111a;
+    font-weight: 700;
+    font-size: 0.88rem;
+    border: none;
+    white-space: nowrap;
+    cursor: pointer;
+}
+
 </style>
 
 <style id="modal-size-fix">
@@ -5922,6 +6593,7 @@ body:not(.bgstyle-white) .sg-footer-meta {
                     <div class="quick-access-block">
                         <div class="quick-access-title">⚡ Truy cập nhanh</div>
                         <div class="quick-access-grid">
+                            <button class="dash-tool-btn qa-card" id="dashRewriteTestBtn" type="button" onclick="startRewriteTest(true)" style="background: linear-gradient(135deg, rgba(99,102,241,0.18), rgba(211,163,90,0.18)); border-color: rgba(211,163,90,0.35);"><span class="qa-icon">✍️</span><span class="qa-text">Kiểm tra Viết lại (5 câu)</span></button>
                             <button class="dash-tool-btn qa-card" id="dashRandomBtn" type="button"><span class="qa-icon">🎲</span><span class="qa-text">Từ ngẫu nhiên</span></button>
                             <button class="dash-tool-btn qa-card practice-btn" id="dashPracticeBtn" type="button"><span class="qa-icon">🏋️</span><span class="qa-text">Luyện tập</span></button>
                             <button class="dash-tool-btn qa-card" id="dashDictBtn" type="button"><span class="qa-icon">📖</span><span class="qa-text">Từ điển</span></button>
@@ -6484,7 +7156,57 @@ body:not(.bgstyle-white) .sg-footer-meta {
             </div>
         </div>
 
-    </div><!-- end .wrap -->
+    
+        <!-- ==========================================================
+        PAGE: REWRITE TEST (5 câu ngẫu nhiên OLP 30/4)
+        ========================================================== -->
+        <div class="page" id="page-rewrite-test">
+            <div class="rewrite-hero">
+                <div class="rewrite-topbar">
+                    <button class="rewrite-back-btn" type="button" onclick="exitRewriteTest()">⬅ Quay lại thư viện</button>
+                    <span class="rewrite-badge-pool">🏆 Olympic 30/4 · 190 Câu Rewrite</span>
+                </div>
+                <div class="rewrite-title-group">
+                    <h2>✍️ Kiểm tra Viết lại câu (5 câu ngẫu nhiên)</h2>
+                    <p>Trích ngẫu nhiên từ kho 190 câu đề thi Chuyên &amp; HSG. Tự động chấm điểm, đối chiếu đáp án chuẩn và giải thích chi tiết cấu trúc, bẫy ngữ pháp.</p>
+                </div>
+            </div>
+
+            <!-- Control bar: Toggle switch + Re-randomize button -->
+            <div class="rewrite-control-bar">
+                <label class="rewrite-toggle-wrapper" for="rewriteAutoRandomToggle">
+                    <div class="rewrite-toggle-switch">
+                        <input type="checkbox" id="rewriteAutoRandomToggle" checked onchange="toggleAutoRandom(this.checked)">
+                        <span class="rewrite-toggle-slider"></span>
+                    </div>
+                    <div class="rewrite-toggle-text">
+                        <span>Tự động đổi 5 câu mới mỗi lượt</span>
+                        <small>Bật: Mỗi lần bấm "Làm lượt tiếp" sẽ tự động bốc 5 câu mới ngẫu nhiên</small>
+                    </div>
+                </label>
+
+                <div class="rewrite-actions-right">
+                    <button class="rewrite-btn-reroll" type="button" onclick="startRewriteTest(true)">
+                        <span>🔀</span> Bốc 5 câu mới ngay
+                    </button>
+                </div>
+            </div>
+
+            <!-- Results summary container (initially hidden) -->
+            <div id="rewriteSummaryContainer" style="display:none;"></div>
+
+            <!-- Questions list container -->
+            <div id="rewriteQuestionsList"></div>
+
+            <!-- Bottom Action Bar -->
+            <div class="rewrite-submit-bar" id="rewriteSubmitBar">
+                <button class="rewrite-btn-submit" id="rewriteSubmitBtn" type="button" onclick="submitRewriteTest()">
+                    <span>📝</span> Nộp bài &amp; Chấm chữa
+                </button>
+            </div>
+        </div>
+
+</div><!-- end .wrap -->
 
     <!-- ==========================================================
     VOCAB DATA (embedded)
@@ -7305,6 +8027,22 @@ body:not(.bgstyle-white) .sg-footer-meta {
                 `"${meta.theme}" theme — pick a small set (1–${maxSub}) to start learning.`;
             const grid = document.getElementById('subfolderGrid');
             grid.innerHTML = '';
+            if (key === 'olp 30/4 rewrite') {
+                const banner = document.createElement('div');
+                banner.className = 'rewrite-banner-card';
+                banner.onclick = () => startRewriteTest(true);
+                banner.innerHTML = `
+                    <div class="rbc-left">
+                        <div class="rbc-icon">✍️</div>
+                        <div>
+                            <div class="rbc-title">Kiểm tra 5 câu ngẫu nhiên (Olympic 30/4)</div>
+                            <div class="rbc-desc">Luyện 5 câu ngẫu nhiên từ kho 190 câu, tự động chấm điểm thông minh &amp; hiển thị giải thích chi tiết, công thức, bẫy ngữ pháp.</div>
+                        </div>
+                    </div>
+                    <button class="rbc-btn" type="button">Làm bài ngay ➜</button>
+                `;
+                grid.appendChild(banner);
+            }
             const wordsInFolder = FOLDER_WORDS.get(key) || [];
             const subCounts = new Array(maxSub + 1).fill(0);
             for (let _si = 0; _si < wordsInFolder.length; _si++) {
@@ -10331,7 +11069,10 @@ document.addEventListener("DOMContentLoaded", function() {
 
     // Add Spacebar and Click to flip
     document.addEventListener('keydown', (e) => {
-        if (e.code === 'Space' && document.activeElement.tagName !== 'INPUT') {
+        const tag = (document.activeElement && document.activeElement.tagName) || '';
+        if (tag === 'INPUT' || tag === 'TEXTAREA' || (document.activeElement && document.activeElement.isContentEditable)) return;
+        if (!document.getElementById('page-study') || !document.getElementById('page-study').classList.contains('active')) return;
+        if (e.code === 'Space') {
             e.preventDefault();
             if (typeof flipCard === 'function') flipCard();
         }
@@ -11192,6 +11933,662 @@ document.addEventListener("DOMContentLoaded", function() {
 <script id="gate-ultra-engine">
 // Nền đăng nhập tĩnh: không chạy canvas / hiệu ứng con trỏ để tiết kiệm CPU/GPU
 window.triggerGateWarp = function() {};
+
+
+
+// ==========================================
+// ✍️ OLP 30/4 REWRITE TEST ENGINE
+// ==========================================
+
+const REWRITE_TRICKY_MAP = {
+  "Screaming fans surrounded the star as soon as he arrived at the stage door.": [
+    "On arriving at the stage door, the star was surrounded by screaming fans.",
+    "On his arriving at the stage door, the star was surrounded by screaming fans.",
+    "On arrival at the stage door, the star was surrounded by screaming fans.",
+    "On his arrival at the stage door, the star was surrounded by screaming fans."
+  ],
+  "You've eaten so much that it's logical you feel sick. (STANDS)": [
+    "You have eaten so much that it stands to reason you feel sick.",
+    "You have eaten so much it stands to reason you feel sick.",
+    "You've eaten so much that it stands to reason you feel sick.",
+    "You've eaten so much it stands to reason you feel sick."
+  ],
+  "\"There's no point in writing it all out in longhand if you can use a typewriter, isn't there?\"": [
+    "She dissuaded me from writing it all out in longhand.",
+    "She dissuaded me from writing it all out in longhand and told me to use a typewriter."
+  ],
+  "We can't possibly imagine how we are going to afford a new car. (REMOTEST)": [
+    "We haven't the remotest idea how we are going to afford a new car.",
+    "We don't have the remotest idea how we are going to afford a new car."
+  ],
+  "He may be inexperienced but he makes up for it by being enthusiastic. (LACKS)": [
+    "What he lacks in experience, he makes up for it by being enthusiastic.",
+    "What he lacks in experience, he makes up for it with his enthusiasm.",
+    "What he lacks in experience he makes up for it by being enthusiastic.",
+    "What he lacks in experience he makes up for it with his enthusiasm."
+  ],
+  "The president is the statesman I admire most of all.": [
+    "There is no other statesman I admire more than the president.",
+    "There is no statesman I admire more than the president.",
+    "There is no other statesman I admire as much as the president.",
+    "There is no statesman I admire as much as the president."
+  ],
+  "Mary is unlikely to get the job that she has applied for. (PROSPECT)": [
+    "There is little prospect of Mary's getting the job that she has applied for.",
+    "There is no prospect of Mary's getting the job that she has applied for.",
+    "There is little prospect of Mary getting the job that she has applied for.",
+    "There is no prospect of Mary getting the job that she has applied for."
+  ],
+  "It looks nice, but it doesn't taste as good. (EARTH)": [
+    "Nice as it looks, it tastes like nothing on earth.",
+    "Nice though it looks, it tastes like nothing on earth."
+  ],
+  "She finally admitted that she had stolen the money. (OWNED)": [
+    "She finally owned up to stealing the money.",
+    "She finally owned up to having stolen the money."
+  ],
+  "Laura's tendency to interrupt every conversation makes me furious! (BEND)": [
+    "It drives me round the bend when Laura interrupts every conversation.",
+    "It drives me round the bend that Laura interrupts every conversation."
+  ],
+  "This property has been totally neglected and is in need of complete renovation. (DISREPAIR)": [
+    "Having fallen into disrepair, this property needs renovating completely.",
+    "Having fallen into a state of disrepair, this property needs renovating completely."
+  ],
+  "He hid the truth about the matter because he didn't want to lose his high position. (CARPET)": [
+    "For fear that he lose his high position, he swept the matter under the carpet.",
+    "For fear that he should lose his high position, he swept the matter under the carpet."
+  ],
+  "He indicated very clearly that he would do anything to obtain the contract. (LENGTHS)": [
+    "He gave every indication of going to any lengths to obtain the contract.",
+    "He gave every indication that he would go to any lengths to obtain the contract."
+  ],
+  "She was surprised when he suddenly asked her to marry him. (TOOK)": [
+    "His sudden marriage proposal took her by surprise.",
+    "His sudden marriage proposal took her aback."
+  ],
+  "You must never talk to the press about this, whatever happens.": [
+    "Under no circumstances should you talk to the press about this.",
+    "Under no circumstances must you talk to the press about this."
+  ],
+  "The rumours of his being fired are not true. CONTRARY": [
+    "Despite rumours to the contrary, he has not been fired.",
+    "Despite the rumours to the contrary, he has not been fired."
+  ],
+  "I know you'll find it hard to believe, but I don't know how to chat on the Internet. SEEM": [
+    "Unlikely as it may seem, I don't know how to chat on the Internet.",
+    "Unlikely as it may seems, I don't know how to chat on the Internet.",
+    "Unlikely as it may seem to you, I don't know how to chat on the Internet.",
+    "Unlikely as it seems, I don't know how to chat on the Internet.",
+    "Unlikely as it seems to you, I don't know how to chat on the Internet."
+  ],
+  "We must always bear in mind that many scientific breakthroughs are due to luck. SIGHT": [
+    "We must not lose sight of the fact that luck plays a large part in many scientific breakthroughs.",
+    "We must never lose sight of the fact that luck plays a large part in many scientific breakthroughs."
+  ],
+  "The plan is unlikely to find favour with managers, unless the cost is greatly reduced.": [
+    "Without a great reduction in cost, managers will probably reject the plan.",
+    "Without a great reduction in the cost, managers will probably reject the plan."
+  ],
+  "They will consider age and experience when they decide the salary.": [
+    "They will take age and experience into account when they decide the salary.",
+    "They will take age and experience into consideration when they decide the salary."
+  ],
+  "It's becoming extremely expensive to maintain the museum. (upkeep)": [
+    "The upkeep of the museum is becoming extremely high.",
+    "The upkeep of the museum is becoming extremely expensive."
+  ],
+  "Shouldn't she be going home now?": [
+    "Isn't it time she was going home?",
+    "Isn't it time she went home?",
+    "Isn't it high time she was going home?",
+    "Isn't it high time she went home?",
+    "Isn't it about time she was going home?",
+    "Isn't it about time she went home?"
+  ],
+  "Karen's schoolwork definitely seems to be improving this term. (SIGNS)": [
+    "Karen's schoolwork shows definite signs of improvement this term.",
+    "Karen's schoolwork shows definite signs of improving this term."
+  ],
+  "I was greatly relieved to hear that her condition was not serious.": [
+    "It was with great relief to hear that her condition was not serious.",
+    "It was a great relief to hear that her condition was not serious."
+  ],
+  "I tried as hard as I could to make sure that this problem would not arise. (POWER)": [
+    "I did everything with my power to prevent this problem from rising.",
+    "I did everything with my power to prevent this problem from arising.",
+    "I did everything with my power to stop this problem from rising.",
+    "I did everything with my power to stop this problem from arising.",
+    "I did everything in my power to prevent this problem from rising.",
+    "I did everything in my power to prevent this problem from arising.",
+    "I did everything in my power to stop this problem from rising.",
+    "I did everything in my power to stop this problem from arising."
+  ],
+  "It was an absolute miracle that they survived the accident. (SHORT)": [
+    "The fact that they survived the accident was nothing short of miraculous.",
+    "The fact that they survived the accident was nothing short of a miracle."
+  ],
+  "When I heard her speak, it affected me profoundly. (IMPACT)": [
+    "Her speech had a profound impact on me.",
+    "Her speech made a profound impact on me.",
+    "Her speech created a profound impact on me.",
+    "Her speech exerted a profound impact on me."
+  ],
+  "\"It's not worth worrying about the past, Jane\", I said": [
+    "I told Jane that there was no point worrying about the past.",
+    "I told Jane that there was no point in worrying about the past."
+  ],
+  "She just pretended to welcome him then quickly left the waiting room. (MOTIONS)": [
+    "She just went through the motions of welcoming him, then quickly left the waiting room.",
+    "She just went through the motions of welcoming him, but then quickly left the waiting room."
+  ],
+  "Peter grimaced as he swallowed the foul-tasting medicine. (FACE)": [
+    "Peter pulled a face as he swallowed the foul-tasting medicine.",
+    "Peter made a face as he swallowed the foul-tasting medicine.",
+    "Peter pulled faces as he swallowed the foul-tasting medicine.",
+    "Peter made faces as he swallowed the foul-tasting medicine."
+  ],
+  "She was not astonished to hear that she had failed the driving test. (CAME)": [
+    "It came as no surprise to her to hear that she had failed the driving test.",
+    "It came as no surprise to her to hear she had failed the driving test."
+  ],
+  "He said that he had been far from the scene of the crime. (DENIED)": [
+    "He denied being near the scene of the crime.",
+    "He denied being at the scene of the crime.",
+    "He denied having been near the scene of the crime.",
+    "He denied having been at the scene of the crime.",
+    "He denied he had been near the scene of the crime.",
+    "He denied he had been at the scene of the crime."
+  ],
+  "We suppose the new models are about ten thousand dollars. VICINITY": [
+    "The new models are supposed to be in the vicinity of ten thousand dollars.",
+    "The new models are supposedly in the vicinity of ten thousand dollars."
+  ],
+  "My grandfather had completely forgotten that he phoned me last night. RECOLLECTION": [
+    "My grandfather had no recollection at all of phoning me last night.",
+    "My grandfather did not have any recollection at all of phoning me last night.",
+    "My grandfather didn't have any recollection at all of phoning me last night."
+  ],
+  "It was his lack of confidence that surprised me.": [
+    "What I found surprising was his lack of confidence.",
+    "What surprised me was his lack of confidence."
+  ],
+  "It wasn't clear to us at the time how serious the problem was.": [
+    "Little did we realise at the time how serious the problem was.",
+    "Little did we know at the time how serious the problem was.",
+    "Little did we realize at the time how serious the problem was."
+  ],
+  "The doctor is very busy; I'm afraid he can't see you today. (SPARE)": [
+    "The doctor can't spare the time to see you today.",
+    "The doctor hasn't any spare time to see you today."
+  ],
+  "Mark meant well so you mustn't be offended by his comments. (AMISS)": [
+    "You mustn't take Mark's comments amiss because he was well meaning.",
+    "You mustn't take what Mark said amiss because he was well meaning."
+  ],
+  "Nowadays parents and their children seem to have more in common than they used to do. (NARROWING)": [
+    "The generation gap appears to be narrowing these days.",
+    "The generation gap seems to be narrowing these days."
+  ],
+  "He became famous, but it cost him his privacy. (EXPENSE)": [
+    "His rise to fame was at the expense of his privacy.",
+    "His rise to fame came at the expense of his privacy."
+  ],
+  "I'll have to consider working abroad if an opportunity doesn't arise here soon. (NEAR)": [
+    "Unless an opportunity presents itself to me in the near future, I'll have to expatriate.",
+    "Unless an opportunity presents itself to me within the near future, I'll have to expatriate.",
+    "Unless an opportunity presents itself in the near future, I'll have to expatriate.",
+    "Unless an opportunity presents itself within the near future, I'll have to expatriate."
+  ],
+  "I don't know the first thing about aeronautics.": [
+    "I am utterly ignorant about aeronautics.",
+    "I am totally ignorant about aeronautics."
+  ],
+  "You shouldn't let trivial matters worry you so much. (PREY)": [
+    "You shouldn't let trivial matters prey on your mind to such an extent.",
+    "You shouldn't let trivial matters prey on your mind to such a great extent."
+  ],
+  "Ann's dedication to her work has always been exemplary. (herself)": [
+    "Ann has dedicated herself to her work in the most exemplary manner.",
+    "Ann has dedicated herself to her work in a most exemplary manner."
+  ],
+  "She wore headphones in order not to disturb anyone.": [
+    "She wore headphones lest she disturb anyone.",
+    "She wore headphones lest she should disturb anyone."
+  ],
+  "I advise you not to believe what you read in the papers about me. (reliance)": [
+    "You should place little reliance on what you read in the papers about me.",
+    "You should put little reliance on what you read in the papers about me."
+  ],
+  "People say that there's hardly any difference between love and hatred. (line)": [
+    "People say that there is a very fine line between love and hatred.",
+    "People say that there is a very thin line between love and hatred."
+  ]
+};
+
+let rewriteQuestions = [];
+let rewriteSubmitted = false;
+let rewriteAutoRandom = true;
+let rewriteRoundCount = 0;
+
+function normalizeRewriteStr(str) {
+    if (!str) return '';
+    return str
+        .toLowerCase()
+        .replace(/[\u2018\u2019]/g, "'")
+        .replace(/[\u201C\u201D]/g, '"')
+        .replace(/^[0-9]+[\.\)\s]+/, '')
+        .replace(/[.,!?;:]+$/, '')
+        .replace(/\s+/g, ' ')
+        .trim();
+}
+
+function levenshteinDist(a, b) {
+    const m = a.length, n = b.length;
+    const dp = Array.from({ length: m + 1 }, () => new Uint16Array(n + 1));
+    for (let i = 0; i <= m; i++) dp[i][0] = i;
+    for (let j = 0; j <= n; j++) dp[0][j] = j;
+    for (let i = 1; i <= m; i++) {
+        for (let j = 1; j <= n; j++) {
+            const cost = a[i - 1] === b[j - 1] ? 0 : 1;
+            dp[i][j] = Math.min(
+                dp[i - 1][j] + 1,
+                dp[i][j - 1] + 1,
+                dp[i - 1][j - 1] + cost
+            );
+        }
+    }
+    return dp[m][n];
+}
+
+function checkRewriteAnswer(userAns, item) {
+    const normUser = normalizeRewriteStr(userAns);
+    if (!normUser) return { status: 'empty', score: 0, reason: 'Chưa nhập câu trả lời' };
+
+    let candidates = REWRITE_TRICKY_MAP[item.term] ? [...REWRITE_TRICKY_MAP[item.term]] : [];
+    if (!candidates.includes(item.answer)) candidates.push(item.answer);
+
+    const normVariants = new Set();
+    candidates.forEach(c => {
+        const n = normalizeRewriteStr(c);
+        if (n) {
+            normVariants.add(n);
+            normVariants.add(n.replace(/\bdon't\b/g, "do not"));
+            normVariants.add(n.replace(/\bdo not\b/g, "don't"));
+            normVariants.add(n.replace(/\bdidn't\b/g, "did not"));
+            normVariants.add(n.replace(/\bdid not\b/g, "didn't"));
+            normVariants.add(n.replace(/\bhaven't\b/g, "have not"));
+            normVariants.add(n.replace(/\bhave not\b/g, "haven't"));
+            normVariants.add(n.replace(/\bcan't\b/g, "cannot"));
+            normVariants.add(n.replace(/\bcannot\b/g, "can't"));
+            normVariants.add(n.replace(/\bit's\b/g, "it is"));
+            normVariants.add(n.replace(/\bit is\b/g, "it's"));
+        }
+    });
+
+    const variantList = Array.from(normVariants);
+
+    for (const v of variantList) {
+        if (normUser === v) {
+            return { status: 'correct', score: 1.0, matched: v };
+        }
+    }
+
+    let bestDist = 999;
+    let closestVariant = variantList[0] || item.answer;
+    for (const v of variantList) {
+        const d = levenshteinDist(normUser, v);
+        if (d < bestDist) {
+            bestDist = d;
+            closestVariant = v;
+        }
+    }
+
+    const maxLen = Math.max(normUser.length, closestVariant.length);
+    const sim = maxLen > 0 ? (1 - (bestDist / maxLen)) : 0;
+
+    if (bestDist <= 2 || sim >= 0.94) {
+        return { status: 'near', score: 0.8, dist: bestDist, matched: closestVariant, reason: 'Gần đúng (lỗi chính tả nhỏ)' };
+    }
+
+    return { status: 'incorrect', score: 0.0, dist: bestDist, matched: closestVariant };
+}
+
+function toggleAutoRandom(checked) {
+    rewriteAutoRandom = !!checked;
+}
+
+function exitRewriteTest() {
+    if (typeof currentParentKey !== 'undefined' && currentParentKey === 'olp 30/4 rewrite') {
+        showPage('page-subfolders');
+    } else {
+        showPage('page-folders');
+    }
+}
+
+function startRewriteTest(isNewRandom) {
+    const pool = VOCAB.filter(w => w.folder === 'olp 30/4 rewrite');
+    if (!pool || pool.length === 0) {
+        alert('Chưa tìm thấy dữ liệu bộ đề Olympic 30/4!');
+        return;
+    }
+
+    if (isNewRandom || rewriteQuestions.length === 0) {
+        // Fisher-Yates shuffle
+        const shuffled = pool.slice();
+        for (let i = shuffled.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            const temp = shuffled[i];
+            shuffled[i] = shuffled[j];
+            shuffled[j] = temp;
+        }
+        rewriteQuestions = shuffled.slice(0, 5);
+        rewriteRoundCount++;
+    }
+
+    rewriteSubmitted = false;
+
+    // Reset summary container
+    const sumEl = document.getElementById('rewriteSummaryContainer');
+    if (sumEl) {
+        sumEl.style.display = 'none';
+        sumEl.innerHTML = '';
+    }
+
+    // Reset submit button & bar
+    const submitBar = document.getElementById('rewriteSubmitBar');
+    if (submitBar) submitBar.style.display = 'flex';
+    const submitBtn = document.getElementById('rewriteSubmitBtn');
+    if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = '<span>📝</span> Nộp bài &amp; Chấm chữa';
+    }
+
+    // Build question cards HTML
+    const listEl = document.getElementById('rewriteQuestionsList');
+    if (!listEl) return;
+
+    let html = '';
+    rewriteQuestions.forEach((q, idx) => {
+        const testNum = q.sub ? (q.sub < 10 ? '0' + q.sub : '' + q.sub) : '01';
+        html += `
+        <div class="rewrite-card" id="rewriteCard_${idx}">
+            <div class="rewrite-card-header">
+                <div class="rch-left">
+                    <span class="rch-num">Câu ${idx + 1} / 5</span>
+                    <span class="rch-origin">📌 Practice Test ${testNum}</span>
+                </div>
+                <div id="rchStatus_${idx}"></div>
+            </div>
+
+            <div class="rewrite-sentence-box">
+                <div class="rewrite-label">Câu gốc cần viết lại:</div>
+                <div class="rewrite-term">${escapeHtml(q.term)}</div>
+            </div>
+
+            <div class="rewrite-hint-box">
+                <span class="badge-hint">Gợi ý / Từ khóa:</span>
+                <span class="hint-text">${escapeHtml(q.ipa || '')}</span>
+            </div>
+
+            <div class="rewrite-input-wrap">
+                <label for="rewriteInput_${idx}" class="rewrite-input-label">✍️ Câu viết lại của bạn:</label>
+                <textarea id="rewriteInput_${idx}" class="rewrite-user-input" rows="2" placeholder="Gõ câu viết lại hoàn chỉnh của bạn vào đây..." onkeydown="handleRewriteKey(event, ${idx})"></textarea>
+            </div>
+
+            <div class="rewrite-correction" id="rewriteCorrection_${idx}" style="display:none;"></div>
+        </div>
+        `;
+    });
+
+    listEl.innerHTML = html;
+
+    // Make sure page is active
+    showPage('page-rewrite-test');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    // Focus first input
+    setTimeout(() => {
+        const firstInput = document.getElementById('rewriteInput_0');
+        if (firstInput) firstInput.focus();
+    }, 200);
+}
+
+function handleRewriteKey(event, idx) {
+    if (event.key === ' ' || event.code === 'Space') {
+        event.stopPropagation();
+        return;
+    }
+    if (event.key === 'Enter' && !event.shiftKey) {
+        event.preventDefault();
+        event.stopPropagation();
+        if (idx < 4) {
+            const next = document.getElementById('rewriteInput_' + (idx + 1));
+            if (next) next.focus();
+        } else {
+            submitRewriteTest();
+        }
+    }
+}
+
+function submitRewriteTest() {
+    if (rewriteSubmitted) return;
+    rewriteSubmitted = true;
+
+    let totalScore = 0;
+    let correctCount = 0;
+    let nearCount = 0;
+
+    rewriteQuestions.forEach((q, idx) => {
+        const inputEl = document.getElementById('rewriteInput_' + idx);
+        const userAns = inputEl ? inputEl.value.trim() : '';
+        if (inputEl) inputEl.disabled = true;
+
+        const res = checkRewriteAnswer(userAns, q);
+        totalScore += res.score;
+        if (res.status === 'correct') correctCount++;
+        else if (res.status === 'near') nearCount++;
+
+        // Status badge in header
+        const statusEl = document.getElementById('rchStatus_' + idx);
+        if (statusEl) {
+            let badgeClass = 'incorrect';
+            let badgeText = '❌ Chưa đúng (0đ)';
+            if (res.status === 'correct') {
+                badgeClass = 'correct';
+                badgeText = '✅ Chính xác (+1.0đ)';
+            } else if (res.status === 'near') {
+                badgeClass = 'near';
+                badgeText = '⚠️ Gần đúng (+0.8đ)';
+            }
+            statusEl.innerHTML = `<span class="rch-status-badge ${badgeClass}">${badgeText}</span>`;
+        }
+
+        // Correction details
+        const corrEl = document.getElementById('rewriteCorrection_' + idx);
+        if (corrEl) {
+            let exHtml = '';
+            if (Array.isArray(q.ex) && q.ex.length > 0) {
+                exHtml = q.ex.map(e => `
+                    <div class="corr-ex-item">
+                        <span>• ${escapeHtml(e)}</span>
+                        <button type="button" class="corr-tts-btn" onclick="speakText(\`${escapeJsString(e)}\`)">🔊</button>
+                    </div>
+                `).join('');
+            } else {
+                exHtml = '<em>Không có ví dụ mở rộng.</em>';
+            }
+
+            const cleanAnswerForSpeech = escapeJsString(q.answer.replace(/\([^)]*\)/g, '').replace(/\/.*$/, '').trim());
+
+            corrEl.innerHTML = `
+                <div class="corr-answers-grid">
+                    <div class="corr-ans-box user">
+                        <div class="corr-ans-header">
+                            <span class="corr-ans-label">Câu của bạn đã gõ:</span>
+                        </div>
+                        <div class="corr-ans-text">${escapeHtml(userAns || '(Bạn chưa nhập câu trả lời)')}</div>
+                    </div>
+                    <div class="corr-ans-box barem">
+                        <div class="corr-ans-header">
+                            <span class="corr-ans-label">Đáp án chuẩn Barem:</span>
+                            <button type="button" class="corr-tts-btn" onclick="speakText(\`${cleanAnswerForSpeech}\`)">🔊 Nghe phát âm</button>
+                        </div>
+                        <div class="corr-ans-text">${escapeHtml(q.answer)}</div>
+                    </div>
+                </div>
+
+                <div class="corr-explanation">
+                    <div class="corr-section en">
+                        <div class="corr-sec-head">🇬🇧 English Explanation (Siêu ngắn rút gọn)</div>
+                        <div class="corr-sec-body">${escapeHtml(q.en || 'N/A')}</div>
+                    </div>
+
+                    <div class="corr-section vi">
+                        <div class="corr-sec-head">🇻🇳 Dịch nghĩa &amp; Giải thích tiếng Việt</div>
+                        <div class="corr-sec-body">${escapeHtml(q.vi || 'N/A')}</div>
+                    </div>
+
+                    <div class="corr-section collo">
+                        <div class="corr-sec-head">📐 Cấu trúc / Collocation trọng tâm</div>
+                        <div class="corr-sec-body code-style">${escapeHtml(q.collo || 'N/A')}</div>
+                    </div>
+
+                    <div class="corr-section note">
+                        <div class="corr-sec-head">📌 Lưu ý &amp; Bẫy ngữ pháp cần tránh</div>
+                        <div class="corr-sec-body note-style">${escapeHtml(q.note || 'N/A')}</div>
+                    </div>
+
+                    <div class="corr-section ex">
+                        <div class="corr-sec-head">✍️ Ví dụ minh họa thực tế</div>
+                        <div class="corr-sec-body">${exHtml}</div>
+                    </div>
+                </div>
+            `;
+            corrEl.style.display = 'block';
+        }
+    });
+
+    // Hide submit bar
+    const submitBar = document.getElementById('rewriteSubmitBar');
+    if (submitBar) submitBar.style.display = 'none';
+
+    // Build Summary Card
+    const sumEl = document.getElementById('rewriteSummaryContainer');
+    if (sumEl) {
+        const roundedScore = Math.round(totalScore * 10) / 10;
+        let feedback = '';
+        let detail = `Bạn đã làm đúng ${correctCount}/5 câu hoàn hảo`;
+        if (nearCount > 0) detail += `, ${nearCount} câu gần đúng`;
+        detail += '.';
+
+        if (roundedScore === 5) {
+            feedback = '🎉 Xuất sắc tuyệt đối! Đạt chuẩn HSG & Chuyên Anh!';
+            if (typeof launchConfetti === 'function') launchConfetti();
+        } else if (roundedScore >= 4) {
+            feedback = '👏 Rất tốt! Bạn nắm rất vững kiến thức và kỹ năng viết lại!';
+        } else if (roundedScore >= 2.5) {
+            feedback = '💪 Khá tốt! Hãy đọc kỹ các lưu ý bẫy ngữ pháp để bứt phá nhé!';
+        } else {
+            feedback = '📖 Cố gắng lên! Ôn tập kỹ các cấu trúc đảo ngữ & thành ngữ bên dưới nhé!';
+        }
+
+        sumEl.innerHTML = `
+            <div class="rewrite-summary-card">
+                <div class="rsc-score-badge">${roundedScore} / 5.0</div>
+                <div class="rsc-feedback">${feedback}</div>
+                <div class="rsc-detail">${detail}</div>
+                <div class="rsc-buttons">
+                    <button class="rsc-btn primary" type="button" onclick="handleNextRewriteRound()">
+                        <span>${rewriteAutoRandom ? '🔀 Làm lượt tiếp theo (5 câu mới)' : '🔄 Làm lại lượt này'}</span>
+                    </button>
+                    <button class="rsc-btn secondary" type="button" onclick="startRewriteTest(true)">
+                        <span>🔀 Đổi 5 câu ngẫu nhiên khác</span>
+                    </button>
+                    <button class="rsc-btn secondary" type="button" onclick="retryCurrentRewriteTest()">
+                        <span>🔄 Làm lại bộ 5 câu này</span>
+                    </button>
+                    <button class="rsc-btn secondary" type="button" onclick="exitRewriteTest()">
+                        <span>⬅ Về thư viện</span>
+                    </button>
+                </div>
+            </div>
+        `;
+        sumEl.style.display = 'block';
+        sumEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+}
+
+function handleNextRewriteRound() {
+    if (rewriteAutoRandom) {
+        startRewriteTest(true);
+    } else {
+        retryCurrentRewriteTest();
+    }
+}
+
+function retryCurrentRewriteTest() {
+    rewriteSubmitted = false;
+
+    // Reset summary
+    const sumEl = document.getElementById('rewriteSummaryContainer');
+    if (sumEl) {
+        sumEl.style.display = 'none';
+        sumEl.innerHTML = '';
+    }
+
+    // Reset submit bar
+    const submitBar = document.getElementById('rewriteSubmitBar');
+    if (submitBar) submitBar.style.display = 'flex';
+
+    // Clear inputs and hide corrections
+    rewriteQuestions.forEach((q, idx) => {
+        const inputEl = document.getElementById('rewriteInput_' + idx);
+        if (inputEl) {
+            inputEl.value = '';
+            inputEl.disabled = false;
+        }
+
+        const statusEl = document.getElementById('rchStatus_' + idx);
+        if (statusEl) statusEl.innerHTML = '';
+
+        const corrEl = document.getElementById('rewriteCorrection_' + idx);
+        if (corrEl) {
+            corrEl.style.display = 'none';
+            corrEl.innerHTML = '';
+        }
+    });
+
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    setTimeout(() => {
+        const firstInput = document.getElementById('rewriteInput_0');
+        if (firstInput) firstInput.focus();
+    }, 200);
+}
+
+function escapeHtml(str) {
+    if (!str) return '';
+    return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+}
+
+function escapeJsString(str) {
+    if (!str) return '';
+    return String(str).replace(/\\/g, '\\\\').replace(/`/g, '\\`').replace(/\$/g, '\\$').replace(/"/g, '&quot;');
+}
+
+window.startRewriteTest = startRewriteTest;
+window.submitRewriteTest = submitRewriteTest;
+window.toggleAutoRandom = toggleAutoRandom;
+window.exitRewriteTest = exitRewriteTest;
+window.handleNextRewriteRound = handleNextRewriteRound;
+window.retryCurrentRewriteTest = retryCurrentRewriteTest;
+
+
 </script>
 
 </body></html>
